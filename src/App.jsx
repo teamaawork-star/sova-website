@@ -165,7 +165,7 @@ export default function App() {
       setIsSubmitted(true);
 
       // 2. Отправляем радиосигнал для Google Календаря
-      if (WEBHOOK_URL !== 'https://h.albato.ru/wh/38/1lfe1d5/tFKF5VOoV6uKRzCIoVGsXKbbiJC0r2s_3Viaz8Ef9oQ/') {
+      if (WEBHOOK_URL !== '') {
         await fetch(WEBHOOK_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
