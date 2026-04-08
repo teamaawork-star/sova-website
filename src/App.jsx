@@ -155,13 +155,27 @@ export default function App() {
       createdAt: new Date().toISOString()
     };
 
+    // ССЫЛКА НА ВАШ ВЕБХУК ОТ MAKE.COM ИЛИ ALBATO:
+    const WEBHOOK_URL = 'https://h.albato.ru/wh/38/1lfe1d5/tFKF5VOoV6uKRzCIoVGsXKbbiJC0r2s_3Viaz8Ef9oQ/';
+
     try {
+      // 1. Сохраняем заявку в нашу базу Firebase (для админки)
       const docRef = await addDoc(collection(db, "bookings"), newBooking);
       setBookingsList([{ ...newBooking, id: docRef.id }, ...bookingsList]);
       setIsSubmitted(true);
+
+      // 2. Отправляем радиосигнал для Google Календаря
+      if (WEBHOOK_URL !== 'https://h.albato.ru/wh/38/1lfe1d5/tFKF5VOoV6uKRzCIoVGsXKbbiJC0r2s_3Viaz8Ef9oQ/') {
+        await fetch(WEBHOOK_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newBooking)
+        });
+      }
+
     } catch (error) {
       console.error("Ошибка при сохранении заявки:", error);
-      alert("Не удалось отправить заявку.");
+      alert("Не удалось отправить заявку. Пожалуйста, попробуйте еще раз.");
     } finally {
       setIsSubmitting(false);
     }
