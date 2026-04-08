@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
-import { Phone, MapPin, Clock, Sparkles, Wind, Droplets, X, CheckCircle, Lock, User, Trash2, LogOut, Edit, Plus, Save, ArrowLeft, ArrowRight, Loader2, ChevronDown, ChevronUp, ShieldCheck } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Phone, MapPin, Clock, Sparkles, Wind, Droplets, X, CheckCircle, Lock, User, Trash2, LogOut, Edit, Plus, Save, ArrowLeft, ArrowRight, Loader2, ChevronDown, ChevronUp, ShieldCheck, Upload } from 'lucide-react';
+import { collection, getDocs, addDoc, doc, setDoc, deleteDoc } from 'firebase/firestore';
+import { db } from './firebase';
 
 const IconMap = { Wind, Droplets, Sparkles };
 
-// --- ДАННЫЕ ИЗ ПРАЙС-ЛИСТОВ ---
+// --- ДАННЫЕ ИЗ ПРАЙС-ЛИСТОВ (Резервные, если база пуста) ---
 const massageServicesData = [
   {
     title: "Массаж спины",
@@ -24,71 +26,12 @@ const massageServicesData = [
     ]
   },
   {
-    title: "Массаж головы",
-    description: "Стимулирует рост волос, улучшает кровообращение, эффективно снимает стресс и мигрени.",
-    image: "https://images.unsplash.com/photo-1519823551278-64ac92734fb1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    items: [
-      { name: "1 сеанс (20 минут)", price: "900 руб." },
-      { name: "Курс 10 сеансов", price: "8000 руб." }
-    ]
-  },
-  {
     title: "Массаж ног",
     description: "Снимает отечность, чувство тяжести и усталости после долгого дня, улучшает лимфоток. Включает ягодицы, бедра, голени, стопы.",
     image: "https://images.unsplash.com/photo-1552693673-1bf958298935?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
     items: [
       { name: "1 сеанс (40 минут)", price: "1500 руб." },
       { name: "Курс 10 сеансов", price: "13000 руб." }
-    ]
-  },
-  {
-    title: "Массаж задней поверхности тела",
-    description: "Комплексная и глубокая проработка спины, верхних и нижних конечностей для полного расслабления мышц.",
-    image: "https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    items: [
-      { name: "Взрослый (60 минут)", price: "2200 руб." },
-      { name: "Детский до 14 лет (50 минут)", price: "1600 руб." }
-    ]
-  },
-  {
-    title: "Комплексный массаж тела",
-    description: "Глубокое расслабление всех групп мышц, восстановление жизненных сил и нормализация психоэмоционального фона.",
-    image: "https://images.unsplash.com/photo-1519824145371-296894a0daa9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    items: [
-      { name: "Общий массаж всего тела (1 час 30 мин)", price: "2800 руб." },
-      { name: "Расслабляющий массаж тела (1 час 30 мин)", price: "2800 руб." }
-    ]
-  },
-  {
-    title: "SPA-уход: Массаж спины + Обертывание",
-    description: "Идеальное сочетание мышечного расслабления спины и интенсивного ухода за кожей всего тела.",
-    image: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    items: [
-      { name: "1 сеанс (1 час 30 минут)", price: "3000 руб." }
-    ]
-  },
-  {
-    title: "SPA-уход: Стоунотерапия",
-    description: "Глубокое прогревание тканей теплыми камнями для мощного релакса, снятия блоков и улучшения кровотока.",
-    image: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    items: [
-      { name: "1 сеанс (1 час 50 минут)", price: "3500 руб." }
-    ]
-  },
-  {
-    title: "SPA-уход: Релакс / Антистресс",
-    description: "Максимальное погружение в отдых, снятие синдрома хронической усталости. Включает общий массаж и SPA-обертывание.",
-    image: "https://images.unsplash.com/photo-1608280731043-345649b014f9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    items: [
-      { name: "1 сеанс (2 часа 30 минут)", price: "4000 руб." }
-    ]
-  },
-  {
-    title: "SPA-уход: Талассотерапия",
-    description: "Обогащение кожи минералами, детоксикация и мощный антицеллюлитный эффект. Включает массаж и обертывание морскими водорослями.",
-    image: "https://images.unsplash.com/photo-1583416750470-965b2707b355?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    items: [
-      { name: "1 сеанс (2 часа 30 минут)", price: "5500 руб." }
     ]
   }
 ];
@@ -101,9 +44,7 @@ const bodyShapingServicesData = [
     iconName: "Wind",
     items: [
       { name: "Бедра и ягодицы (спереди и сзади)", duration: "40 минут", price: "1400 руб." },
-      { name: "Живот", duration: "20 минут", price: "900 руб." },
-      { name: "Абонемент на зону живота (+бока) 10 сеансов", duration: "по 30 мин", price: "8000 руб." },
-      { name: "Абонемент на зону ног (бедра +ягодицы) 10 сеансов", duration: "по 40 мин", price: "12000 руб." }
+      { name: "Живот", duration: "20 минут", price: "900 руб." }
     ]
   },
   {
@@ -113,51 +54,7 @@ const bodyShapingServicesData = [
     iconName: "Droplets",
     items: [
       { name: "УЗ кавитация (живот)", duration: "30 минут", price: "1200 руб." },
-      { name: "УЗ кавитация (живот) 8 сеансов", price: "8500 руб." },
-      { name: "УЗ кавитация (живот) 12 сеансов", price: "12000 руб." },
-      { name: "УЗ кавитация (бедра, ягодицы)", duration: "60 минут", price: "1900 руб." },
-      { name: "УЗ кавитация (бедра, ягодицы) 8 сеансов", price: "13500 руб." },
-      { name: "УЗ кавитация (бедра, ягодицы) 12 сеансов", price: "20000 руб." }
-    ]
-  },
-  {
-    category: "LPG-массаж",
-    description: "Инновационный вакуумно-роликовый массаж для моделирования контуров тела, мощного лимфодренажа и устранения эффекта «апельсиновой корки».",
-    image: "https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    iconName: "Sparkles",
-    items: [
-      { name: "Всего тела", duration: "45 минут", price: "1900 руб." },
-      { name: "Костюм для LPG (покупается 1 раз)", price: "800 руб.", description: "Обязательный индивидуальный костюм для проведения процедуры." },
-      { name: "LPG-массаж абонемент на 10 сеансов (+ костюм в подарок)", price: "17000 руб." }
-    ]
-  },
-  {
-    category: "Криолиполиз",
-    description: "Воздействие холодом на жировые складки, приводящее к их естественному и безопасному разрушению. Результат заметен уже после первой процедуры.",
-    image: "https://images.unsplash.com/photo-1532453288672-3a27e9be9efd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    iconName: "Droplets",
-    items: [
-      { name: "Криолиполиз зона бедер 2 насадки", duration: "40 минут", price: "6000 руб." },
-      { name: "Криолиполиз зона ягодиц 2 насадки", duration: "40 минут", price: "6000 руб." },
-      { name: "Криолиполиз зона боков 2 насадки", duration: "40 минут", price: "6000 руб." },
-      { name: "Криолиполиз зона живота 1 насадка", duration: "40 минут", price: "3500 руб." },
-      { name: "Криолиполиз зона рук 2 насадки", duration: "40 минут", price: "3000 руб." }
-    ]
-  },
-  {
-    category: "Аппаратные услуги",
-    description: "Комплексные современные методы для подтяжки кожи, тонизации мышц и коррекции локальных несовершенств фигуры.",
-    image: "https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    iconName: "Sparkles",
-    items: [
-      { name: "RF-лифтинг тела (1 зона)", duration: "30 минут", price: "1200 руб.", description: "Радиочастотная подтяжка кожи, стимуляция выработки коллагена." },
-      { name: "RF-лифтинг тела (1 зона) абонемент 10 сеансов", price: "10000 руб." },
-      { name: "Миостимуляция", duration: "40 минут", price: "1100 руб.", description: "«Гимнастика для ленивых». Тонизирует и укрепляет мышцы микротоками." },
-      { name: "Миостимуляция абонемент 10 сеансов", price: "10000 руб." },
-      { name: "Лазерный липолиз", duration: "30 минут", price: "900 руб.", description: "Мягкое и безопасное расщепление жировых клеток холодным лазером." },
-      { name: "Лазерный липолиз абонемент 10 сеансов", price: "7000 руб." },
-      { name: "Прессотерапия", duration: "45 минут", price: "1200 руб.", description: "Мощный аппаратный лимфодренаж. Снимает отеки, выводит токсины." },
-      { name: "Прессотерапия абонемент на 10 сеансов", price: "10000 руб." }
+      { name: "УЗ кавитация (живот) 8 сеансов", price: "8500 руб." }
     ]
   }
 ];
@@ -174,18 +71,6 @@ const equipmentData = [
     description: "Многофункциональная платформа для безоперационной липосакции. Ультразвук разрушает жировые клетки, а радиочастотный лифтинг подтягивает кожу.",
     image: "https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
     features: ["Локальное похудение", "Синтез коллагена", "Лифтинг-эффект"]
-  },
-  {
-    title: "Установка Криолиполиза",
-    description: "Инновационная система для разрушения жировых отложений с помощью направленного холода. Оснащена манипулами для бережной проработки различных зон.",
-    image: "https://images.unsplash.com/photo-1583416750470-965b2707b355?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    features: ["Удаление до 30% жира", "Без реабилитации", "Долгосрочный результат"]
-  },
-  {
-    title: "Система Прессотерапии",
-    description: "Специальный многокамерный костюм, мягко воздействующий на лимфатическую систему сжатым воздухом для полного детокса организма.",
-    image: "https://images.unsplash.com/photo-1564551139785-5eb9c0a6b579?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    features: ["Устранение тяжести", "Детокс", "Глубокое расслабление"]
   }
 ];
 
@@ -197,52 +82,56 @@ const teamMembers = [
     image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
   },
   {
-    name: "Имя Сотрудника 1",
+    name: "Специалист 1",
     role: "Специалист по аппаратному массажу",
     description: "Мастер LPG и УЗ кавитации. Знает все секреты того, как быстро и безболезненно достичь идеальных контуров тела.",
     image: "https://images.unsplash.com/photo-1595152772835-219674b2a8a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    name: "Имя Сотрудника 2",
-    role: "Мастер ручного массажа",
-    description: "Сертифицированный специалист по оздоровительному и расслабляющему массажу. Избавит от зажимов и боли в спине.",
-    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    name: "Имя Сотрудника 3",
-    role: "SPA-эстетист",
-    description: "Эксперт по талассотерапии, стоунотерапии и обертываниям. Подарит вам часы глубокого релакса и отдыха.",
-    image: "https://images.unsplash.com/photo-1554727242-741c14fa561c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
   }
 ];
 
 const faqData = [
   {
     question: "Сколько процедур массажа или коррекции нужно для стойкого эффекта?",
-    answer: "Для достижения выраженного и долгосрочного результата мы рекомендуем проходить процедуры курсом от 8 до 12 сеансов, в зависимости от индивидуальных особенностей вашего тела. Видимые изменения часто заметны уже после 2-3 сеансов."
-  },
-  {
-    question: "Нужно ли как-то готовиться к процедуре УЗ-кавитации или LPG?",
-    answer: "За 3 дня до аппаратных процедур рекомендуется ограничить употребление алкоголя, жирной и острой пищи. За 1,5-2 часа до сеанса желательно выпить около 1-1.5 литров чистой воды для лучшего выведения расщепленных жиров из организма."
+    answer: "Для достижения выраженного и долгосрочного результата мы рекомендуем проходить процедуры курсом от 8 до 12 сеансов, в зависимости от индивидуальных особенностей вашего тела."
   },
   {
     question: "Что брать с собой на сеанс?",
-    answer: "Ничего специального! Мы предоставляем все необходимые одноразовые материалы (простыни, белье, полотенца). Для процедуры LPG-массажа требуется специальный костюм — вы можете приобрести его у нас один раз и использовать на протяжении всего курса."
-  },
-  {
-    question: "Есть ли противопоказания к аппаратному массажу?",
-    answer: "Да, как и у любой эстетической процедуры. Основными противопоказаниями являются: беременность, период лактации, онкология, острые инфекционные заболевания, наличие кардиостимулятора, тяжелые заболевания почек и печени. Перед первой процедурой мы обязательно проводим детальную консультацию."
-  },
-  {
-    question: "Болезненны ли аппаратные процедуры?",
-    answer: "Большинство наших процедур абсолютно комфортны. На RF-лифтинге или LPG многие клиенты расслабляются и засыпают. При вакуумном массаже возможны легкие дискомфортные ощущения в проблемных зонах, но мастер всегда индивидуально подстраивает мощность аппарата под вашу чувствительность."
+    answer: "Ничего специального! Мы предоставляем все необходимые одноразовые материалы. Для процедуры LPG-массажа требуется специальный костюм — вы можете приобрести его у нас."
   }
 ];
 
 export default function App() {
   const [currentView, setCurrentView] = useState('main');
+  
+  // Состояния данных
   const [massageServices, setMassageServices] = useState(massageServicesData);
   const [bodyShapingServices, setBodyShapingServices] = useState(bodyShapingServicesData);
+  const [bookingsList, setBookingsList] = useState([]);
+  
+  const [isLoadingData, setIsLoadingData] = useState(true);
+
+  // --- ЧТЕНИЕ ИЗ FIREBASE ПРИ ЗАГРУЗКЕ САЙТА ---
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const bookingsSnap = await getDocs(collection(db, "bookings"));
+        const loadedBookings = bookingsSnap.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+        loadedBookings.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        setBookingsList(loadedBookings);
+
+        const contentSnap = await getDocs(collection(db, "site_content"));
+        contentSnap.docs.forEach(doc => {
+          if (doc.id === 'massage') setMassageServices(doc.data().items);
+          if (doc.id === 'body') setBodyShapingServices(doc.data().items);
+        });
+      } catch (error) {
+        console.error("Ошибка при загрузке данных:", error);
+      } finally {
+        setIsLoadingData(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   const [activeTab, setActiveTab] = useState('massage');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -253,7 +142,6 @@ export default function App() {
 
   const [loginPass, setLoginPass] = useState('');
   const [loginError, setLoginError] = useState('');
-  const [bookingsList, setBookingsList] = useState([]);
   
   const [adminPanelTab, setAdminPanelTab] = useState('bookings');
   const [contentTab, setContentTab] = useState('massage');
@@ -263,6 +151,7 @@ export default function App() {
   const [selectedServiceData, setSelectedServiceData] = useState(null);
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
 
+  // --- ЛОГИКА САЙТА ---
   const openModal = (serviceName = '') => {
     setSelectedService(serviceName);
     setIsModalOpen(true);
@@ -283,37 +172,23 @@ export default function App() {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // --- ИНТЕГРАЦИЯ С GOOGLE КАЛЕНДАРЕМ ---
-    const WEBHOOK_URL = 'ВАШ_WEBHOOK_URL_ЗДЕСЬ'; 
-
     const newBooking = {
-      id: Date.now().toString(),
       name: bookingData.name,
       phone: bookingData.phone,
       service: selectedService || 'Не указана',
       date: bookingData.date,
       time: bookingData.time,
       status: 'new',
-      createdAt: new Date().toLocaleString('ru-RU')
+      createdAt: new Date().toISOString()
     };
 
     try {
-      if (WEBHOOK_URL !== 'ВАШ_WEBHOOK_URL_ЗДЕСЬ') {
-        await fetch(WEBHOOK_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(newBooking)
-        });
-      }
-      setBookingsList([newBooking, ...bookingsList]);
+      const docRef = await addDoc(collection(db, "bookings"), newBooking);
+      setBookingsList([{ ...newBooking, id: docRef.id }, ...bookingsList]);
       setIsSubmitted(true);
-      
     } catch (error) {
-      console.error("Ошибка при отправке в календарь:", error);
-      setBookingsList([newBooking, ...bookingsList]);
-      setIsSubmitted(true);
+      console.error("Ошибка при сохранении заявки:", error);
+      alert("Не удалось отправить заявку. Пожалуйста, попробуйте еще раз.");
     } finally {
       setIsSubmitting(false);
     }
@@ -332,6 +207,7 @@ export default function App() {
     window.scrollTo(0, 0);
   };
 
+  // --- ЛОГИКА АДМИНКИ ---
   const handleLogin = (e) => {
     e.preventDefault();
     if (loginPass === 'admin') {
@@ -343,36 +219,56 @@ export default function App() {
     }
   };
 
-  const toggleBookingStatus = (id) => {
-    setBookingsList(bookingsList.map(b => 
-      b.id === id ? { ...b, status: b.status === 'new' ? 'done' : 'new' } : b
-    ));
-  };
-
-  const deleteBooking = (id) => {
-    if(window.confirm('Точно удалить эту заявку?')) {
-      setBookingsList(bookingsList.filter(b => b.id !== id));
+  // ИЗМЕНЕНО: Работа со статусами в Firebase
+  const toggleBookingStatus = async (id, currentStatus) => {
+    const newStatus = currentStatus === 'new' ? 'done' : 'new';
+    try {
+      await setDoc(doc(db, "bookings", id), { status: newStatus }, { merge: true });
+      setBookingsList(bookingsList.map(b => b.id === id ? { ...b, status: newStatus } : b));
+    } catch (error) {
+      console.error("Ошибка при обновлении статуса:", error);
     }
   };
 
+  // ИЗМЕНЕНО: Удаление из Firebase
+  const deleteBooking = async (id) => {
+    if(window.confirm('Точно удалить эту заявку?')) {
+      try {
+        await deleteDoc(doc(db, "bookings", id));
+        setBookingsList(bookingsList.filter(b => b.id !== id));
+      } catch (error) {
+        console.error("Ошибка при удалении:", error);
+      }
+    }
+  };
+
+  // --- ЛОГИКА РЕДАКТОРА КОНТЕНТА ---
   const handleEditClick = (index) => {
     setEditingIndex(index);
     const sourceData = contentTab === 'massage' ? massageServices[index] : bodyShapingServices[index];
     setEditingItem(JSON.parse(JSON.stringify(sourceData)));
   };
 
-  const handleSaveContent = () => {
-    if (contentTab === 'massage') {
-      const newData = [...massageServices];
-      newData[editingIndex] = editingItem;
-      setMassageServices(newData);
-    } else {
-      const newData = [...bodyShapingServices];
-      newData[editingIndex] = editingItem;
-      setBodyShapingServices(newData);
+  // ИЗМЕНЕНО: Сохранение контента в Firebase
+  const handleSaveContent = async () => {
+    try {
+      if (contentTab === 'massage') {
+        const newData = [...massageServices];
+        newData[editingIndex] = editingItem;
+        setMassageServices(newData);
+        await setDoc(doc(db, "site_content", "massage"), { items: newData });
+      } else {
+        const newData = [...bodyShapingServices];
+        newData[editingIndex] = editingItem;
+        setBodyShapingServices(newData);
+        await setDoc(doc(db, "site_content", "body"), { items: newData });
+      }
+      setEditingItem(null);
+      setEditingIndex(-1);
+    } catch (error) {
+      console.error("Ошибка сохранения контента:", error);
+      alert("Ошибка при сохранении!");
     }
-    setEditingItem(null);
-    setEditingIndex(-1);
   };
 
   const handleCancelEdit = () => {
@@ -384,6 +280,62 @@ export default function App() {
     const updated = { ...editingItem };
     updated.items[itemIdx][field] = value;
     setEditingItem(updated);
+  };
+
+  // НОВОЕ: Удаление карточки услуги из БД
+  const handleDeleteService = async (index) => {
+    if(window.confirm('Вы уверены, что хотите удалить эту карточку со всеми услугами внутри?')) {
+      try {
+        if (contentTab === 'massage') {
+          const newData = massageServices.filter((_, i) => i !== index);
+          setMassageServices(newData);
+          await setDoc(doc(db, "site_content", "massage"), { items: newData });
+        } else {
+          const newData = bodyShapingServices.filter((_, i) => i !== index);
+          setBodyShapingServices(newData);
+          await setDoc(doc(db, "site_content", "body"), { items: newData });
+        }
+      } catch (error) {
+        console.error("Ошибка при удалении услуги:", error);
+        alert("Не удалось удалить услугу.");
+      }
+    }
+  };
+
+  // НОВОЕ: Добавление новой карточки
+  const handleAddServiceBlock = () => {
+    const newBlock = {
+      description: "Краткое описание процедуры...",
+      image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      items: [{ name: "Название", price: "0 руб.", duration: "30 минут" }]
+    };
+
+    if (contentTab === 'massage') {
+      newBlock.title = "Новая услуга";
+      setMassageServices([...massageServices, newBlock]);
+    } else {
+      newBlock.category = "Новый аппарат";
+      newBlock.iconName = "Sparkles";
+      setBodyShapingServices([...bodyShapingServices, newBlock]);
+    }
+    
+    const newIndex = contentTab === 'massage' ? massageServices.length : bodyShapingServices.length;
+    handleEditClick(newIndex);
+  };
+
+  // НОВОЕ: Загрузка фото с компьютера
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        alert("Внимание! Рекомендуется загружать фото до 2 МБ.");
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setEditingItem({ ...editingItem, image: reader.result });
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   // ==========================================
@@ -459,7 +411,12 @@ export default function App() {
         </header>
 
         <div className="max-w-6xl mx-auto p-6">
-          {adminPanelTab === 'bookings' && (
+          {isLoadingData ? (
+            <div className="flex justify-center items-center py-20">
+              <Loader2 className="w-8 h-8 text-sky-500 animate-spin" />
+              <span className="ml-3 text-stone-500">Загрузка данных из базы...</span>
+            </div>
+          ) : adminPanelTab === 'bookings' ? (
             <>
               <div className="flex justify-between items-end mb-8">
                 <div>
@@ -502,13 +459,13 @@ export default function App() {
                             <Clock className="w-4 h-4 mr-1.5 text-stone-400" />
                             {booking.date} в {booking.time}
                           </div>
-                          <span className="text-[10px] text-stone-400 mt-1 block">Создано: {booking.createdAt}</span>
+                          <span className="text-[10px] text-stone-400 mt-1 block">Создано: {new Date(booking.createdAt).toLocaleString('ru-RU')}</span>
                         </div>
                       </div>
 
                       <div className="flex flex-row md:flex-col gap-2 w-full md:w-auto mt-4 md:mt-0 border-t md:border-t-0 border-stone-100 pt-4 md:pt-0">
                         <button 
-                          onClick={() => toggleBookingStatus(booking.id)}
+                          onClick={() => toggleBookingStatus(booking.id, booking.status)}
                           className={`flex-1 md:flex-none flex items-center justify-center px-4 py-2 rounded-xl text-sm font-medium transition-colors border ${booking.status === 'done' ? 'bg-green-100 text-green-700 border-green-200 hover:bg-green-200' : 'bg-white text-stone-600 border-stone-200 hover:bg-stone-50'}`}
                         >
                           <CheckCircle className={`w-4 h-4 mr-2 ${booking.status === 'done' ? 'text-green-600' : 'text-stone-400'}`} />
@@ -528,15 +485,19 @@ export default function App() {
                 </div>
               )}
             </>
-          )}
-
-          {adminPanelTab === 'content' && (
+          ) : (
             <>
-              <div className="flex justify-between items-end mb-6">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end mb-6 gap-4">
                 <div>
                   <h2 className="text-3xl font-serif mb-2">Управление услугами</h2>
-                  <p className="text-stone-500 text-sm">Редактируйте описания, цены и фотографии на сайте.</p>
+                  <p className="text-stone-500 text-sm">Редактируйте, добавляйте новые или удаляйте неактуальные услуги.</p>
                 </div>
+                <button 
+                  onClick={handleAddServiceBlock}
+                  className="bg-stone-800 hover:bg-stone-900 text-white px-5 py-2.5 rounded-xl text-sm font-medium transition-colors flex items-center justify-center whitespace-nowrap"
+                >
+                  <Plus className="w-4 h-4 mr-2" /> Добавить блок услуг
+                </button>
               </div>
 
               <div className="flex border-b border-stone-200 mb-6">
@@ -568,15 +529,24 @@ export default function App() {
                         </h3>
                         <p className="text-sm text-stone-500 line-clamp-2 mb-4">{service.description}</p>
                         <div className="text-xs text-stone-400 mb-4">
-                          Включено услуг: {service.items.length}
+                          Включено услуг: {service.items?.length || 0}
                         </div>
                       </div>
-                      <button 
-                        onClick={() => handleEditClick(idx)}
-                        className="w-full bg-sky-50 text-sky-600 hover:bg-sky-100 font-medium py-2 rounded-xl transition-colors flex items-center justify-center"
-                      >
-                        <Edit className="w-4 h-4 mr-2" /> Редактировать
-                      </button>
+                      <div className="flex gap-2 mt-2">
+                        <button 
+                          onClick={() => handleEditClick(idx)}
+                          className="flex-1 bg-sky-50 text-sky-600 hover:bg-sky-100 font-medium py-2 rounded-xl transition-colors flex items-center justify-center text-sm"
+                        >
+                          <Edit className="w-4 h-4 mr-2" /> Изменить
+                        </button>
+                        <button 
+                          onClick={() => handleDeleteService(idx)}
+                          className="flex-none bg-white border border-stone-200 text-red-400 hover:bg-red-50 hover:text-red-500 hover:border-red-200 font-medium px-3 rounded-xl transition-colors flex items-center justify-center"
+                          title="Удалить карточку"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -592,7 +562,7 @@ export default function App() {
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-sm font-medium text-stone-700 mb-1">Заголовок</label>
+                        <label className="block text-sm font-medium text-stone-700 mb-1">Заголовок / Название</label>
                         <input 
                           type="text" 
                           className="w-full border border-stone-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-sky-500 outline-none"
@@ -601,23 +571,40 @@ export default function App() {
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-stone-700 mb-1">Описание</label>
+                        <label className="block text-sm font-medium text-stone-700 mb-1">Описание процедуры</label>
                         <textarea 
                           className="w-full border border-stone-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-sky-500 outline-none min-h-[100px]"
                           value={editingItem.description}
                           onChange={e => setEditingItem({...editingItem, description: e.target.value})}
                         />
                       </div>
+                      
+                      {/* НОВЫЙ БЛОК: ЗАГРУЗКА ФОТО */}
                       <div>
-                        <label className="block text-sm font-medium text-stone-700 mb-1">Ссылка на изображение</label>
-                        <input 
-                          type="text" 
-                          className="w-full border border-stone-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-sky-500 outline-none"
-                          value={editingItem.image}
-                          onChange={e => setEditingItem({...editingItem, image: e.target.value})}
-                        />
+                        <label className="block text-sm font-medium text-stone-700 mb-1">Фотография</label>
+                        <div className="flex flex-col gap-3">
+                          <input 
+                            type="text" 
+                            className="w-full border border-stone-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-sky-500 outline-none"
+                            placeholder="Вставьте ссылку на фото из интернета..."
+                            value={editingItem.image}
+                            onChange={e => setEditingItem({...editingItem, image: e.target.value})}
+                          />
+                          <div className="flex items-center gap-3 relative">
+                              <input 
+                                type="file" 
+                                accept="image/*"
+                                onChange={handleImageUpload}
+                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                              />
+                              <button className="w-full bg-stone-50 hover:bg-stone-100 text-stone-700 font-medium py-2.5 rounded-xl transition-colors flex items-center justify-center text-sm border border-stone-200">
+                                <Upload className="w-4 h-4 mr-2" /> Выбрать фото с компьютера
+                              </button>
+                          </div>
+                          <p className="text-xs text-stone-400">Рекомендуется использовать сжатые картинки до 500 КБ.</p>
+                        </div>
                         {editingItem.image && (
-                          <div className="mt-3 w-full h-32 rounded-xl overflow-hidden border border-stone-200">
+                          <div className="mt-4 w-full h-32 rounded-xl overflow-hidden border border-stone-200">
                             <img src={editingItem.image} alt="Preview" className="w-full h-full object-cover" />
                           </div>
                         )}
@@ -627,7 +614,7 @@ export default function App() {
                     <div>
                       <label className="block text-sm font-medium text-stone-700 mb-3">Вложенные услуги и цены</label>
                       <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2">
-                        {editingItem.items.map((item, itemIdx) => (
+                        {editingItem.items?.map((item, itemIdx) => (
                           <div key={itemIdx} className="bg-stone-50 border border-stone-200 rounded-xl p-4 relative">
                             <button 
                               onClick={() => setEditingItem({
@@ -676,11 +663,11 @@ export default function App() {
                       <button 
                         onClick={() => setEditingItem({
                           ...editingItem, 
-                          items: [...editingItem.items, { name: "Новая услуга", price: "0 руб." }]
+                          items: [...(editingItem.items || []), { name: "Новая под-услуга", price: "0 руб." }]
                         })}
                         className="w-full border-2 border-dashed border-stone-300 text-stone-500 hover:bg-stone-50 hover:text-stone-700 font-medium py-3 rounded-xl mt-4 transition-colors flex items-center justify-center text-sm"
                       >
-                        <Plus className="w-4 h-4 mr-1" /> Добавить услугу
+                        <Plus className="w-4 h-4 mr-1" /> Добавить вариант (цену)
                       </button>
                     </div>
                   </div>
@@ -763,7 +750,7 @@ export default function App() {
 
             <h2 className="text-2xl md:text-3xl font-serif text-stone-800 mb-6">Варианты и стоимость</h2>
             <div className="space-y-4">
-              {selectedServiceData.items.map((item, idx) => (
+              {selectedServiceData.items?.map((item, idx) => (
                 <div key={idx} className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 rounded-2xl border border-stone-100 hover:border-sky-200 hover:bg-sky-50/50 transition-colors gap-4">
                   <div>
                     <h4 className="font-medium text-stone-800 text-lg">{item.name}</h4>
@@ -989,7 +976,7 @@ export default function App() {
                     <div className="p-6 flex-1 flex flex-col">
                       <p className="text-sm text-stone-500 mb-6 flex-1">{service.description}</p>
                       <div className="space-y-4">
-                        {service.items.map((item, itemIdx) => (
+                        {service.items?.map((item, itemIdx) => (
                           <div key={itemIdx} className="flex flex-col border-t border-stone-100 pt-4 first:border-0 first:pt-0 gap-2">
                             <div className="flex justify-between items-start gap-3">
                               <span className="text-sm font-medium text-stone-800">{item.name}</span>
@@ -1031,7 +1018,7 @@ export default function App() {
                     <div className="p-6 flex-1 flex flex-col">
                       <p className="text-sm text-stone-500 mb-6 flex-1">{category.description}</p>
                       <ul className="space-y-4">
-                        {category.items.map((item, itemIdx) => (
+                        {category.items?.map((item, itemIdx) => (
                           <li key={itemIdx} className="flex flex-col border-t border-stone-100 pt-4 first:border-0 first:pt-0 gap-2">
                             <div className="flex justify-between items-start gap-3">
                               <div className="pr-2">
@@ -1253,10 +1240,10 @@ export default function App() {
                     >
                       <option value="" disabled>Выберите услугу (необязательно)</option>
                       <optgroup label="Массаж">
-                        {massageServices.flatMap(s => s.items.map(i => `${s.title} (${i.name})`)).map((name, i) => <option key={`m-${i}`} value={name}>{name}</option>)}
+                        {massageServices.flatMap(s => s.items?.map(i => `${s.title} (${i.name})`) || []).map((name, i) => <option key={`m-${i}`} value={name}>{name}</option>)}
                       </optgroup>
                       <optgroup label="Коррекция фигуры">
-                        {bodyShapingServices.flatMap(cat => cat.items.map(i => `${cat.category} - ${i.name}`)).map((name, i) => <option key={`b-${i}`} value={name}>{name}</option>)}
+                        {bodyShapingServices.flatMap(cat => cat.items?.map(i => `${cat.category} - ${i.name}`) || []).map((name, i) => <option key={`b-${i}`} value={name}>{name}</option>)}
                       </optgroup>
                     </select>
                   </div>
