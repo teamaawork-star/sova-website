@@ -91,6 +91,17 @@ export default function App() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [bookingData, setBookingData] = useState({ name: '', phone: '', date: '', time: '' });
+  const [showPromo, setShowPromo] = useState(false);
+  const [promoClosed, setPromoClosed] = useState(false);
+  // --- ТАЙМЕР ДЛЯ БАННЕРА (10 секунд = 10000 миллисекунд) ---
+  useEffect(() => {
+    if (!promoClosed && currentView === 'main') {
+      const timer = setTimeout(() => {
+        setShowPromo(true);
+      }, 10000);
+      return () => clearTimeout(timer); // Очищаем таймер, если клиент ушел с сайта раньше
+    }
+  }, [promoClosed, currentView]);
 
   const [loginPass, setLoginPass] = useState('');
   const [loginError, setLoginError] = useState('');
@@ -853,6 +864,39 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {/* PROMO BANNER */}
+      {showPromo && (
+        <div className="fixed bottom-6 right-6 z-[90] max-w-sm w-[calc(100%-3rem)] bg-white rounded-3xl shadow-2xl border border-sky-100 overflow-hidden animate-fade-in">
+          <div className="bg-gradient-to-r from-sky-500 to-sky-400 p-5 relative">
+            <button 
+              onClick={() => { setShowPromo(false); setPromoClosed(true); }} 
+              className="absolute top-4 right-4 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-1.5 rounded-full transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+            <div className="flex items-center gap-3">
+              <div className="bg-white/20 p-2 rounded-xl"><Sparkles className="w-6 h-6 text-white" /></div>
+              <h4 className="font-serif text-xl font-medium text-white">Первый раз у нас?</h4>
+            </div>
+          </div>
+          <div className="p-6">
+            <p className="text-stone-600 text-sm mb-5 leading-relaxed">
+              Запишитесь сейчас и получите скидку <strong className="text-sky-500 font-bold text-base">15%</strong> на любой массаж или процедуру коррекции фигуры!
+            </p>
+            <button
+              onClick={() => {
+                setShowPromo(false);
+                setPromoClosed(true);
+                openModal(); // Открываем форму записи
+              }}
+              className="w-full bg-sky-50 hover:bg-sky-100 text-sky-600 font-medium py-3 rounded-xl transition-colors text-sm flex justify-center items-center"
+            >
+              Забрать скидку
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* BOOKING MODAL */}
       {isModalOpen && (
