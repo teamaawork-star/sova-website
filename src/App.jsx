@@ -131,72 +131,8 @@ const bodyShapingServicesData = [
 ];
 const teamMembersData = [{ name: "Екатерина Игнатова", role: "Владелица студии", description: "Основательница SOVA...", image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" }];
 const equipmentDefaultData = [{ title: "Оборудование для LPG-массажа", description: "Передовая технология...", image: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", features: "Безболезненно, Мощный лимфодренаж" }];
-const faqDefaultData = [
-  {
-    question: "Будет ли мне больно во время процедур?",
-    answer: "Мы заботимся о вашем комфорте. Большинство наших услуг, такие как LPG-массаж, УЗ-кавитация и RF-лифтинг, являются безболезненными и вызывают лишь ощущение тепла или приятной вибрации. Даже интенсивный вакуумный массаж или криолиполиз подбираются под ваш порог чувствительности, чтобы процедура была эффективной, но не травматичной."
-  },
-  {
-    question: "Сколько сеансов нужно, чтобы увидеть результат?",
-    answer: "Первые изменения в качестве кожи часто заметны уже после 1–2 посещений. Однако для стойкого эффекта (уменьшение объемов, избавление от целлюлита) мы рекомендуем курсы по 8–12 сеансов. Именно поэтому у нас предусмотрены выгодные абонементы: например, курс УЗ-кавитации на 12 сеансов или абонемент на RF-лифтинг (10 сеансов), которые позволяют закрепить результат и существенно сэкономить."
-  },
-  {
-    question: "Боюсь, что аппаратная коррекция — это дорого. Как сэкономить?",
-    answer: "Самый выгодный способ — покупка абонемента. При покупке абонемента на LPG-массаж (10 сеансов) вы получаете специальный костюм в подарок (отдельно он стоит 800 руб.). Абонемент на миостимуляцию или прессотерапию (10 сеансов за 10 000 руб.) снижает стоимость одного визита до 1000 руб., что выгоднее разового посещения."
-  },
-  {
-    question: "Поможет ли массаж, если у меня большой лишний вес или «упрямые» зоны?",
-    answer: "Да, мы комбинируем методы для достижения цели. Для глубоких жировых отложений отлично подходит Криолиполиз (воздействие холодом) или УЗ-кавитация. Для подтяжки кожи после похудения — RF-лифтинг. Мы поможем подобрать индивидуальную программу, работающую именно с вашими проблемными зонами (живот, бедра, руки или бока)."
-  },
-  {
-    question: "Безопасно ли это для здоровья?",
-    answer: "Все наши услуги — это проверенные аппаратные методики. Перед процедурой наш специалист уточнит наличие противопоказаний. Если вы хотите просто расслабиться и снять стресс без интенсивного вмешательства, рекомендуем наши SPA-уходы: стоунтерапию горячими камнями или талассотерапию с морскими водорослями."
-  },
-  {
-    question: "Можно ли приходить с детьми?",
-    answer: "В нашей студии есть специальная услуга — массаж задней поверхности тела для детей до 14 лет (50 минут — 1600 руб.). Вы можете записаться вместе и прививать ребенку культуру заботы о здоровье с ранних лет."
-  },
-  {
-    question: "Я боюсь, что после вакуумного массажа останутся жуткие синяки. Это нормально?",
-    answer: "Небольшие покраснения — это естественная реакция на усиление кровотока, но «черных» гематом быть не должно. Наши мастера работают по проверенным протоколам, постепенно увеличивая интенсивность. Ваша кожа станет подтянутой, а не травмированной."
-  },
-  {
-    question: "Криолиполиз — это не опасно? Я не «застужу» внутренние органы?",
-    answer: "Абсолютно безопасно. Аппарат воздействует локально только на жировую складку, которая захватывается вакуумной насадкой. Температура подобрана так, чтобы разрушать только жировые клетки, не затрагивая кожу, мышцы и внутренние органы."
-  },
-  {
-    question: "У меня сидячая работа, постоянно болит шея. Какой массаж выбрать, чтобы не стало хуже?",
-    answer: "Вам идеально подойдет массаж шейно-воротниковой зоны (20 мин / 900 руб.) или полный массаж спины (40 мин / 1500 руб.). Наши техники направлены на снятие зажимов и улучшение лимфотока, что избавляет от головных болей и чувства «тяжести» в плечах."
-  },
-  {
-    question: "А что, если я куплю абонемент на 10 сеансов и не увижу эффекта?",
-    answer: "Мы рекомендуем комбинировать методики. Например, УЗ-кавитация разбивает жир, а Прессотерапия (1200 руб.) помогает организму быстро вывести продукты распада. Такой комплексный подход гарантирует результат, который вы увидите в зеркале и по одежде."
-  },
-  {
-    question: "Слышала, что LPG-массаж — это просто «поглаживание». Будет ли толк?",
-    answer: "Это миф. LPG-массаж (45 минут / 1900 руб.) — это мощная механическая стимуляция тканей. Он прорабатывает слои, которые недоступны при обычном ручном массаже. Для максимальной гигиены и правильного скольжения роллеров мы используем специальный костюм, который вы получаете в подарок при покупке курса."
-  },
-  {
-    question: "Можно ли мне на процедуры, если у меня варикоз?",
-    answer: "При выраженном варикозе многие агрессивные процедуры противопоказаны, но у нас есть мягкие альтернативы, например, Прессотерапия. Она, наоборот, полезна для вен, так как снимает отечность и улучшает венозный отток. В любом случае, мастер проконсультирует вас перед началом."
-  },
-  {
-    question: "RF-лифтинг — это больно? Говорят, он «жарит» кожу.",
-    answer: "Во время процедуры вы чувствуете только глубокое, приятное тепло. Насадка контролирует температуру, чтобы стимулировать выработку коллагена без ожогов. Это отличная безболезненная альтернатива пластическим операциям для подтяжки кожи."
-  },
-  {
-    question: "Я очень стесняюсь своего тела. Мне будет комфортно у вас?",
-    answer: "В нашей студии царит атмосфера спокойствия и профессионализма. Для большинства процедур по коррекции фигуры (например, LPG) используется специальный плотный костюм, поэтому вы будете чувствовать себя максимально защищенно и комфортно."
-  },
-  {
-    question: "Что выбрать, если я хочу и похудеть, и просто расслабиться?",
-    answer: "Обратите внимание на наш SPA-уход Талассотерапия (2,5 часа / 5500 руб.). Это мощный лимфодренаж за счет обертывания водорослями в сочетании с полным расслабляющим массажем тела. Вы уходите от нас обновленной и «легкой»."
-  },
-  {
-    question: "Миостимуляция — это правда «тренировка для ленивых»? Мои мышцы реально будут работать?",
-    answer: "Да, импульсные токи заставляют мышцы сокращаться так же интенсивно, как в спортзале. Это идеальное решение для подтяжки зоны живота или ягодиц, если на фитнес нет времени. Сеанс стоит всего 1100 руб., а эффект сопоставим с полноценной тренировкой."
-  }
-];
+const faqDefaultData = [{ question: "Сколько нужно процедур?", answer: "Обычно курс состоит из 8-12 сеансов." }];
+
 
 export default function App() {
   // Проверяем адрес в браузере: если там /admin, сразу включаем окно входа
@@ -261,9 +197,34 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('massage');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedService, setSelectedService] = useState('');
-  const [isSubmitted, setIsSubmitted] = useState(false);
+const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [bookingData, setBookingData] = useState({ name: '', phone: '', date: '', time: '' });
+// --- УМНАЯ МАСКА ДЛЯ ТЕЛЕФОНА ---
+  const handlePhoneChange = (e) => {
+    let input = e.target.value.replace(/\D/g, ''); // Оставляем только цифры
+    let formatted = '+7 ';
+    
+    if (!input || input === '7' || input === '8') {
+      setBookingData({ ...bookingData, phone: '' });
+      return;
+    }
+    if (input[0] === '7' || input[0] === '8') input = input.substring(1); // Убираем первую 7 или 8
+    
+    if (input.length > 0) formatted += '(' + input.substring(0, 3);
+    if (input.length >= 4) formatted += ') ' + input.substring(3, 6);
+    if (input.length >= 7) formatted += '-' + input.substring(6, 8);
+    if (input.length >= 9) formatted += '-' + input.substring(8, 10);
+    
+    setBookingData({ ...bookingData, phone: formatted });
+  };
+
+  // --- НОВЫЕ СОСТОЯНИЯ ДЛЯ ФОРМЫ ---
+  const [captcha, setCaptcha] = useState({ num1: 0, num2: 0, answer: '' });
+  // Получаем сегодняшнюю дату для блокировки календаря (формат YYYY-MM-DD)
+  const todayDate = new Date().toISOString().split('T')[0];
+  // Доступные слоты времени
+  const timeSlots = ['10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'];
   const [showPromo, setShowPromo] = useState(false);
   const [promoClosed, setPromoClosed] = useState(false);
   // --- ТАЙМЕР ДЛЯ БАННЕРА (10 секунд = 10000 миллисекунд) ---
@@ -288,11 +249,17 @@ export default function App() {
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
 
   // --- ЛОГИКА САЙТА ---
-  const openModal = (serviceName = '') => {
+const openModal = (serviceName = '') => {
     setSelectedService(serviceName);
     setIsModalOpen(true);
     setIsSubmitted(false);
     setIsSubmitting(false);
+    // Генерируем капчу (два числа от 1 до 10)
+    setCaptcha({ 
+      num1: Math.floor(Math.random() * 10) + 1, 
+      num2: Math.floor(Math.random() * 10) + 1, 
+      answer: '' 
+    });
   };
 
   const closeModal = () => {
@@ -304,24 +271,24 @@ export default function App() {
     }, 300);
   };
 
-  const handleBookingSubmit = async (e) => {
+const handleBookingSubmit = async (e) => {
     e.preventDefault();
+    
+    // ПРОВЕРКА КАПЧИ И ВРЕМЕНИ
+    if (parseInt(captcha.answer) !== (captcha.num1 + captcha.num2)) {
+      alert("Неверный ответ на математический вопрос. Попробуйте еще раз!");
+      return;
+    }
+    if (!bookingData.time) {
+      alert("Пожалуйста, выберите время сеанса.");
+      return;
+    }
+
     setIsSubmitting(true);
     
+    // ... здесь остается ваш старый код отправки в Firebase и Albato
     const [h, m] = bookingData.time.split(':');
-    const endH = String((Number(h) + 1) % 24).padStart(2, '0');
-    const endTime = `${endH}:${m}`;
-
-    const newBooking = {
-      name: bookingData.name,
-      phone: bookingData.phone,
-      service: selectedService || 'Не указана',
-      date: bookingData.date,
-      time: bookingData.time,
-      endTime: endTime,
-      status: 'new',
-      createdAt: new Date().toISOString()
-    };
+    // ... и так далее
 
     const WEBHOOK_URL = 'ВАШ_WEBHOOK_URL_ЗДЕСЬ'; // Не забудьте вернуть вашу ссылку от Albato!
 
@@ -1119,24 +1086,63 @@ export default function App() {
             ) : (
               <>
                 <h3 className="text-2xl font-serif text-stone-800 mb-2">Онлайн-запись</h3>
-                <form onSubmit={handleBookingSubmit} className="space-y-4 mt-6">
+                <form onSubmit={handleBookingSubmit} className="space-y-5 mt-6">
                   <div>
-                    <label className="block text-sm font-medium mb-1">Услуга</label>
-                    <select className="w-full border p-3 rounded-xl text-sm bg-stone-50" value={selectedService} onChange={e => setSelectedService(e.target.value)}>
+                    <label className="block text-sm font-medium mb-1 text-stone-700">Услуга</label>
+                    <select className="w-full border-stone-200 p-3 rounded-xl text-sm bg-stone-50 focus:ring-2 focus:ring-sky-500 outline-none transition-all" value={selectedService} onChange={e => setSelectedService(e.target.value)}>
                       <option value="" disabled>Выберите услугу</option>
                       <optgroup label="Массаж">{massageServices.flatMap(s => s.items?.map(i => `${s.title} (${i.name})`) || []).map((n, i) => <option key={i} value={n}>{n}</option>)}</optgroup>
                       <optgroup label="Коррекция фигуры">{bodyShapingServices.flatMap(c => c.items?.map(i => `${c.category} - ${i.name}`) || []).map((n, i) => <option key={i} value={n}>{n}</option>)}</optgroup>
                     </select>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div><label className="block text-sm font-medium mb-1">Имя</label><input required type="text" className="w-full border p-3 rounded-xl text-sm" value={bookingData.name} onChange={e => setBookingData({...bookingData, name: e.target.value})} /></div>
-                    <div><label className="block text-sm font-medium mb-1">Телефон</label><input required type="tel" className="w-full border p-3 rounded-xl text-sm" value={bookingData.phone} onChange={e => setBookingData({...bookingData, phone: e.target.value})} /></div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-1 text-stone-700">Имя</label>
+                      <input required type="text" placeholder="Ваше имя" className="w-full border border-stone-200 p-3 rounded-xl text-sm focus:ring-2 focus:ring-sky-500 outline-none" value={bookingData.name} onChange={e => setBookingData({...bookingData, name: e.target.value})} />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1 text-stone-700">Телефон</label>
+                      <input required type="tel" placeholder="+7 (999) 000-00-00" className="w-full border border-stone-200 p-3 rounded-xl text-sm focus:ring-2 focus:ring-sky-500 outline-none" value={bookingData.phone} onChange={handlePhoneChange} maxLength={18} />
+                    </div>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div><label className="block text-sm font-medium mb-1">Дата</label><input required type="date" className="w-full border p-3 rounded-xl text-sm" value={bookingData.date} onChange={e => setBookingData({...bookingData, date: e.target.value})} /></div>
-                    <div><label className="block text-sm font-medium mb-1">Время</label><input required type="time" className="w-full border p-3 rounded-xl text-sm" value={bookingData.time} onChange={e => setBookingData({...bookingData, time: e.target.value})} /></div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-1 text-stone-700">Дата сеанса</label>
+                    <input required type="date" min={todayDate} className="w-full border border-stone-200 p-3 rounded-xl text-sm focus:ring-2 focus:ring-sky-500 outline-none bg-stone-50" value={bookingData.date} onChange={e => setBookingData({...bookingData, date: e.target.value})} />
                   </div>
-                  <button type="submit" disabled={isSubmitting} className="w-full bg-sky-500 hover:bg-sky-600 text-white font-medium py-3.5 rounded-xl mt-6 flex justify-center items-center">
+
+                  <div>
+                    <label className="block text-sm font-medium mb-2 text-stone-700">Свободное время</label>
+                    <div className="flex flex-wrap gap-2">
+                      {timeSlots.map(t => (
+                        <button 
+                          key={t} 
+                          type="button" 
+                          onClick={() => setBookingData({...bookingData, time: t})}
+                          className={`px-4 py-2 rounded-xl text-sm font-medium transition-all border ${bookingData.time === t ? 'bg-sky-500 text-white border-sky-500 shadow-md scale-105' : 'bg-white text-stone-600 border-stone-200 hover:border-sky-300 hover:bg-sky-50'}`}
+                        >
+                          {t}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* КАПЧА */}
+                  <div className="bg-stone-50 border border-stone-200 p-4 rounded-xl flex items-center justify-between gap-4 mt-2">
+                    <label className="text-sm text-stone-600 font-medium">
+                      Проверка от спама: <strong className="text-lg text-stone-800 ml-1">{captcha.num1} + {captcha.num2} = ?</strong>
+                    </label>
+                    <input 
+                      required 
+                      type="number" 
+                      className="w-20 border border-stone-300 p-2 rounded-lg text-center focus:ring-2 focus:ring-sky-500 outline-none" 
+                      value={captcha.answer} 
+                      onChange={e => setCaptcha({...captcha, answer: e.target.value})} 
+                    />
+                  </div>
+
+                  <button type="submit" disabled={isSubmitting} className="w-full bg-sky-500 hover:bg-sky-600 text-white font-medium py-4 rounded-xl mt-6 flex justify-center items-center shadow-lg hover:shadow-xl transition-all">
                     {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : "Отправить заявку"}
                   </button>
                 </form>
