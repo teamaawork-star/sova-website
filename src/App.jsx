@@ -939,53 +939,53 @@ export default function App() {
         </div>
       </section>
 
-      {/* CONTACTS / FOOTER */}
-{/* CONTACTS / FOOTER */}
+    {/* CONTACTS / FOOTER */}
       <section id="contacts" className="py-20 bg-sky-900 text-white relative overflow-hidden">
-        <div className="max-w-5xl mx-auto px-4 relative z-10">
-          <h2 className="text-3xl md:text-4xl font-serif mb-10 text-center">Готовы к преображению?</h2>
+        <div className="max-w-6xl mx-auto px-4 relative z-10">
           
-          <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-6 md:p-8 border border-white/20 shadow-2xl">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+          {/* Главный заголовок секции */}
+          <h2 className="text-3xl md:text-4xl font-serif mb-10 text-center lg:text-left">Контакты</h2>
+          
+          <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-6 md:p-8 border border-white/20 shadow-2xl flex flex-col lg:flex-row gap-8 items-stretch">
+            
+            {/* ЛЕВАЯ КОЛОНКА (35%): Информация */}
+            <div className="w-full lg:w-[35%] flex flex-col justify-center items-center lg:items-start text-center lg:text-left">
               
-              {/* Левая колонка: Контакты */}
-              <div className="flex flex-col justify-center items-center lg:items-start text-center lg:text-left py-4">
-                <div className="mb-8 w-full border-b border-white/10 pb-8">
-                  <div className="flex items-center justify-center lg:justify-start space-x-2 text-sky-200 mb-2">
-                    <MapPin className="w-5 h-5" />
-                    <span className="uppercase tracking-wider text-sm">Наш адрес</span>
-                  </div>
-                  <span className="text-xl font-light text-white block">г. Саров, проспект Музрукова, д.37 к.3</span>
+              <div className="mb-8 w-full border-b border-white/10 pb-8">
+                <div className="flex items-center justify-center lg:justify-start space-x-2 text-sky-200 mb-2">
+                  <MapPin className="w-5 h-5" />
+                  <span className="uppercase tracking-wider text-sm font-medium">Наш адрес</span>
                 </div>
-                
-                <a href="tel:+79101258250" className="group flex flex-col items-center lg:items-start mb-8 w-full">
-                  <div className="flex items-center space-x-3 sm:space-x-4">
-                    <div className="w-12 h-12 sm:w-14 sm:h-14 bg-sky-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shrink-0">
-                      <Phone className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                    </div>
-                    <span className="text-2xl sm:text-3xl md:text-4xl font-light text-white tracking-wide">+7 910-125-82-50</span>
-                  </div>
-                </a>
-                
-                <button onClick={() => openModal()} className="w-full lg:w-auto px-10 bg-white text-sky-900 hover:bg-sky-50 font-medium py-3.5 rounded-full transition-colors text-lg">
-                  Записаться онлайн
-                </button>
-              </div>
-
-              {/* Правая колонка: Карта Яндекса */}
-              <div className="w-full h-72 lg:h-auto min-h-[350px] rounded-2xl overflow-hidden border border-white/10 shadow-inner relative bg-stone-100">
-                <iframe 
-                  src="https://yandex.ru/map-widget/v1/?text=Саров%2C%20проспект%20Музрукова%2C%2037к3&z=16" 
-                  width="100%" 
-                  height="100%" 
-                  frameBorder="0" 
-                  allowFullScreen={true} 
-                  style={{ position: 'absolute', top: 0, left: 0 }}
-                  title="Карта студии SOVA"
-                ></iframe>
+                <span className="text-xl font-light text-white block leading-relaxed">г. Саров,<br/>проспект Музрукова, д.37 к.3</span>
               </div>
               
+              <a href="tel:+79101258250" className="group flex flex-col items-center lg:items-start mb-8 w-full">
+                <div className="flex items-center space-x-3 sm:space-x-4">
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 bg-sky-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shrink-0">
+                    <Phone className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                  </div>
+                  <span className="text-2xl sm:text-3xl font-light text-white tracking-wide whitespace-nowrap">+7 910-125-82-50</span>
+                </div>
+              </a>
+              
+              <button onClick={() => openModal()} className="w-full px-8 bg-white text-sky-900 hover:bg-sky-50 font-medium py-4 rounded-full transition-colors text-lg shadow-md mt-auto">
+                Записаться онлайн
+              </button>
             </div>
+
+            {/* ПРАВАЯ КОЛОНКА (65%): Карта Яндекса из Конструктора */}
+            <div className="w-full lg:w-[65%] h-80 lg:h-auto min-h-[400px] rounded-2xl overflow-hidden border border-white/10 shadow-inner relative bg-stone-100">
+              <iframe 
+                src="https://yandex.ru/map-widget/v1/?um=constructor%3A5bd4448c7935bb1d9d7b082ee77117acbad4684acf8b86717e288673a4a24dbc&amp;source=constructor" 
+                width="100%" 
+                height="100%" 
+                frameBorder="0" 
+                allowFullScreen={true} 
+                style={{ position: 'absolute', top: 0, left: 0 }}
+                title="Карта студии SOVA"
+              ></iframe>
+            </div>
+            
           </div>
         </div>
       </section>
