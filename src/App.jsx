@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Phone, MapPin, Clock, Sparkles, Wind, Droplets, X, CheckCircle, Lock, User, Trash2, LogOut, Edit, Plus, Save, ArrowLeft, ArrowRight, Loader2, ChevronDown, ChevronUp, ShieldCheck, Upload, Search } from 'lucide-react';
+import { Phone, MapPin, Clock, Sparkles, Wind, Droplets, X, CheckCircle, Lock, Trash2, LogOut, Edit, Plus, Save, ArrowLeft, ArrowRight, Loader2, ChevronDown, ChevronUp, ShieldCheck, Upload, Search } from 'lucide-react';
 import { collection, getDocs, addDoc, doc, setDoc, deleteDoc } from 'firebase/firestore';
 import { db } from './firebase';
 
@@ -45,13 +45,15 @@ export default function App() {
 
   // --- МАГИЯ SEO: ДИНАМИЧЕСКАЯ ПОДМЕНА ТЕГОВ ---
   useEffect(() => {
-    document.title = seoData.title;
-    
-    const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) metaDesc.setAttribute('content', seoData.description);
-    
-    const metaKeywords = document.querySelector('meta[name="keywords"]');
-    if (metaKeywords) metaKeywords.setAttribute('content', seoData.keywords);
+    if (seoData) {
+      document.title = seoData.title || "SOVA";
+      
+      const metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) metaDesc.setAttribute('content', seoData.description || "");
+      
+      const metaKeywords = document.querySelector('meta[name="keywords"]');
+      if (metaKeywords) metaKeywords.setAttribute('content', seoData.keywords || "");
+    }
   }, [seoData]);
 
   // --- ЧТЕНИЕ ИЗ FIREBASE ПРИ ЗАГРУЗКЕ САЙТА ---
