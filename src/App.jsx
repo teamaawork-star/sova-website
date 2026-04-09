@@ -224,7 +224,7 @@ const [isSubmitted, setIsSubmitted] = useState(false);
   // Получаем сегодняшнюю дату для блокировки календаря (формат YYYY-MM-DD)
   const todayDate = new Date().toISOString().split('T')[0];
   // Доступные слоты времени
-  const timeSlots = ['10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'];
+  
   const [showPromo, setShowPromo] = useState(false);
   const [promoClosed, setPromoClosed] = useState(false);
   // --- ТАЙМЕР ДЛЯ БАННЕРА (10 секунд = 10000 миллисекунд) ---
@@ -236,6 +236,12 @@ const [isSubmitted, setIsSubmitted] = useState(false);
       return () => clearTimeout(timer); // Очищаем таймер, если клиент ушел с сайта раньше
     }
   }, [promoClosed, currentView]);
+
+  // --- СБРОС ВРЕМЕНИ ПРИ СМЕНЕ УСЛУГИ ---
+  useEffect(() => {
+    setBookingData(prev => ({ ...prev, time: '' }));
+  }, [selectedService]);
+
 
   const [loginPass, setLoginPass] = useState('');
   const [loginError, setLoginError] = useState('');
@@ -665,6 +671,20 @@ const handleBookingSubmit = async (e) => {
                             <p className="text-xs text-sky-800 leading-relaxed">Эти данные будут отправляться в поисковики (Яндекс, Google) и отображаться на вкладке браузера. Изменения применяются мгновенно!</p>
                           </div>
                           <div><label className="block text-sm font-medium mb-1">Title (Главный заголовок сайта)</label><input type="text" className="w-full border p-3 rounded-xl text-sm font-medium" value={editingItem.title} onChange={e => setEditingItem({...editingItem, title: e.target.value})} /></div>
+                          {/* НОВОЕ ПОЛЕ: РАСПИСАНИЕ */}
+                           {['massage', 'body'].includes(contentTab) && (
+                             <div>
+                               <label className="block text-sm font-medium mb-1 text-sky-700">Доступное время (через запятую)</label>
+                               <input 
+                                 type="text" 
+                                 className="w-full border p-3 rounded-xl text-sm" 
+                                 placeholder="Например: 09:00, 11:30, 15:00" 
+                                 value={editingItem.availableTimes || ''} 
+                                 onChange={e => setEditingItem({...editingItem, availableTimes: e.target.value})} 
+                               />
+                               <p className="text-xs text-stone-400 mt-1">Оставьте пустым для расписания по умолчанию (с 10:00 до 20:00)</p>
+                             </div>
+                           )}
                           <div><label className="block text-sm font-medium mb-1">Description (Описание для сниппета в поиске)</label><textarea className="w-full border p-3 rounded-xl text-sm min-h-[100px]" value={editingItem.description} onChange={e => setEditingItem({...editingItem, description: e.target.value})} /></div>
                           <div><label className="block text-sm font-medium mb-1">Keywords (Ключевые слова через запятую)</label><textarea className="w-full border p-3 rounded-xl text-sm" value={editingItem.keywords} onChange={e => setEditingItem({...editingItem, keywords: e.target.value})} /></div>
                         </div>
@@ -1113,19 +1133,38 @@ const handleBookingSubmit = async (e) => {
                   </div>
 
                   <div>
+                   <div>
                     <label className="block text-sm font-medium mb-2 text-stone-700">Свободное время</label>
-                    <div className="flex flex-wrap gap-2">
-                      {timeSlots.map(t => (
-                        <button 
-                          key={t} 
-                          type="button" 
-                          onClick={() => setBookingData({...bookingData, time: t})}
-                          className={`px-4 py-2 rounded-xl text-sm font-medium transition-all border ${bookingData.time === t ? 'bg-sky-500 text-white border-sky-500 shadow-md scale-105' : 'bg-white text-stone-600 border-stone-200 hover:border-sky-300 hover:bg-sky-50'}`}
-                        >
-                          {t}
-                        </button>
-                      ))}
-                    </div>
+                    
+                    {/* ЛОГИКА ВЫЧИСЛЕНИЯ ВРЕМЕНИ */}
+                    {(() => {
+                      if (!selectedService) {
+                        return <p className="text-sm text-stone-500 py-2 bg-stone-100 px-4 rounded-xl">Сначала выберите услугу в списке выше 👆</p>;
+                      }
+                      
+                      // Ищем, к какой категории относится выбранная услуга
+                      const massageMatch = massageServices.find(s => s.items?.some(i => `${s.title} (${i.name})` === selectedService));
+                      const bodyMatch = bodyShapingServices.find(c => c.items?.some(i => `${c.category} - ${i.name}` === selectedService));
+                      
+                      // Берем время из базы или ставим стандартное
+                      const timesString = (massageMatch?.availableTimes) || (bodyMatch?.availableTimes) || "10:00, 11:00, 12:00, 13:00, 14:00, 15:00, 16:00, 17:00, 18:00, 19:00, 20:00";
+                      const activeSlots = timesString.split(',').map(t => t.trim()).filter(Boolean);
+
+                      return (
+                        <div className="flex flex-wrap gap-2 animate-fade-in">
+                          {activeSlots.map(t => (
+                            <button 
+                              key={t} 
+                              type="button" 
+                              onClick={() => setBookingData({...bookingData, time: t})}
+                              className={`px-4 py-2 rounded-xl text-sm font-medium transition-all border ${bookingData.time === t ? 'bg-sky-500 text-white border-sky-500 shadow-md scale-105' : 'bg-white text-stone-600 border-stone-200 hover:border-sky-300 hover:bg-sky-50'}`}
+                            >
+                              {t}
+                            </button>
+                          ))}
+                        </div>
+                      );
+                    })()}
                   </div>
 
                   {/* КАПЧА */}
