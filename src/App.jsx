@@ -546,14 +546,24 @@ const handleBookingSubmit = async (e) => {
         )
       }
 
-      if (contentTab === 'seo') {
+if (contentTab === 'seo') {
         return (
           <div className="bg-white rounded-2xl border border-stone-200 p-8 flex flex-col items-center text-center shadow-sm">
             <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-6"><Search className="w-8 h-8" /></div>
             <h3 className="text-2xl font-serif text-stone-800 mb-2">{seoData.title}</h3>
             <p className="text-stone-500 mb-4 max-w-xl">{seoData.description}</p>
-            <div className="bg-stone-50 px-4 py-2 rounded-lg border border-stone-200 mb-8"><span className="text-xs text-stone-400 font-mono uppercase tracking-wider block mb-1">Ключевые слова</span><span className="text-sm text-stone-600 font-medium">{seoData.keywords}</span></div>
-            <button onClick={() => handleEditClick(0)} className="bg-sky-500 text-white px-8 hover:bg-sky-600 font-medium py-3 rounded-xl flex items-center justify-center"><Edit className="w-4 h-4 mr-2" /> Настроить SEO-теги</button>
+            
+            <div className="w-full max-w-md space-y-3 mb-8 text-left">
+              <div className="bg-stone-50 px-4 py-3 rounded-lg border border-stone-200">
+                <span className="text-xs text-stone-400 font-mono uppercase tracking-wider block mb-1">Доступное время записи</span>
+                <span className="text-sm text-stone-800 font-medium">{seoData.availableTimes || defaultSeo.availableTimes}</span>
+              </div>
+              <div className="bg-stone-50 px-4 py-3 rounded-lg border border-stone-200">
+                <span className="text-xs text-stone-400 font-mono uppercase tracking-wider block mb-1">Ключевые слова</span>
+                <span className="text-sm text-stone-600 font-medium">{seoData.keywords}</span>
+              </div>
+            </div>
+            <button onClick={() => handleEditClick(0)} className="bg-sky-500 text-white px-8 hover:bg-sky-600 font-medium py-3 rounded-xl flex items-center justify-center"><Edit className="w-4 h-4 mr-2" /> Настроить SEO и время</button>
           </div>
         )
       }
@@ -681,22 +691,23 @@ const handleBookingSubmit = async (e) => {
                       {contentTab === 'seo' && (
                         <div className="space-y-5 lg:col-span-2 w-full max-w-2xl">
                           <div className="bg-sky-50 border border-sky-100 p-4 rounded-xl mb-4">
-                            <p className="text-xs text-sky-800 leading-relaxed">Эти данные будут отправляться в поисковики (Яндекс, Google) и отображаться на вкладке браузера. Изменения применяются мгновенно!</p>
+                            <p className="text-xs text-sky-800 leading-relaxed">Здесь вы можете изменить общие настройки сайта: расписание для записи, а также теги для Яндекса и Google.</p>
                           </div>
+                          
+                          {/* ПОЛЕ ВРЕМЕНИ */}
+                          <div className="bg-stone-50 border border-stone-200 p-5 rounded-xl">
+                            <label className="block text-sm font-medium mb-1 text-stone-800">Доступное время (через запятую)</label>
+                            <input 
+                              type="text" 
+                              className="w-full border border-stone-300 p-3 rounded-xl text-sm" 
+                              placeholder="Например: 09:00, 11:30, 15:00" 
+                              value={editingItem.availableTimes || ''} 
+                              onChange={e => setEditingItem({...editingItem, availableTimes: e.target.value})} 
+                            />
+                            <p className="text-xs text-stone-500 mt-2">Оставьте пустым для расписания по умолчанию (с 10:00 до 20:00)</p>
+                          </div>
+
                           <div><label className="block text-sm font-medium mb-1">Title (Главный заголовок сайта)</label><input type="text" className="w-full border p-3 rounded-xl text-sm font-medium" value={editingItem.title} onChange={e => setEditingItem({...editingItem, title: e.target.value})} /></div>
-                          {/* НОВОЕ ПОЛЕ: РАСПИСАНИЕ */}
-                              <div>
-                               <label className="block text-sm font-medium mb-1 text-sky-700">Доступное время (через запятую)</label>
-                               <input 
-                                 type="text" 
-                                 className="w-full border p-3 rounded-xl text-sm" 
-                                 placeholder="Например: 09:00, 11:30, 15:00" 
-                                 value={editingItem.availableTimes || ''} 
-                                 onChange={e => setEditingItem({...editingItem, availableTimes: e.target.value})} 
-                               />
-                               <p className="text-xs text-stone-400 mt-1">Оставьте пустым для расписания по умолчанию (с 10:00 до 20:00)</p>
-                             </div>
-                           )
                           <div><label className="block text-sm font-medium mb-1">Description (Описание для сниппета в поиске)</label><textarea className="w-full border p-3 rounded-xl text-sm min-h-[100px]" value={editingItem.description} onChange={e => setEditingItem({...editingItem, description: e.target.value})} /></div>
                           <div><label className="block text-sm font-medium mb-1">Keywords (Ключевые слова через запятую)</label><textarea className="w-full border p-3 rounded-xl text-sm" value={editingItem.keywords} onChange={e => setEditingItem({...editingItem, keywords: e.target.value})} /></div>
                         </div>
