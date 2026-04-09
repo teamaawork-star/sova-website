@@ -691,7 +691,7 @@ export default function App() {
       {/* HERO SECTION */}
       <section className="relative bg-stone-100 overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <img src={heroData.bgImage} alt="Background" className="w-full h-full object-cover opacity-30" />
+          <img src={heroData.bgImage} alt="Background" className="w-full h-full object-cover opacity-50" />
           <div className="absolute inset-0 bg-gradient-to-r from-stone-50 via-stone-50/80 to-transparent"></div>
         </div>
         <div className="max-w-6xl mx-auto px-4 py-20 md:py-32 relative z-10">
