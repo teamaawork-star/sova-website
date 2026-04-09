@@ -1,68 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import { Phone, MapPin, Clock, Sparkles, Wind, Droplets, X, CheckCircle, Lock, User, Trash2, LogOut, Edit, Plus, Save, ArrowLeft, ArrowRight, Loader2, ChevronDown, ChevronUp, ShieldCheck, Upload } from 'lucide-react';
+import { Phone, MapPin, Clock, Sparkles, Wind, Droplets, X, CheckCircle, Lock, User, Trash2, LogOut, Edit, Plus, Save, ArrowLeft, ArrowRight, Loader2, ChevronDown, ChevronUp, ShieldCheck, Upload, Search } from 'lucide-react';
 import { collection, getDocs, addDoc, doc, setDoc, deleteDoc } from 'firebase/firestore';
 import { db } from './firebase';
 
 const IconMap = { Wind, Droplets, Sparkles };
 
-// --- БАЗОВЫЕ ДАННЫЕ (Если база Firebase пуста) ---
+// --- БАЗОВЫЕ ДАННЫЕ ---
 const defaultHero = {
   badge: "Добро пожаловать в SOVA",
   title1: "Подарите себе",
   titleHighlight: "гармонию",
   title2: "и красоту",
-  description: "Профессиональный массаж и современные аппаратные методики коррекции фигуры в уютной атмосфере нашей студии. Ваше тело скажет вам спасибо.",
+  description: "Профессиональный массаж и современные аппаратные методики коррекции фигуры в уютной атмосфере нашей студии.",
   bgImage: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
 };
 
-const massageServicesData = [
-  {
-    title: "Массаж спины",
-    description: "Снимает напряжение, мышечные боли и зажимы, улучшает осанку и кровообращение.",
-    image: "https://images.unsplash.com/photo-1600334129128-68505dcecbfa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    items: [
-      { name: "1 сеанс (40 минут)", price: "1500 руб." },
-      { name: "Курс 10 сеансов", price: "13000 руб." }
-    ]
-  }
-];
+const defaultSeo = {
+  title: "Студия массажа и коррекции фигуры SOVA | Саров",
+  description: "Профессиональный массаж, LPG, УЗ-кавитация и аппаратная коррекция фигуры в Сарове. Запишитесь онлайн!",
+  keywords: "массаж саров, lpg массаж, коррекция фигуры, сова"
+};
 
-const bodyShapingServicesData = [
-  {
-    category: "Вакуумный массаж",
-    description: "Аппаратное воздействие, которое ускоряет лимфоток, эффективно разбивает жировые отложения и борется с целлюлитом.",
-    image: "https://images.unsplash.com/photo-1564551139785-5eb9c0a6b579?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    iconName: "Wind",
-    items: [
-      { name: "Бедра и ягодицы", duration: "40 минут", price: "1400 руб." }
-    ]
-  }
-];
-
-const teamMembersData = [
-  {
-    name: "Екатерина Игнатова",
-    role: "Владелица студии",
-    description: "Основательница SOVA, эксперт по коррекции фигуры и массажным методикам.",
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-  }
-];
-
-const equipmentDefaultData = [
-  {
-    title: "Оборудование для LPG-массажа",
-    description: "Передовая вакуумно-роликовая технология для глубокого лимфодренажа.",
-    image: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    features: "Безболезненно, Мощный лимфодренаж, Снятие отеков"
-  }
-];
-
-const faqDefaultData = [
-  {
-    question: "Сколько процедур массажа или коррекции нужно для стойкого эффекта?",
-    answer: "Для достижения выраженного и долгосрочного результата мы рекомендуем проходить процедуры курсом от 8 до 12 сеансов."
-  }
-];
+const massageServicesData = [{ title: "Массаж спины", description: "Снимает напряжение...", image: "https://images.unsplash.com/photo-1600334129128-68505dcecbfa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", items: [{ name: "1 сеанс", price: "1500 руб." }] }];
+const bodyShapingServicesData = [{ category: "Вакуумный массаж", description: "Ускоряет лимфоток...", image: "https://images.unsplash.com/photo-1564551139785-5eb9c0a6b579?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", iconName: "Wind", items: [{ name: "Бедра и ягодицы", duration: "40 минут", price: "1400 руб." }] }];
+const teamMembersData = [{ name: "Екатерина Игнатова", role: "Владелица студии", description: "Основательница SOVA...", image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" }];
+const equipmentDefaultData = [{ title: "Оборудование для LPG-массажа", description: "Передовая технология...", image: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", features: "Безболезненно, Мощный лимфодренаж" }];
+const faqDefaultData = [{ question: "Сколько нужно процедур?", answer: "Обычно курс состоит из 8-12 сеансов." }];
 
 
 export default function App() {
@@ -70,6 +33,7 @@ export default function App() {
   
   // Состояния данных
   const [heroData, setHeroData] = useState(defaultHero);
+  const [seoData, setSeoData] = useState(defaultSeo); // <-- НОВОЕ ПОЛЕ SEO
   const [massageServices, setMassageServices] = useState(massageServicesData);
   const [bodyShapingServices, setBodyShapingServices] = useState(bodyShapingServicesData);
   const [teamMembers, setTeamMembers] = useState(teamMembersData);
@@ -78,6 +42,17 @@ export default function App() {
   const [bookingsList, setBookingsList] = useState([]);
   
   const [isLoadingData, setIsLoadingData] = useState(true);
+
+  // --- МАГИЯ SEO: ДИНАМИЧЕСКАЯ ПОДМЕНА ТЕГОВ ---
+  useEffect(() => {
+    document.title = seoData.title;
+    
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.setAttribute('content', seoData.description);
+    
+    const metaKeywords = document.querySelector('meta[name="keywords"]');
+    if (metaKeywords) metaKeywords.setAttribute('content', seoData.keywords);
+  }, [seoData]);
 
   // --- ЧТЕНИЕ ИЗ FIREBASE ПРИ ЗАГРУЗКЕ САЙТА ---
   useEffect(() => {
@@ -91,6 +66,7 @@ export default function App() {
         const contentSnap = await getDocs(collection(db, "site_content"));
         contentSnap.docs.forEach(doc => {
           if (doc.id === 'hero') setHeroData(doc.data());
+          if (doc.id === 'seo') setSeoData(doc.data()); // <-- ЗАГРУЗКА SEO ИЗ БАЗЫ
           if (doc.id === 'massage') setMassageServices(doc.data().items);
           if (doc.id === 'body') setBodyShapingServices(doc.data().items);
           if (doc.id === 'team') setTeamMembers(doc.data().items);
@@ -145,37 +121,38 @@ export default function App() {
     e.preventDefault();
     setIsSubmitting(true);
     
+    const [h, m] = bookingData.time.split(':');
+    const endH = String((Number(h) + 1) % 24).padStart(2, '0');
+    const endTime = `${endH}:${m}`;
+
     const newBooking = {
       name: bookingData.name,
       phone: bookingData.phone,
       service: selectedService || 'Не указана',
       date: bookingData.date,
       time: bookingData.time,
+      endTime: endTime,
       status: 'new',
       createdAt: new Date().toISOString()
     };
 
-    // ССЫЛКА НА ВАШ ВЕБХУК ОТ MAKE.COM ИЛИ ALBATO:
-    const WEBHOOK_URL = 'https://h.albato.ru/wh/38/1lfe1d5/tFKF5VOoV6uKRzCIoVGsXKbbiJC0r2s_3Viaz8Ef9oQ/';
+    const WEBHOOK_URL = 'ВАШ_WEBHOOK_URL_ЗДЕСЬ'; // Не забудьте вернуть вашу ссылку от Albato!
 
     try {
-      // 1. Сохраняем заявку в нашу базу Firebase (для админки)
       const docRef = await addDoc(collection(db, "bookings"), newBooking);
       setBookingsList([{ ...newBooking, id: docRef.id }, ...bookingsList]);
       setIsSubmitted(true);
 
-      // 2. Отправляем радиосигнал для Google Календаря
-      if (WEBHOOK_URL !== '') {
+      if (WEBHOOK_URL !== 'ВАШ_WEBHOOK_URL_ЗДЕСЬ') {
         await fetch(WEBHOOK_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(newBooking)
         });
       }
-
     } catch (error) {
       console.error("Ошибка при сохранении заявки:", error);
-      alert("Не удалось отправить заявку. Пожалуйста, попробуйте еще раз.");
+      alert("Не удалось отправить заявку.");
     } finally {
       setIsSubmitting(false);
     }
@@ -232,6 +209,8 @@ export default function App() {
     setEditingIndex(index);
     if (contentTab === 'hero') {
       setEditingItem(JSON.parse(JSON.stringify(heroData)));
+    } else if (contentTab === 'seo') {
+      setEditingItem(JSON.parse(JSON.stringify(seoData)));
     } else if (contentTab === 'massage') {
       setEditingItem(JSON.parse(JSON.stringify(massageServices[index])));
     } else if (contentTab === 'body') {
@@ -250,6 +229,9 @@ export default function App() {
       if (contentTab === 'hero') {
         setHeroData(editingItem);
         await setDoc(doc(db, "site_content", "hero"), editingItem);
+      } else if (contentTab === 'seo') {
+        setSeoData(editingItem);
+        await setDoc(doc(db, "site_content", "seo"), editingItem);
       } else {
         let newData = [];
         if (contentTab === 'massage') { newData = [...massageServices]; newData[editingIndex] = editingItem; setMassageServices(newData); }
@@ -328,9 +310,6 @@ export default function App() {
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      if (file.size > 1 * 1024 * 1024) {
-        alert("Внимание! Размер фото больше 1 МБ. База данных может не сохранить файл. Рекомендуем сжать фото.");
-      }
       const reader = new FileReader();
       reader.onloadend = () => {
         if (contentTab === 'hero') {
@@ -350,25 +329,14 @@ export default function App() {
     return (
       <div className="min-h-screen bg-stone-100 flex items-center justify-center p-4">
         <div className="bg-white p-8 rounded-3xl shadow-xl w-full max-w-sm relative">
-          <button onClick={() => setCurrentView('main')} className="absolute top-4 right-4 text-stone-400 hover:text-stone-700">
-            <X className="w-5 h-5" />
-          </button>
+          <button onClick={() => setCurrentView('main')} className="absolute top-4 right-4 text-stone-400 hover:text-stone-700"><X className="w-5 h-5" /></button>
           <div className="flex flex-col items-center mb-6">
-            <div className="w-12 h-12 bg-sky-100 text-sky-600 rounded-full flex items-center justify-center mb-4">
-              <Lock className="w-6 h-6" />
-            </div>
+            <div className="w-12 h-12 bg-sky-100 text-sky-600 rounded-full flex items-center justify-center mb-4"><Lock className="w-6 h-6" /></div>
             <h2 className="text-2xl font-serif text-stone-800">Вход в панель</h2>
-            <p className="text-sm text-stone-500 text-center mt-1">Пароль по умолчанию: <strong>admin</strong></p>
           </div>
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <input 
-                type="password" 
-                placeholder="Введите пароль" 
-                className="w-full border border-stone-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-sky-500 outline-none text-center"
-                value={loginPass}
-                onChange={e => setLoginPass(e.target.value)}
-              />
+              <input type="password" placeholder="Введите пароль" className="w-full border border-stone-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-sky-500 outline-none text-center" value={loginPass} onChange={e => setLoginPass(e.target.value)} />
               {loginError && <p className="text-red-500 text-xs text-center mt-2">{loginError}</p>}
             </div>
             <button type="submit" className="w-full bg-sky-500 hover:bg-sky-600 text-white font-medium py-3 rounded-xl transition-colors">Войти</button>
@@ -400,9 +368,19 @@ export default function App() {
               </div>
             </div>
             <p className="text-stone-500 mb-6 max-w-xl">{heroData.description}</p>
-            <button onClick={() => handleEditClick(0)} className="bg-sky-500 text-white px-8 hover:bg-sky-600 font-medium py-3 rounded-xl transition-colors flex items-center justify-center">
-              <Edit className="w-4 h-4 mr-2" /> Редактировать главный экран
-            </button>
+            <button onClick={() => handleEditClick(0)} className="bg-sky-500 text-white px-8 hover:bg-sky-600 font-medium py-3 rounded-xl flex items-center justify-center"><Edit className="w-4 h-4 mr-2" /> Редактировать</button>
+          </div>
+        )
+      }
+
+      if (contentTab === 'seo') {
+        return (
+          <div className="bg-white rounded-2xl border border-stone-200 p-8 flex flex-col items-center text-center shadow-sm">
+            <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-6"><Search className="w-8 h-8" /></div>
+            <h3 className="text-2xl font-serif text-stone-800 mb-2">{seoData.title}</h3>
+            <p className="text-stone-500 mb-4 max-w-xl">{seoData.description}</p>
+            <div className="bg-stone-50 px-4 py-2 rounded-lg border border-stone-200 mb-8"><span className="text-xs text-stone-400 font-mono uppercase tracking-wider block mb-1">Ключевые слова</span><span className="text-sm text-stone-600 font-medium">{seoData.keywords}</span></div>
+            <button onClick={() => handleEditClick(0)} className="bg-sky-500 text-white px-8 hover:bg-sky-600 font-medium py-3 rounded-xl flex items-center justify-center"><Edit className="w-4 h-4 mr-2" /> Настроить SEO-теги</button>
           </div>
         )
       }
@@ -412,23 +390,13 @@ export default function App() {
           {dataToRender.map((item, idx) => (
             <div key={idx} className="bg-white rounded-2xl border border-stone-200 p-5 flex flex-col justify-between hover:shadow-md transition-shadow">
               <div className="mb-4">
-                {item.image && (
-                  <div className="w-full h-32 rounded-xl overflow-hidden mb-4 relative">
-                    <img src={item.image} alt="" className="w-full h-full object-cover" />
-                  </div>
-                )}
-                <h3 className="text-lg font-serif font-bold text-stone-800 mb-2">
-                  {item.title || item.category || item.name || item.question}
-                </h3>
+                {item.image && (<div className="w-full h-32 rounded-xl overflow-hidden mb-4 relative"><img src={item.image} alt="" className="w-full h-full object-cover" /></div>)}
+                <h3 className="text-lg font-serif font-bold text-stone-800 mb-2">{item.title || item.category || item.name || item.question}</h3>
                 <p className="text-sm text-stone-500 line-clamp-2">{item.description || item.answer || item.role}</p>
               </div>
               <div className="flex gap-2">
-                <button onClick={() => handleEditClick(idx)} className="flex-1 bg-sky-50 text-sky-600 hover:bg-sky-100 font-medium py-2 rounded-xl flex items-center justify-center text-sm">
-                  <Edit className="w-4 h-4 mr-2" /> Изменить
-                </button>
-                <button onClick={() => handleDeleteItem(idx)} className="flex-none bg-white border border-stone-200 text-red-400 hover:bg-red-50 hover:text-red-500 font-medium px-3 rounded-xl flex items-center justify-center">
-                  <Trash2 className="w-4 h-4" />
-                </button>
+                <button onClick={() => handleEditClick(idx)} className="flex-1 bg-sky-50 text-sky-600 hover:bg-sky-100 font-medium py-2 rounded-xl flex items-center justify-center text-sm"><Edit className="w-4 h-4 mr-2" /> Изменить</button>
+                <button onClick={() => handleDeleteItem(idx)} className="flex-none bg-white border border-stone-200 text-red-400 hover:bg-red-50 hover:text-red-500 font-medium px-3 rounded-xl flex items-center justify-center"><Trash2 className="w-4 h-4" /></button>
               </div>
             </div>
           ))}
@@ -449,24 +417,21 @@ export default function App() {
           </div>
           <div className="flex items-center gap-4">
             <a href="#" onClick={(e) => {e.preventDefault(); setCurrentView('main');}} className="text-sm text-stone-500 hover:text-sky-600">На сайт</a>
-            <button onClick={() => setCurrentView('main')} className="flex items-center gap-2 text-sm font-medium text-red-500 hover:text-red-700 bg-red-50 px-4 py-2 rounded-lg transition-colors"><LogOut className="w-4 h-4" /> Выйти</button>
+            <button onClick={() => setCurrentView('main')} className="flex items-center gap-2 text-sm font-medium text-red-500 hover:text-red-700 bg-red-50 px-4 py-2 rounded-lg"><LogOut className="w-4 h-4" /> Выйти</button>
           </div>
         </header>
 
         <div className="max-w-6xl mx-auto p-6">
           {isLoadingData ? (
-            <div className="flex justify-center items-center py-20">
-              <Loader2 className="w-8 h-8 text-sky-500 animate-spin" />
-              <span className="ml-3 text-stone-500">Загрузка данных из базы...</span>
-            </div>
+            <div className="flex justify-center items-center py-20"><Loader2 className="w-8 h-8 text-sky-500 animate-spin" /></div>
           ) : adminPanelTab === 'bookings' ? (
             <>
+              {/* Рендер заявок (Оставлен как был) */}
               <div className="flex justify-between items-end mb-8">
                 <div><h2 className="text-3xl font-serif mb-2">Заявки с сайта</h2></div>
-                <div className="text-sm bg-white border border-stone-200 px-4 py-2 rounded-lg shadow-sm">Всего заявок: <strong className="text-sky-600">{bookingsList.length}</strong></div>
               </div>
               {bookingsList.length === 0 ? (
-                <div className="bg-white rounded-2xl border border-stone-200 p-12 text-center text-stone-500">Пока нет заявок.</div>
+                <div className="bg-white rounded-2xl border p-12 text-center text-stone-500">Пока нет заявок.</div>
               ) : (
                 <div className="grid grid-cols-1 gap-4">
                   {bookingsList.map((booking) => (
@@ -501,17 +466,16 @@ export default function App() {
             <>
               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end mb-6 gap-4">
                 <div><h2 className="text-3xl font-serif mb-2">Управление контентом</h2></div>
-                {contentTab !== 'hero' && (
-                  <button onClick={handleAddNewItem} className="bg-stone-800 hover:bg-stone-900 text-white px-5 py-2.5 rounded-xl text-sm font-medium flex items-center">
-                    <Plus className="w-4 h-4 mr-2" /> Добавить элемент
-                  </button>
+                {!['hero', 'seo'].includes(contentTab) && (
+                  <button onClick={handleAddNewItem} className="bg-stone-800 hover:bg-stone-900 text-white px-5 py-2.5 rounded-xl text-sm font-medium flex items-center"><Plus className="w-4 h-4 mr-2" /> Добавить элемент</button>
                 )}
               </div>
 
-              {/* НАВИГАЦИЯ ПО РАЗДЕЛАМ САЙТА */}
+              {/* НАВИГАЦИЯ ПО РАЗДЕЛАМ САЙТА (ДОБАВЛЕНО SEO) */}
               <div className="flex overflow-x-auto pb-2 border-b border-stone-200 mb-6 space-x-2 scrollbar-hide">
                 {[
                   { id: 'hero', label: 'Главный экран' },
+                  { id: 'seo', label: 'SEO настройки' },
                   { id: 'massage', label: 'Массаж' },
                   { id: 'body', label: 'Коррекция' },
                   { id: 'team', label: 'Команда' },
@@ -538,83 +502,90 @@ export default function App() {
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     
                     {/* ЛЕВАЯ КОЛОНКА (Основные поля) */}
-                    <div className="space-y-4">
+                    <div className="space-y-4 lg:col-span-1">
+                      
+                      {/* ФОРМА ДЛЯ SEO */}
+                      {contentTab === 'seo' && (
+                        <div className="space-y-5 lg:col-span-2 w-full max-w-2xl">
+                          <div className="bg-sky-50 border border-sky-100 p-4 rounded-xl mb-4">
+                            <p className="text-xs text-sky-800 leading-relaxed">Эти данные будут отправляться в поисковики (Яндекс, Google) и отображаться на вкладке браузера. Изменения применяются мгновенно!</p>
+                          </div>
+                          <div><label className="block text-sm font-medium mb-1">Title (Главный заголовок сайта)</label><input type="text" className="w-full border p-3 rounded-xl text-sm font-medium" value={editingItem.title} onChange={e => setEditingItem({...editingItem, title: e.target.value})} /></div>
+                          <div><label className="block text-sm font-medium mb-1">Description (Описание для сниппета в поиске)</label><textarea className="w-full border p-3 rounded-xl text-sm min-h-[100px]" value={editingItem.description} onChange={e => setEditingItem({...editingItem, description: e.target.value})} /></div>
+                          <div><label className="block text-sm font-medium mb-1">Keywords (Ключевые слова через запятую)</label><textarea className="w-full border p-3 rounded-xl text-sm" value={editingItem.keywords} onChange={e => setEditingItem({...editingItem, keywords: e.target.value})} /></div>
+                        </div>
+                      )}
+
+                      {/* СТАРЫЕ ФОРМЫ */}
                       {contentTab === 'hero' && (
                         <>
-                          <div><label className="block text-sm font-medium mb-1">Бейдж (мелкий текст сверху)</label><input type="text" className="w-full border p-3 rounded-xl text-sm" value={editingItem.badge} onChange={e => setEditingItem({...editingItem, badge: e.target.value})} /></div>
+                          <div><label className="block text-sm font-medium mb-1">Бейдж</label><input type="text" className="w-full border p-3 rounded-xl text-sm" value={editingItem.badge} onChange={e => setEditingItem({...editingItem, badge: e.target.value})} /></div>
                           <div className="grid grid-cols-3 gap-2">
                             <div><label className="block text-sm font-medium mb-1">Заголовок 1</label><input type="text" className="w-full border p-3 rounded-xl text-sm" value={editingItem.title1} onChange={e => setEditingItem({...editingItem, title1: e.target.value})} /></div>
                             <div><label className="block text-sm font-medium text-sky-600 mb-1">Цветное слово</label><input type="text" className="w-full border border-sky-300 bg-sky-50 p-3 rounded-xl text-sm" value={editingItem.titleHighlight} onChange={e => setEditingItem({...editingItem, titleHighlight: e.target.value})} /></div>
                             <div><label className="block text-sm font-medium mb-1">Заголовок 2</label><input type="text" className="w-full border p-3 rounded-xl text-sm" value={editingItem.title2} onChange={e => setEditingItem({...editingItem, title2: e.target.value})} /></div>
                           </div>
+                          <div><label className="block text-sm font-medium mb-1">Описание</label><textarea className="w-full border p-3 rounded-xl text-sm min-h-[100px]" value={editingItem.description} onChange={e => setEditingItem({...editingItem, description: e.target.value})} /></div>
                         </>
                       )}
 
-                      {['massage', 'body', 'equipment'].includes(contentTab) && (
-                        <div><label className="block text-sm font-medium mb-1">Заголовок / Название</label><input type="text" className="w-full border p-3 rounded-xl text-sm" value={editingItem.title || editingItem.category || ''} onChange={e => setEditingItem(prev => prev.title !== undefined ? {...prev, title: e.target.value} : {...prev, category: e.target.value})} /></div>
-                      )}
-
-                      {contentTab === 'team' && (
-                        <>
-                          <div><label className="block text-sm font-medium mb-1">Имя сотрудника</label><input type="text" className="w-full border p-3 rounded-xl text-sm" value={editingItem.name} onChange={e => setEditingItem({...editingItem, name: e.target.value})} /></div>
-                          <div><label className="block text-sm font-medium mb-1">Должность</label><input type="text" className="w-full border p-3 rounded-xl text-sm" value={editingItem.role} onChange={e => setEditingItem({...editingItem, role: e.target.value})} /></div>
-                        </>
-                      )}
-
-                      {contentTab === 'faq' && (
-                        <div><label className="block text-sm font-medium mb-1">Вопрос</label><input type="text" className="w-full border p-3 rounded-xl text-sm" value={editingItem.question} onChange={e => setEditingItem({...editingItem, question: e.target.value})} /></div>
-                      )}
-
-                      <div>
-                        <label className="block text-sm font-medium mb-1">{contentTab === 'faq' ? 'Ответ' : 'Описание'}</label>
-                        <textarea className="w-full border p-3 rounded-xl text-sm min-h-[100px]" value={editingItem.description || editingItem.answer || ''} onChange={e => contentTab === 'faq' ? setEditingItem({...editingItem, answer: e.target.value}) : setEditingItem({...editingItem, description: e.target.value})} />
-                      </div>
-
-                      {contentTab === 'equipment' && (
-                        <div><label className="block text-sm font-medium mb-1">Особенности (через запятую)</label><textarea className="w-full border p-3 rounded-xl text-sm" value={editingItem.features} placeholder="Детокс, Глубокое расслабление" onChange={e => setEditingItem({...editingItem, features: e.target.value})} /></div>
+                      {['massage', 'body', 'equipment', 'team', 'faq'].includes(contentTab) && (
+                         <>
+                           {['massage', 'body', 'equipment'].includes(contentTab) && <div><label className="block text-sm font-medium mb-1">Заголовок</label><input type="text" className="w-full border p-3 rounded-xl text-sm" value={editingItem.title || editingItem.category || ''} onChange={e => setEditingItem(prev => prev.title !== undefined ? {...prev, title: e.target.value} : {...prev, category: e.target.value})} /></div>}
+                           {contentTab === 'team' && (
+                             <>
+                               <div><label className="block text-sm font-medium mb-1">Имя</label><input type="text" className="w-full border p-3 rounded-xl text-sm" value={editingItem.name} onChange={e => setEditingItem({...editingItem, name: e.target.value})} /></div>
+                               <div><label className="block text-sm font-medium mb-1">Должность</label><input type="text" className="w-full border p-3 rounded-xl text-sm" value={editingItem.role} onChange={e => setEditingItem({...editingItem, role: e.target.value})} /></div>
+                             </>
+                           )}
+                           {contentTab === 'faq' && <div><label className="block text-sm font-medium mb-1">Вопрос</label><input type="text" className="w-full border p-3 rounded-xl text-sm" value={editingItem.question} onChange={e => setEditingItem({...editingItem, question: e.target.value})} /></div>}
+                           <div><label className="block text-sm font-medium mb-1">{contentTab === 'faq' ? 'Ответ' : 'Описание'}</label><textarea className="w-full border p-3 rounded-xl text-sm min-h-[100px]" value={editingItem.description || editingItem.answer || ''} onChange={e => contentTab === 'faq' ? setEditingItem({...editingItem, answer: e.target.value}) : setEditingItem({...editingItem, description: e.target.value})} /></div>
+                           {contentTab === 'equipment' && <div><label className="block text-sm font-medium mb-1">Особенности (через запятую)</label><textarea className="w-full border p-3 rounded-xl text-sm" value={editingItem.features} onChange={e => setEditingItem({...editingItem, features: e.target.value})} /></div>}
+                         </>
                       )}
                     </div>
 
                     {/* ПРАВАЯ КОЛОНКА (Фото или список подуслуг) */}
-                    <div>
-                      {contentTab !== 'faq' && (
-                        <div className="mb-6">
-                          <label className="block text-sm font-medium mb-1">Фотография</label>
-                          <div className="flex flex-col gap-3">
-                            <input type="text" className="w-full border p-3 rounded-xl text-sm" placeholder="Вставьте ссылку на фото..." value={editingItem.image || editingItem.bgImage || ''} onChange={e => contentTab === 'hero' ? setEditingItem({...editingItem, bgImage: e.target.value}) : setEditingItem({...editingItem, image: e.target.value})} />
-                            <div className="relative">
-                                <input type="file" accept="image/*" onChange={handleImageUpload} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
-                                <button className="w-full bg-stone-50 border py-2.5 rounded-xl text-sm flex justify-center items-center"><Upload className="w-4 h-4 mr-2" /> Загрузить фото</button>
+                    {contentTab !== 'seo' && (
+                      <div>
+                        {contentTab !== 'faq' && (
+                          <div className="mb-6">
+                            <label className="block text-sm font-medium mb-1">Фотография</label>
+                            <div className="flex flex-col gap-3">
+                              <input type="text" className="w-full border p-3 rounded-xl text-sm" placeholder="Вставьте ссылку на фото..." value={editingItem.image || editingItem.bgImage || ''} onChange={e => contentTab === 'hero' ? setEditingItem({...editingItem, bgImage: e.target.value}) : setEditingItem({...editingItem, image: e.target.value})} />
+                              <div className="relative">
+                                  <input type="file" accept="image/*" onChange={handleImageUpload} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+                                  <button className="w-full bg-stone-50 border py-2.5 rounded-xl text-sm flex justify-center items-center"><Upload className="w-4 h-4 mr-2" /> Загрузить фото</button>
+                              </div>
                             </div>
+                            {(editingItem.image || editingItem.bgImage) && (
+                              <div className="mt-4 w-full h-32 rounded-xl overflow-hidden border"><img src={editingItem.image || editingItem.bgImage} alt="" className="w-full h-full object-cover" /></div>
+                            )}
                           </div>
-                          {(editingItem.image || editingItem.bgImage) && (
-                            <div className="mt-4 w-full h-32 rounded-xl overflow-hidden border"><img src={editingItem.image || editingItem.bgImage} alt="" className="w-full h-full object-cover" /></div>
-                          )}
-                        </div>
-                      )}
+                        )}
 
-                      {/* Вложенные услуги (только для Массажа и Коррекции) */}
-                      {['massage', 'body'].includes(contentTab) && (
-                        <div>
-                          <label className="block text-sm font-medium mb-3">Вложенные услуги и цены</label>
-                          <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2">
-                            {editingItem.items?.map((item, itemIdx) => (
-                              <div key={itemIdx} className="bg-stone-50 border p-4 rounded-xl relative">
-                                <button onClick={() => setEditingItem({...editingItem, items: editingItem.items.filter((_, i) => i !== itemIdx)})} className="absolute top-3 right-3 text-stone-400 hover:text-red-500"><Trash2 className="w-4 h-4" /></button>
-                                <div className="space-y-3 pt-2">
-                                  <div><label className="text-xs text-stone-500">Название</label><input type="text" className="w-full border p-2 rounded-lg text-sm" value={item.name} onChange={e => handleItemChange(itemIdx, 'name', e.target.value)} /></div>
-                                  <div className="grid grid-cols-2 gap-3">
-                                    <div><label className="text-xs text-stone-500">Длительность</label><input type="text" className="w-full border p-2 rounded-lg text-sm" value={item.duration || ''} onChange={e => handleItemChange(itemIdx, 'duration', e.target.value)} /></div>
-                                    <div><label className="text-xs text-stone-500">Цена</label><input type="text" className="w-full border p-2 rounded-lg text-sm" value={item.price} onChange={e => handleItemChange(itemIdx, 'price', e.target.value)} /></div>
+                        {['massage', 'body'].includes(contentTab) && (
+                          <div>
+                            <label className="block text-sm font-medium mb-3">Вложенные услуги и цены</label>
+                            <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2">
+                              {editingItem.items?.map((item, itemIdx) => (
+                                <div key={itemIdx} className="bg-stone-50 border p-4 rounded-xl relative">
+                                  <button onClick={() => setEditingItem({...editingItem, items: editingItem.items.filter((_, i) => i !== itemIdx)})} className="absolute top-3 right-3 text-stone-400 hover:text-red-500"><Trash2 className="w-4 h-4" /></button>
+                                  <div className="space-y-3 pt-2">
+                                    <div><label className="text-xs text-stone-500">Название</label><input type="text" className="w-full border p-2 rounded-lg text-sm" value={item.name} onChange={e => handleItemChange(itemIdx, 'name', e.target.value)} /></div>
+                                    <div className="grid grid-cols-2 gap-3">
+                                      <div><label className="text-xs text-stone-500">Длительность</label><input type="text" className="w-full border p-2 rounded-lg text-sm" value={item.duration || ''} onChange={e => handleItemChange(itemIdx, 'duration', e.target.value)} /></div>
+                                      <div><label className="text-xs text-stone-500">Цена</label><input type="text" className="w-full border p-2 rounded-lg text-sm" value={item.price} onChange={e => handleItemChange(itemIdx, 'price', e.target.value)} /></div>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                            ))}
+                              ))}
+                            </div>
+                            <button onClick={() => setEditingItem({...editingItem, items: [...(editingItem.items || []), { name: "Новая под-услуга", price: "0 руб." }]})} className="w-full border-2 border-dashed py-3 rounded-xl mt-4 text-sm font-medium text-stone-500 flex justify-center items-center"><Plus className="w-4 h-4 mr-1" /> Добавить вариант (цену)</button>
                           </div>
-                          <button onClick={() => setEditingItem({...editingItem, items: [...(editingItem.items || []), { name: "Новая под-услуга", price: "0 руб." }]})} className="w-full border-2 border-dashed py-3 rounded-xl mt-4 text-sm font-medium text-stone-500 flex justify-center items-center"><Plus className="w-4 h-4 mr-1" /> Добавить вариант (цену)</button>
-                        </div>
-                      )}
-                    </div>
+                        )}
+                      </div>
+                    )}
                   </div>
 
                   <div className="flex justify-end gap-3 mt-8 pt-6 border-t border-stone-100">
@@ -629,6 +600,8 @@ export default function App() {
       </div>
     );
   }
+
+
 
   // ==========================================
   // ВИД: ДЕТАЛЬНАЯ СТРАНИЦА УСЛУГИ
