@@ -734,7 +734,7 @@ const handleBookingSubmit = async (e) => {
                            {contentTab === 'equipment' && <div><label className="block text-sm font-medium mb-1">Особенности (через запятую)</label><textarea className="w-full border p-3 rounded-xl text-sm" value={editingItem.features} onChange={e => setEditingItem({...editingItem, features: e.target.value})} /></div>}
                          </>
                       )}
-                    </div>
+                    
 
                     {/* ПРАВАЯ КОЛОНКА (Фото или список подуслуг) */}
                     {contentTab !== 'seo' && (
