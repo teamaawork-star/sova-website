@@ -939,12 +939,12 @@ export default function App() {
         </div>
       </section>
 
-    {/* CONTACTS / FOOTER */}
-      <section id="contacts" className="py-20 bg-sky-900 text-white relative overflow-hidden">
+{/* CONTACTS / FOOTER */}
+      <section id="contacts" className="py-16 bg-sky-800 text-white relative overflow-hidden">
         <div className="max-w-6xl mx-auto px-4 relative z-10">
           
-          {/* Главный заголовок секции */}
-          <h2 className="text-3xl md:text-4xl font-serif mb-10 text-center lg:text-left">Контакты</h2>
+          {/* Главный заголовок секции - теперь строго по центру */}
+          <h2 className="text-3xl md:text-4xl font-serif mb-10 text-center">Как нас найти</h2>
           
           <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-6 md:p-8 border border-white/20 shadow-2xl flex flex-col lg:flex-row gap-8 items-stretch">
             
@@ -973,8 +973,8 @@ export default function App() {
               </button>
             </div>
 
-            {/* ПРАВАЯ КОЛОНКА (65%): Карта Яндекса из Конструктора */}
-            <div className="w-full lg:w-[65%] h-80 lg:h-auto min-h-[400px] rounded-2xl overflow-hidden border border-white/10 shadow-inner relative bg-stone-100">
+            {/* ПРАВАЯ КОЛОНКА (65%): Карта Яндекса */}
+            <div className="w-full lg:w-[65%] h-80 lg:h-auto min-h-[350px] rounded-2xl overflow-hidden border border-white/10 shadow-inner relative bg-stone-100/10">
               <iframe 
                 src="https://yandex.ru/map-widget/v1/?um=constructor%3A5bd4448c7935bb1d9d7b082ee77117acbad4684acf8b86717e288673a4a24dbc&amp;source=constructor" 
                 width="100%" 
