@@ -135,7 +135,10 @@ const faqDefaultData = [{ question: "Сколько нужно процедур?
 
 
 export default function App() {
-  const [currentView, setCurrentView] = useState('main');
+  // Проверяем адрес в браузере: если там /admin, сразу включаем окно входа
+  const [currentView, setCurrentView] = useState(() => {
+    return window.location.pathname === '/admin' ? 'adminLogin' : 'main';
+  });
   
   // Состояния данных
   const [heroData, setHeroData] = useState(defaultHero);
@@ -995,7 +998,7 @@ export default function App() {
           <div className="flex flex-col items-center md:items-start mb-6 md:mb-0">
             <h1 className="text-2xl font-light text-white tracking-[0.2em] mb-1">SOVA</h1>
             <p className="text-xs uppercase tracking-wider mb-4">Студия массажа и коррекции фигуры</p>
-            <button onClick={() => setCurrentView('adminLogin')} className="text-[10px] uppercase tracking-widest text-stone-600 hover:text-sky-500 flex items-center"><Lock className="w-3 h-3 mr-1" /> Вход для администратора</button>
+            <a href="/admin" className="text-[10px] uppercase tracking-widest text-stone-600 hover:text-sky-500 flex items-center"><Lock className="w-3 h-3 mr-1" /> Вход для администратора</a>
           </div>
           <div className="text-center md:text-right text-sm">
             <p className="mb-2">проспект Музрукова д.37 к.3</p>
