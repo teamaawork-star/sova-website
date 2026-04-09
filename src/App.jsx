@@ -21,8 +21,114 @@ const defaultSeo = {
   keywords: "массаж саров, lpg массаж, коррекция фигуры, сова"
 };
 
-const massageServicesData = [{ title: "Массаж спины", description: "Снимает напряжение...", image: "https://images.unsplash.com/photo-1600334129128-68505dcecbfa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", items: [{ name: "1 сеанс", price: "1500 руб." }] }];
-const bodyShapingServicesData = [{ category: "Вакуумный массаж", description: "Ускоряет лимфоток...", image: "https://images.unsplash.com/photo-1564551139785-5eb9c0a6b579?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", iconName: "Wind", items: [{ name: "Бедра и ягодицы", duration: "40 минут", price: "1400 руб." }] }];
+const massageServicesData = [
+  {
+    title: "Массаж по зонам",
+    description: "Глубокая проработка отдельных участков тела для снятия мышечных зажимов и напряжения.",
+    image: "https://images.unsplash.com/photo-1600334129128-68505dcecbfa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    items: [
+      { name: "Спина (ШВЗ, грудной и поясничный отдел, руки)", duration: "40 минут", price: "1500 руб." },
+      { name: "Курс массажа спины (10 сеансов)", duration: "40 минут", price: "13000 руб." },
+      { name: "Шейно-воротниковая зона", duration: "20 минут", price: "900 руб." },
+      { name: "Курс массажа ШВЗ (10 сеансов)", duration: "20 минут", price: "8000 руб." },
+      { name: "Массаж головы", duration: "20 минут", price: "900 руб." },
+      { name: "Курс массажа головы (10 сеансов)", duration: "20 минут", price: "8000 руб." },
+      { name: "Ноги (ягодицы, бедра, голени, стопы)", duration: "40 минут", price: "1500 руб." },
+      { name: "Курс массажа ног (10 сеансов)", duration: "40 минут", price: "13000 руб." },
+      { name: "Задняя поверхность тела (спина, руки, ноги)", duration: "60 минут", price: "2200 руб." }
+    ]
+  },
+  {
+    title: "Комплексный и Детский массаж",
+    description: "Общие расслабляющие и оздоровительные процедуры для всего тела, а также бережный уход для детей.",
+    image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    items: [
+      { name: "Общий массаж всего тела", duration: "1 час 30 минут", price: "2800 руб." },
+      { name: "Расслабляющий массаж тела", duration: "1 час 30 минут", price: "2800 руб." },
+      { name: "Массаж задней поверхности тела (дети до 14 лет)", duration: "50 минут", price: "1600 руб." }
+    ]
+  },
+  {
+    title: "SPA - программы",
+    description: "Полноценные ритуалы для глубокого расслабления, обновления кожи и снятия стресса.",
+    image: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    items: [
+      { name: "SPA-уход с массажем спины (+ обертывание)", duration: "1 час 30 минут", price: "3000 руб." },
+      { name: "Стоунотерапия (массаж горячими камнями)", duration: "1 час 50 минут", price: "3500 руб." },
+      { name: "SPA-уход релакс/антистресс (+ обертывание)", duration: "2 часа 30 минут", price: "4000 руб." },
+      { name: "Талассотерапия (+ обертывание водорослями)", duration: "2 часа 30 минут", price: "5500 руб." }
+    ]
+  }
+];
+
+const bodyShapingServicesData = [
+  {
+    category: "Вакуумный массаж",
+    description: "Аппаратное воздействие для ускорения лимфотока, эффективного разбивания жировых отложений и борьбы с целлюлитом.",
+    image: "https://images.unsplash.com/photo-1564551139785-5eb9c0a6b579?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    iconName: "Wind",
+    items: [
+      { name: "Бедра и ягодицы (спереди и сзади)", duration: "40 минут", price: "1400 руб." },
+      { name: "Живот", duration: "20 минут", price: "900 руб." },
+      { name: "Абонемент: живот + бока (10 сеансов)", duration: "30 минут", price: "8000 руб." },
+      { name: "Абонемент: бедра + ягодицы (10 сеансов)", duration: "40 минут", price: "12000 руб." }
+    ]
+  },
+  {
+    category: "LPG-массаж",
+    description: "Передовая вакуумно-роликовая технология для моделирования контуров тела и повышения упругости кожи.",
+    image: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    iconName: "Sparkles",
+    items: [
+      { name: "Всего тела", duration: "45 минут", price: "1900 руб." },
+      { name: "Костюм для LPG (покупается 1 раз)", duration: "единоразово", price: "800 руб." },
+      { name: "Абонемент на 10 сеансов (+ костюм в подарок)", duration: "45 минут", price: "17000 руб." }
+    ]
+  },
+  {
+    category: "УЗ кавитация",
+    description: "Безоперационная ультразвуковая липосакция для локального уничтожения жировых клеток.",
+    image: "https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    iconName: "Droplets",
+    items: [
+      { name: "Живот (1 сеанс)", duration: "30 минут", price: "1200 руб." },
+      { name: "Живот (Курс 8 сеансов)", duration: "30 минут", price: "8500 руб." },
+      { name: "Живот (Курс 12 сеансов)", duration: "30 минут", price: "12000 руб." },
+      { name: "Бедра и ягодицы (1 сеанс)", duration: "60 минут", price: "1900 руб." },
+      { name: "Бедра и ягодицы (Курс 8 сеансов)", duration: "60 минут", price: "13500 руб." },
+      { name: "Бедра и ягодицы (Курс 12 сеансов)", duration: "60 минут", price: "20000 руб." }
+    ]
+  },
+  {
+    category: "Криолиполиз",
+    description: "Эффективное расщепление локальных жировых отложений путем их контролируемого охлаждения.",
+    image: "https://images.unsplash.com/photo-1616394584738-fc6e612e71c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    iconName: "Sparkles",
+    items: [
+      { name: "Зона бедер (2 насадки)", duration: "40 минут", price: "6000 руб." },
+      { name: "Зона ягодиц (2 насадки)", duration: "40 минут", price: "6000 руб." },
+      { name: "Зона боков (2 насадки)", duration: "40 минут", price: "6000 руб." },
+      { name: "Зона живота (1 насадка)", duration: "40 минут", price: "3500 руб." },
+      { name: "Зона рук (2 насадки)", duration: "40 минут", price: "3000 руб." }
+    ]
+  },
+  {
+    category: "Аппаратные услуги",
+    description: "Современные методики лифтинга, миостимуляции и лимфодренажа для создания идеального силуэта.",
+    image: "https://images.unsplash.com/photo-1552693673-1bf958298935?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    iconName: "Wind",
+    items: [
+      { name: "RF-лифтинг тела 1 зона (1 сеанс)", duration: "30 минут", price: "1200 руб." },
+      { name: "RF-лифтинг тела 1 зона (10 сеансов)", duration: "30 минут", price: "10000 руб." },
+      { name: "Миостимуляция (1 сеанс)", duration: "40 минут", price: "1100 руб." },
+      { name: "Миостимуляция (10 сеансов)", duration: "40 минут", price: "10000 руб." },
+      { name: "Лазерный липолиз (1 сеанс)", duration: "30 минут", price: "900 руб." },
+      { name: "Лазерный липолиз (10 сеансов)", duration: "30 минут", price: "7000 руб." },
+      { name: "Прессотерапия (1 сеанс)", duration: "45 минут", price: "1200 руб." },
+      { name: "Прессотерапия (10 сеансов)", duration: "45 минут", price: "10000 руб." }
+    ]
+  }
+];
 const teamMembersData = [{ name: "Екатерина Игнатова", role: "Владелица студии", description: "Основательница SOVA...", image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" }];
 const equipmentDefaultData = [{ title: "Оборудование для LPG-массажа", description: "Передовая технология...", image: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", features: "Безболезненно, Мощный лимфодренаж" }];
 const faqDefaultData = [{ question: "Сколько нужно процедур?", answer: "Обычно курс состоит из 8-12 сеансов." }];
