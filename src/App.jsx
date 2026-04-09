@@ -18,7 +18,8 @@ const defaultHero = {
 const defaultSeo = {
   title: "Студия массажа и коррекции фигуры SOVA | Саров",
   description: "Профессиональный массаж, LPG, УЗ-кавитация и аппаратная коррекция фигуры в Сарове. Запишитесь онлайн!",
-  keywords: "массаж саров, lpg массаж, коррекция фигуры, сова"
+  keywords: "массаж саров, lpg массаж, коррекция фигуры, сова",
+  availableTimes: "10:00, 11:00, 12:00, 13:00, 14:00, 15:00, 16:00, 17:00, 18:00, 19:00, 20:00"
 };
 
 const massageServicesData = [
@@ -30,12 +31,7 @@ const massageServicesData = [
       { name: "Спина (ШВЗ, грудной и поясничный отдел, руки)", duration: "40 минут", price: "1500 руб." },
       { name: "Курс массажа спины (10 сеансов)", duration: "40 минут", price: "13000 руб." },
       { name: "Шейно-воротниковая зона", duration: "20 минут", price: "900 руб." },
-      { name: "Курс массажа ШВЗ (10 сеансов)", duration: "20 минут", price: "8000 руб." },
-      { name: "Массаж головы", duration: "20 минут", price: "900 руб." },
-      { name: "Курс массажа головы (10 сеансов)", duration: "20 минут", price: "8000 руб." },
-      { name: "Ноги (ягодицы, бедра, голени, стопы)", duration: "40 минут", price: "1500 руб." },
-      { name: "Курс массажа ног (10 сеансов)", duration: "40 минут", price: "13000 руб." },
-      { name: "Задняя поверхность тела (спина, руки, ноги)", duration: "60 минут", price: "2200 руб." }
+      { name: "Курс массажа ШВЗ (10 сеансов)", duration: "20 минут", price: "8000 руб." }
     ]
   },
   {
@@ -44,19 +40,7 @@ const massageServicesData = [
     image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
     items: [
       { name: "Общий массаж всего тела", duration: "1 час 30 минут", price: "2800 руб." },
-      { name: "Расслабляющий массаж тела", duration: "1 час 30 минут", price: "2800 руб." },
       { name: "Массаж задней поверхности тела (дети до 14 лет)", duration: "50 минут", price: "1600 руб." }
-    ]
-  },
-  {
-    title: "SPA - программы",
-    description: "Полноценные ритуалы для глубокого расслабления, обновления кожи и снятия стресса.",
-    image: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    items: [
-      { name: "SPA-уход с массажем спины (+ обертывание)", duration: "1 час 30 минут", price: "3000 руб." },
-      { name: "Стоунотерапия (массаж горячими камнями)", duration: "1 час 50 минут", price: "3500 руб." },
-      { name: "SPA-уход релакс/антистресс (+ обертывание)", duration: "2 часа 30 минут", price: "4000 руб." },
-      { name: "Талассотерапия (+ обертывание водорослями)", duration: "2 часа 30 минут", price: "5500 руб." }
     ]
   }
 ];
@@ -69,9 +53,7 @@ const bodyShapingServicesData = [
     iconName: "Wind",
     items: [
       { name: "Бедра и ягодицы (спереди и сзади)", duration: "40 минут", price: "1400 руб." },
-      { name: "Живот", duration: "20 минут", price: "900 руб." },
-      { name: "Абонемент: живот + бока (10 сеансов)", duration: "30 минут", price: "8000 руб." },
-      { name: "Абонемент: бедра + ягодицы (10 сеансов)", duration: "40 минут", price: "12000 руб." }
+      { name: "Живот", duration: "20 минут", price: "900 руб." }
     ]
   },
   {
@@ -80,69 +62,23 @@ const bodyShapingServicesData = [
     image: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
     iconName: "Sparkles",
     items: [
-      { name: "Всего тела", duration: "45 минут", price: "1900 руб." },
-      { name: "Костюм для LPG (покупается 1 раз)", duration: "единоразово", price: "800 руб." },
-      { name: "Абонемент на 10 сеансов (+ костюм в подарок)", duration: "45 минут", price: "17000 руб." }
-    ]
-  },
-  {
-    category: "УЗ кавитация",
-    description: "Безоперационная ультразвуковая липосакция для локального уничтожения жировых клеток.",
-    image: "https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    iconName: "Droplets",
-    items: [
-      { name: "Живот (1 сеанс)", duration: "30 минут", price: "1200 руб." },
-      { name: "Живот (Курс 8 сеансов)", duration: "30 минут", price: "8500 руб." },
-      { name: "Живот (Курс 12 сеансов)", duration: "30 минут", price: "12000 руб." },
-      { name: "Бедра и ягодицы (1 сеанс)", duration: "60 минут", price: "1900 руб." },
-      { name: "Бедра и ягодицы (Курс 8 сеансов)", duration: "60 минут", price: "13500 руб." },
-      { name: "Бедра и ягодицы (Курс 12 сеансов)", duration: "60 минут", price: "20000 руб." }
-    ]
-  },
-  {
-    category: "Криолиполиз",
-    description: "Эффективное расщепление локальных жировых отложений путем их контролируемого охлаждения.",
-    image: "https://images.unsplash.com/photo-1616394584738-fc6e612e71c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    iconName: "Sparkles",
-    items: [
-      { name: "Зона бедер (2 насадки)", duration: "40 минут", price: "6000 руб." },
-      { name: "Зона ягодиц (2 насадки)", duration: "40 минут", price: "6000 руб." },
-      { name: "Зона боков (2 насадки)", duration: "40 минут", price: "6000 руб." },
-      { name: "Зона живота (1 насадка)", duration: "40 минут", price: "3500 руб." },
-      { name: "Зона рук (2 насадки)", duration: "40 минут", price: "3000 руб." }
-    ]
-  },
-  {
-    category: "Аппаратные услуги",
-    description: "Современные методики лифтинга, миостимуляции и лимфодренажа для создания идеального силуэта.",
-    image: "https://images.unsplash.com/photo-1552693673-1bf958298935?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    iconName: "Wind",
-    items: [
-      { name: "RF-лифтинг тела 1 зона (1 сеанс)", duration: "30 минут", price: "1200 руб." },
-      { name: "RF-лифтинг тела 1 зона (10 сеансов)", duration: "30 минут", price: "10000 руб." },
-      { name: "Миостимуляция (1 сеанс)", duration: "40 минут", price: "1100 руб." },
-      { name: "Миостимуляция (10 сеансов)", duration: "40 минут", price: "10000 руб." },
-      { name: "Лазерный липолиз (1 сеанс)", duration: "30 минут", price: "900 руб." },
-      { name: "Лазерный липолиз (10 сеансов)", duration: "30 минут", price: "7000 руб." },
-      { name: "Прессотерапия (1 сеанс)", duration: "45 минут", price: "1200 руб." },
-      { name: "Прессотерапия (10 сеансов)", duration: "45 минут", price: "10000 руб." }
+      { name: "Всего тела", duration: "45 минут", price: "1900 руб." }
     ]
   }
 ];
+
 const teamMembersData = [{ name: "Екатерина Игнатова", role: "Владелица студии", description: "Основательница SOVA...", image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" }];
 const equipmentDefaultData = [{ title: "Оборудование для LPG-массажа", description: "Передовая технология...", image: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", features: "Безболезненно, Мощный лимфодренаж" }];
 const faqDefaultData = [{ question: "Сколько нужно процедур?", answer: "Обычно курс состоит из 8-12 сеансов." }];
 
 
 export default function App() {
-  // Проверяем адрес в браузере: если там /admin, сразу включаем окно входа
   const [currentView, setCurrentView] = useState(() => {
     return window.location.pathname === '/admin' ? 'adminLogin' : 'main';
   });
   
-  // Состояния данных
   const [heroData, setHeroData] = useState(defaultHero);
-  const [seoData, setSeoData] = useState(defaultSeo); // <-- НОВОЕ ПОЛЕ SEO
+  const [seoData, setSeoData] = useState(defaultSeo);
   const [massageServices, setMassageServices] = useState(massageServicesData);
   const [bodyShapingServices, setBodyShapingServices] = useState(bodyShapingServicesData);
   const [teamMembers, setTeamMembers] = useState(teamMembersData);
@@ -152,9 +88,8 @@ export default function App() {
   
   const [isLoadingData, setIsLoadingData] = useState(true);
 
- // --- МАГИЯ SEO: ДИНАМИЧЕСКАЯ ПОДМЕНА ТЕГОВ (С ЗАЩИТОЙ) ---
   useEffect(() => {
-    if (seoData) { // <-- Проверяем, что данные вообще есть
+    if (seoData) {
       document.title = seoData.title || "Студия массажа SOVA";
       
       const metaDesc = document.querySelector('meta[name="description"]');
@@ -165,7 +100,6 @@ export default function App() {
     }
   }, [seoData]);
 
-  // --- ЧТЕНИЕ ИЗ FIREBASE ПРИ ЗАГРУЗКЕ САЙТА (С ЗАЩИТОЙ) ---
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -176,7 +110,6 @@ export default function App() {
 
         const contentSnap = await getDocs(collection(db, "site_content"));
         contentSnap.docs.forEach(doc => {
-          // Если база вернула пустоту, мы берем стандартные данные (... || defaultData)
           if (doc.id === 'hero') setHeroData(doc.data() || defaultHero);
           if (doc.id === 'seo') setSeoData(doc.data() || defaultSeo);
           if (doc.id === 'massage') setMassageServices(doc.data().items || massageServicesData);
@@ -197,19 +130,19 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('massage');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedService, setSelectedService] = useState('');
-const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [bookingData, setBookingData] = useState({ name: '', phone: '', date: '', time: '' });
-// --- УМНАЯ МАСКА ДЛЯ ТЕЛЕФОНА ---
+
   const handlePhoneChange = (e) => {
-    let input = e.target.value.replace(/\D/g, ''); // Оставляем только цифры
+    let input = e.target.value.replace(/\D/g, ''); 
     let formatted = '+7 ';
     
     if (!input || input === '7' || input === '8') {
       setBookingData({ ...bookingData, phone: '' });
       return;
     }
-    if (input[0] === '7' || input[0] === '8') input = input.substring(1); // Убираем первую 7 или 8
+    if (input[0] === '7' || input[0] === '8') input = input.substring(1); 
     
     if (input.length > 0) formatted += '(' + input.substring(0, 3);
     if (input.length >= 4) formatted += ') ' + input.substring(3, 6);
@@ -219,29 +152,24 @@ const [isSubmitted, setIsSubmitted] = useState(false);
     setBookingData({ ...bookingData, phone: formatted });
   };
 
-  // --- НОВЫЕ СОСТОЯНИЯ ДЛЯ ФОРМЫ ---
   const [captcha, setCaptcha] = useState({ num1: 0, num2: 0, answer: '' });
-  // Получаем сегодняшнюю дату для блокировки календаря (формат YYYY-MM-DD)
   const todayDate = new Date().toISOString().split('T')[0];
-  // Доступные слоты времени
   
   const [showPromo, setShowPromo] = useState(false);
   const [promoClosed, setPromoClosed] = useState(false);
-  // --- ТАЙМЕР ДЛЯ БАННЕРА (10 секунд = 10000 миллисекунд) ---
+
   useEffect(() => {
     if (!promoClosed && currentView === 'main') {
       const timer = setTimeout(() => {
         setShowPromo(true);
       }, 10000);
-      return () => clearTimeout(timer); // Очищаем таймер, если клиент ушел с сайта раньше
+      return () => clearTimeout(timer);
     }
   }, [promoClosed, currentView]);
 
-  // --- СБРОС ВРЕМЕНИ ПРИ СМЕНЕ УСЛУГИ ---
   useEffect(() => {
     setBookingData(prev => ({ ...prev, time: '' }));
   }, [selectedService]);
-
 
   const [loginPass, setLoginPass] = useState('');
   const [loginError, setLoginError] = useState('');
@@ -254,13 +182,11 @@ const [isSubmitted, setIsSubmitted] = useState(false);
   const [selectedServiceData, setSelectedServiceData] = useState(null);
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
 
-  // --- ЛОГИКА САЙТА ---
-const openModal = (serviceName = '') => {
+  const openModal = (serviceName = '') => {
     setSelectedService(serviceName);
     setIsModalOpen(true);
     setIsSubmitted(false);
     setIsSubmitting(false);
-    // Генерируем капчу (два числа от 1 до 10)
     setCaptcha({ 
       num1: Math.floor(Math.random() * 10) + 1, 
       num2: Math.floor(Math.random() * 10) + 1, 
@@ -277,10 +203,9 @@ const openModal = (serviceName = '') => {
     }, 300);
   };
 
-const handleBookingSubmit = async (e) => {
+  const handleBookingSubmit = async (e) => {
     e.preventDefault();
     
-    // ПРОВЕРКА КАПЧИ И ВРЕМЕНИ
     if (parseInt(captcha.answer) !== (captcha.num1 + captcha.num2)) {
       alert("Неверный ответ на математический вопрос. Попробуйте еще раз!");
       return;
@@ -292,12 +217,10 @@ const handleBookingSubmit = async (e) => {
 
     setIsSubmitting(true);
     
-    // Формируем время окончания (для календаря)
     const [h, m] = bookingData.time.split(':');
     const endH = String((Number(h) + 1) % 24).padStart(2, '0');
     const endTime = `${endH}:${m}`;
 
-    // Создаем саму заявку
     const newBooking = {
       name: bookingData.name,
       phone: bookingData.phone,
@@ -309,7 +232,7 @@ const handleBookingSubmit = async (e) => {
       createdAt: new Date().toISOString()
     };
 
-    const WEBHOOK_URL = 'ВАШ_WEBHOOK_URL_ЗДЕСЬ'; // <-- ВАЖНО: Вставьте сюда вашу ссылку от Albato!
+    const WEBHOOK_URL = 'ВАШ_WEBHOOK_URL_ЗДЕСЬ';
 
     try {
       const docRef = await addDoc(collection(db, "bookings"), newBooking);
@@ -344,7 +267,6 @@ const handleBookingSubmit = async (e) => {
     window.scrollTo(0, 0);
   };
 
-  // --- ЛОГИКА АДМИНКИ ---
   const handleLogin = (e) => {
     e.preventDefault();
     if (loginPass === 'admin') {
@@ -377,7 +299,6 @@ const handleBookingSubmit = async (e) => {
     }
   };
 
-  // --- ЛОГИКА РЕДАКТОРА КОНТЕНТА ---
   const handleEditClick = (index) => {
     setEditingIndex(index);
     if (contentTab === 'hero') {
@@ -495,9 +416,6 @@ const handleBookingSubmit = async (e) => {
     }
   };
 
-  // ==========================================
-  // ВИД: АВТОРИЗАЦИЯ АДМИНИСТРАТОРА
-  // ==========================================
   if (currentView === 'adminLogin') {
     return (
       <div className="min-h-screen bg-stone-100 flex items-center justify-center p-4">
@@ -519,9 +437,6 @@ const handleBookingSubmit = async (e) => {
     );
   }
 
-  // ==========================================
-  // ВИД: ПАНЕЛЬ АДМИНИСТРАТОРА
-  // ==========================================
   if (currentView === 'adminPanel') {
     const renderAdminContentList = () => {
       let dataToRender = [];
@@ -552,8 +467,11 @@ const handleBookingSubmit = async (e) => {
             <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-6"><Search className="w-8 h-8" /></div>
             <h3 className="text-2xl font-serif text-stone-800 mb-2">{seoData.title}</h3>
             <p className="text-stone-500 mb-4 max-w-xl">{seoData.description}</p>
-            <div className="bg-stone-50 px-4 py-2 rounded-lg border border-stone-200 mb-8"><span className="text-xs text-stone-400 font-mono uppercase tracking-wider block mb-1">Ключевые слова</span><span className="text-sm text-stone-600 font-medium">{seoData.keywords}</span></div>
-            <button onClick={() => handleEditClick(0)} className="bg-sky-500 text-white px-8 hover:bg-sky-600 font-medium py-3 rounded-xl flex items-center justify-center"><Edit className="w-4 h-4 mr-2" /> Настроить SEO-теги</button>
+            <div className="bg-stone-50 px-4 py-2 rounded-lg border border-stone-200 mb-8 w-full max-w-md">
+              <span className="text-xs text-stone-400 font-mono uppercase tracking-wider block mb-1">Доступное время для записи</span>
+              <span className="text-sm text-stone-600 font-medium">{seoData.availableTimes || defaultSeo.availableTimes}</span>
+            </div>
+            <button onClick={() => handleEditClick(0)} className="bg-sky-500 text-white px-8 hover:bg-sky-600 font-medium py-3 rounded-xl flex items-center justify-center"><Edit className="w-4 h-4 mr-2" /> Изменить настройки</button>
           </div>
         )
       }
@@ -599,7 +517,6 @@ const handleBookingSubmit = async (e) => {
             <div className="flex justify-center items-center py-20"><Loader2 className="w-8 h-8 text-sky-500 animate-spin" /></div>
           ) : adminPanelTab === 'bookings' ? (
             <>
-              {/* Рендер заявок (Оставлен как был) */}
               <div className="flex justify-between items-end mb-8">
                 <div><h2 className="text-3xl font-serif mb-2">Заявки с сайта</h2></div>
               </div>
@@ -644,11 +561,10 @@ const handleBookingSubmit = async (e) => {
                 )}
               </div>
 
-              {/* НАВИГАЦИЯ ПО РАЗДЕЛАМ САЙТА (ДОБАВЛЕНО SEO) */}
               <div className="flex overflow-x-auto pb-2 border-b border-stone-200 mb-6 space-x-2 scrollbar-hide">
                 {[
                   { id: 'hero', label: 'Главный экран' },
-                  { id: 'seo', label: 'SEO настройки' },
+                  { id: 'seo', label: 'Настройки и SEO' },
                   { id: 'massage', label: 'Массаж' },
                   { id: 'body', label: 'Коррекция' },
                   { id: 'team', label: 'Команда' },
@@ -674,36 +590,33 @@ const handleBookingSubmit = async (e) => {
 
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     
-                    {/* ЛЕВАЯ КОЛОНКА (Основные поля) */}
                     <div className="space-y-4 lg:col-span-1">
                       
-                      {/* ФОРМА ДЛЯ SEO */}
+                      {/* ИСПРАВЛЕННАЯ ФОРМА НАСТРОЕК (ТЕПЕРЬ ПОКАЗЫВАЕТ ВРЕМЯ) */}
                       {contentTab === 'seo' && (
                         <div className="space-y-5 lg:col-span-2 w-full max-w-2xl">
                           <div className="bg-sky-50 border border-sky-100 p-4 rounded-xl mb-4">
-                            <p className="text-xs text-sky-800 leading-relaxed">Эти данные будут отправляться в поисковики (Яндекс, Google) и отображаться на вкладке браузера. Изменения применяются мгновенно!</p>
+                            <p className="text-xs text-sky-800 leading-relaxed">Здесь вы можете изменить общие настройки сайта: расписание для записи, а также заголовки и описание для поисковиков (Яндекс, Google).</p>
                           </div>
+                          
+                          <div className="bg-stone-50 border border-stone-200 p-5 rounded-xl">
+                            <label className="block text-sm font-medium mb-1 text-stone-800">Свободное время для записи (через запятую)</label>
+                            <input 
+                              type="text" 
+                              className="w-full border border-stone-300 p-3 rounded-xl text-sm" 
+                              placeholder="Например: 10:00, 11:30, 15:00" 
+                              value={editingItem.availableTimes || ''} 
+                              onChange={e => setEditingItem({...editingItem, availableTimes: e.target.value})} 
+                            />
+                            <p className="text-xs text-stone-500 mt-2">Эти кнопки времени будут показываться клиенту в окне записи.</p>
+                          </div>
+
                           <div><label className="block text-sm font-medium mb-1">Title (Главный заголовок сайта)</label><input type="text" className="w-full border p-3 rounded-xl text-sm font-medium" value={editingItem.title} onChange={e => setEditingItem({...editingItem, title: e.target.value})} /></div>
-                          {/* НОВОЕ ПОЛЕ: РАСПИСАНИЕ */}
-                           {['massage', 'body'].includes(contentTab) && (
-                             <div>
-                               <label className="block text-sm font-medium mb-1 text-sky-700">Доступное время (через запятую)</label>
-                               <input 
-                                 type="text" 
-                                 className="w-full border p-3 rounded-xl text-sm" 
-                                 placeholder="Например: 09:00, 11:30, 15:00" 
-                                 value={editingItem.availableTimes || ''} 
-                                 onChange={e => setEditingItem({...editingItem, availableTimes: e.target.value})} 
-                               />
-                               <p className="text-xs text-stone-400 mt-1">Оставьте пустым для расписания по умолчанию (с 10:00 до 20:00)</p>
-                             </div>
-                           )}
                           <div><label className="block text-sm font-medium mb-1">Description (Описание для сниппета в поиске)</label><textarea className="w-full border p-3 rounded-xl text-sm min-h-[100px]" value={editingItem.description} onChange={e => setEditingItem({...editingItem, description: e.target.value})} /></div>
                           <div><label className="block text-sm font-medium mb-1">Keywords (Ключевые слова через запятую)</label><textarea className="w-full border p-3 rounded-xl text-sm" value={editingItem.keywords} onChange={e => setEditingItem({...editingItem, keywords: e.target.value})} /></div>
                         </div>
                       )}
 
-                      {/* СТАРЫЕ ФОРМЫ */}
                       {contentTab === 'hero' && (
                         <>
                           <div><label className="block text-sm font-medium mb-1">Бейдж</label><input type="text" className="w-full border p-3 rounded-xl text-sm" value={editingItem.badge} onChange={e => setEditingItem({...editingItem, badge: e.target.value})} /></div>
@@ -720,22 +633,6 @@ const handleBookingSubmit = async (e) => {
                          <>
                            {['massage', 'body', 'equipment'].includes(contentTab) && <div><label className="block text-sm font-medium mb-1">Заголовок</label><input type="text" className="w-full border p-3 rounded-xl text-sm" value={editingItem.title || editingItem.category || ''} onChange={e => setEditingItem(prev => prev.title !== undefined ? {...prev, title: e.target.value} : {...prev, category: e.target.value})} /></div>}
                            
-                           {/* --- НОВОЕ ПОЛЕ: РАСПИСАНИЕ --- */}
-                           {['massage', 'body'].includes(contentTab) && (
-                             <div className="bg-sky-50 border border-sky-100 p-4 rounded-xl">
-                               <label className="block text-sm font-medium mb-1 text-sky-800">Доступное время (через запятую)</label>
-                               <input 
-                                 type="text" 
-                                 className="w-full border border-sky-200 p-3 rounded-xl text-sm" 
-                                 placeholder="Например: 08:00, 09:30, 11:00, 12:30" 
-                                 value={editingItem.availableTimes || ''} 
-                                 onChange={e => setEditingItem({...editingItem, availableTimes: e.target.value})} 
-                               />
-                               <p className="text-xs text-sky-600 mt-2">Оставьте пустым для классического расписания (с 10:00 до 20:00)</p>
-                             </div>
-                           )}
-                           {/* ------------------------------ */}
-
                            {contentTab === 'team' && (
                              <>
                                <div><label className="block text-sm font-medium mb-1">Имя</label><input type="text" className="w-full border p-3 rounded-xl text-sm" value={editingItem.name} onChange={e => setEditingItem({...editingItem, name: e.target.value})} /></div>
@@ -749,7 +646,6 @@ const handleBookingSubmit = async (e) => {
                       )}
                     
 
-                    {/* ПРАВАЯ КОЛОНКА (Фото или список подуслуг) */}
                     {contentTab !== 'seo' && (
                       <div>
                         {contentTab !== 'faq' && (
@@ -805,11 +701,6 @@ const handleBookingSubmit = async (e) => {
     );
   }
 
-
-
-  // ==========================================
-  // ВИД: ДЕТАЛЬНАЯ СТРАНИЦА УСЛУГИ
-  // ==========================================
   if (currentView === 'serviceDetails' && selectedServiceData) {
     const title = selectedServiceData.title || selectedServiceData.category;
     return (
@@ -853,13 +744,9 @@ const handleBookingSubmit = async (e) => {
     );
   }
 
-  // ==========================================
-  // ВИД: ОСНОВНОЙ САЙТ
-  // ==========================================
   return (
     <div className="min-h-screen bg-stone-50 font-sans text-slate-800">
       
-      {/* HEADER */}
       <header className="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-stone-200">
         <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex flex-col items-center">
@@ -878,7 +765,6 @@ const handleBookingSubmit = async (e) => {
         </div>
       </header>
 
-      {/* HERO SECTION */}
       <section className="relative bg-stone-100 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img src={heroData.bgImage} alt="Background" className="w-full h-full object-cover opacity-60" />
@@ -899,7 +785,6 @@ const handleBookingSubmit = async (e) => {
         </div>
       </section>
 
-      {/* SERVICES SECTION */}
       <section id="services" className="py-20 bg-white border-t border-stone-200">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-12">
@@ -955,7 +840,6 @@ const handleBookingSubmit = async (e) => {
         </div>
       </section>
 
-      {/* TEAM SECTION */}
       <section id="team" className="py-20 bg-stone-50 border-t border-stone-200">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-16">
@@ -976,7 +860,6 @@ const handleBookingSubmit = async (e) => {
         </div>
       </section>
 
-      {/* EQUIPMENT SECTION */}
       <section id="equipment" className="py-20 bg-white border-t border-stone-200">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-16">
@@ -1001,221 +884,3 @@ const handleBookingSubmit = async (e) => {
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ SECTION */}
-      <section id="faq" className="py-20 bg-stone-50 border-t border-stone-200">
-        <div className="max-w-4xl mx-auto px-4">
-          <div className="text-center mb-16"><h2 className="text-3xl md:text-4xl font-serif text-stone-800 mb-4">Вопрос-ответ</h2></div>
-          <div className="space-y-4">
-            {faqData.map((faq, idx) => (
-              <div key={idx} className="border border-stone-200 rounded-2xl overflow-hidden transition-all duration-300">
-                <button onClick={() => setOpenFaqIndex(openFaqIndex === idx ? null : idx)} className="w-full px-6 py-5 flex justify-between items-center bg-white hover:bg-stone-100 text-left">
-                  <span className="font-medium text-stone-800 pr-4">{faq.question}</span>
-                  {openFaqIndex === idx ? <ChevronUp className="w-5 h-5 text-sky-500 shrink-0" /> : <ChevronDown className="w-5 h-5 text-stone-400 shrink-0" />}
-                </button>
-                {openFaqIndex === idx && <div className="px-6 py-5 bg-stone-50 text-stone-600 text-sm leading-relaxed border-t">{faq.answer}</div>}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-{/* CONTACTS / FOOTER */}
-      <section id="contacts" className="py-16 bg-sky-800 text-white relative overflow-hidden">
-        <div className="max-w-6xl mx-auto px-4 relative z-10">
-          
-          {/* Главный заголовок секции - теперь строго по центру */}
-          <h2 className="text-3xl md:text-4xl font-serif mb-10 text-center">Как нас найти</h2>
-          
-          <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-6 md:p-8 border border-white/20 shadow-2xl flex flex-col lg:flex-row gap-8 items-stretch">
-            
-            {/* ЛЕВАЯ КОЛОНКА (35%): Информация */}
-            <div className="w-full lg:w-[35%] flex flex-col justify-center items-center lg:items-start text-center lg:text-left">
-              
-              <div className="mb-8 w-full border-b border-white/10 pb-8">
-                <div className="flex items-center justify-center lg:justify-start space-x-2 text-sky-200 mb-2">
-                  <MapPin className="w-5 h-5" />
-                  <span className="uppercase tracking-wider text-sm font-medium">Наш адрес</span>
-                </div>
-                <span className="text-xl font-light text-white block leading-relaxed">г. Саров,<br/>проспект Музрукова, д.37 к.3</span>
-              </div>
-              
-              <a href="tel:+79101258250" className="group flex flex-col items-center lg:items-start mb-8 w-full">
-                <div className="flex items-center space-x-3 sm:space-x-4">
-                  <div className="w-12 h-12 sm:w-14 sm:h-14 bg-sky-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shrink-0">
-                    <Phone className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                  </div>
-                  <span className="text-2xl sm:text-3xl font-light text-white tracking-wide whitespace-nowrap">+7 910-125-82-50</span>
-                </div>
-              </a>
-              
-              <button onClick={() => openModal()} className="w-full px-8 bg-white text-sky-900 hover:bg-sky-50 font-medium py-4 rounded-full transition-colors text-lg shadow-md mt-auto">
-                Записаться онлайн
-              </button>
-            </div>
-
-            {/* ПРАВАЯ КОЛОНКА (65%): Карта Яндекса */}
-            <div className="w-full lg:w-[65%] h-80 lg:h-auto min-h-[350px] rounded-2xl overflow-hidden border border-white/10 shadow-inner relative bg-stone-100/10">
-              <iframe 
-                src="https://yandex.ru/map-widget/v1/?um=constructor%3A5bd4448c7935bb1d9d7b082ee77117acbad4684acf8b86717e288673a4a24dbc&amp;source=constructor" 
-                width="100%" 
-                height="100%" 
-                frameBorder="0" 
-                allowFullScreen={true} 
-                style={{ position: 'absolute', top: 0, left: 0 }}
-                title="Карта студии SOVA"
-              ></iframe>
-            </div>
-            
-          </div>
-        </div>
-      </section>
-
-      <footer className="bg-stone-900 text-stone-400 py-10 border-t border-stone-800">
-        <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
-          <div className="flex flex-col items-center md:items-start mb-6 md:mb-0">
-            <h1 className="text-2xl font-light text-white tracking-[0.2em] mb-1">SOVA</h1>
-            <p className="text-xs uppercase tracking-wider mb-4">Студия массажа и коррекции фигуры</p>
-            <a href="/admin" className="text-[10px] uppercase tracking-widest text-stone-600 hover:text-sky-500 flex items-center"><Lock className="w-3 h-3 mr-1" /> Вход для администратора</a>
-          </div>
-          <div className="text-center md:text-right text-sm">
-            <p className="mb-2">проспект Музрукова д.37 к.3</p>
-            <p>© {new Date().getFullYear()} Студия «SOVA». Все права защищены.</p>
-          </div>
-        </div>
-      </footer>
-
-      {/* PROMO BANNER */}
-      {showPromo && (
-        <div className="fixed bottom-6 right-6 z-[90] max-w-sm w-[calc(100%-3rem)] bg-white rounded-3xl shadow-2xl border border-sky-100 overflow-hidden animate-fade-in">
-          <div className="bg-gradient-to-r from-sky-500 to-sky-400 p-5 relative">
-            <button 
-              onClick={() => { setShowPromo(false); setPromoClosed(true); }} 
-              className="absolute top-4 right-4 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-1.5 rounded-full transition-colors"
-            >
-              <X className="w-4 h-4" />
-            </button>
-            <div className="flex items-center gap-3">
-              <div className="bg-white/20 p-2 rounded-xl"><Sparkles className="w-6 h-6 text-white" /></div>
-              <h4 className="font-serif text-xl font-medium text-white">Первый раз у нас?</h4>
-            </div>
-          </div>
-          <div className="p-6">
-            <p className="text-stone-600 text-sm mb-5 leading-relaxed">
-              Запишитесь сейчас и получите скидку <strong className="text-sky-500 font-bold text-base">15%</strong> на любой массаж или процедуру коррекции фигуры!
-            </p>
-            <button
-              onClick={() => {
-                setShowPromo(false);
-                setPromoClosed(true);
-                openModal(); // Открываем форму записи
-              }}
-              className="w-full bg-sky-50 hover:bg-sky-100 text-sky-600 font-medium py-3 rounded-xl transition-colors text-sm flex justify-center items-center"
-            >
-              Забрать скидку
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* BOOKING MODAL */}
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-stone-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl p-6 md:p-8 w-full max-w-md relative shadow-2xl">
-            <button onClick={closeModal} className="absolute top-5 right-5 text-stone-400 hover:text-stone-700 bg-stone-100 p-2 rounded-full"><X className="w-5 h-5" /></button>
-            {isSubmitted ? (
-              <div className="text-center py-8">
-                <div className="w-16 h-16 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4"><CheckCircle className="w-8 h-8" /></div>
-                <h3 className="text-2xl font-serif text-stone-800 mb-2">Заявка отправлена!</h3>
-                <p className="text-stone-500 mb-6">Спасибо, {bookingData.name}! Мы свяжемся с вами в ближайшее время.</p>
-                <button onClick={closeModal} className="bg-sky-500 hover:bg-sky-600 text-white px-8 py-3 rounded-full font-medium">Закрыть</button>
-              </div>
-            ) : (
-              <>
-                <h3 className="text-2xl font-serif text-stone-800 mb-2">Онлайн-запись</h3>
-                <form onSubmit={handleBookingSubmit} className="space-y-5 mt-6">
-                  <div>
-                    <label className="block text-sm font-medium mb-1 text-stone-700">Услуга</label>
-                    <select className="w-full border-stone-200 p-3 rounded-xl text-sm bg-stone-50 focus:ring-2 focus:ring-sky-500 outline-none transition-all" value={selectedService} onChange={e => setSelectedService(e.target.value)}>
-                      <option value="" disabled>Выберите услугу</option>
-                      <optgroup label="Массаж">{massageServices.flatMap(s => s.items?.map(i => `${s.title} (${i.name})`) || []).map((n, i) => <option key={i} value={n}>{n}</option>)}</optgroup>
-                      <optgroup label="Коррекция фигуры">{bodyShapingServices.flatMap(c => c.items?.map(i => `${c.category} - ${i.name}`) || []).map((n, i) => <option key={i} value={n}>{n}</option>)}</optgroup>
-                    </select>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium mb-1 text-stone-700">Имя</label>
-                      <input required type="text" placeholder="Ваше имя" className="w-full border border-stone-200 p-3 rounded-xl text-sm focus:ring-2 focus:ring-sky-500 outline-none" value={bookingData.name} onChange={e => setBookingData({...bookingData, name: e.target.value})} />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-1 text-stone-700">Телефон</label>
-                      <input required type="tel" placeholder="+7 (999) 000-00-00" className="w-full border border-stone-200 p-3 rounded-xl text-sm focus:ring-2 focus:ring-sky-500 outline-none" value={bookingData.phone} onChange={handlePhoneChange} maxLength={18} />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-1 text-stone-700">Дата сеанса</label>
-                    <input required type="date" min={todayDate} className="w-full border border-stone-200 p-3 rounded-xl text-sm focus:ring-2 focus:ring-sky-500 outline-none bg-stone-50" value={bookingData.date} onChange={e => setBookingData({...bookingData, date: e.target.value})} />
-                  </div>
-
-                  {/* ИСПРАВЛЕННЫЙ БЛОК: Свободное время */}
-                  <div>
-                    <label className="block text-sm font-medium mb-2 text-stone-700">Свободное время</label>
-                    {(() => {
-                      if (!selectedService) {
-                        return <p className="text-sm text-stone-500 py-2 bg-stone-100 px-4 rounded-xl">Сначала выберите услугу в списке выше 👆</p>;
-                      }
-                      
-                      const massageMatch = massageServices.find(s => s.items?.some(i => `${s.title} (${i.name})` === selectedService));
-                      const bodyMatch = bodyShapingServices.find(c => c.items?.some(i => `${c.category} - ${i.name}` === selectedService));
-                      
-                      const timesString = (massageMatch?.availableTimes) || (bodyMatch?.availableTimes) || "10:00, 11:00, 12:00, 13:00, 14:00, 15:00, 16:00, 17:00, 18:00, 19:00, 20:00";
-                      const activeSlots = timesString.split(',').map(t => t.trim()).filter(Boolean);
-
-                      return (
-                        <div className="flex flex-wrap gap-2 animate-fade-in">
-                          {activeSlots.map(t => (
-                            <button 
-                              key={t} 
-                              type="button" 
-                              onClick={() => setBookingData({...bookingData, time: t})}
-                              className={`px-4 py-2 rounded-xl text-sm font-medium transition-all border ${bookingData.time === t ? 'bg-sky-500 text-white border-sky-500 shadow-md scale-105' : 'bg-white text-stone-600 border-stone-200 hover:border-sky-300 hover:bg-sky-50'}`}
-                            >
-                              {t}
-                            </button>
-                          ))}
-                        </div>
-                      );
-                    })()}
-                  </div>
-
-                  {/* КАПЧА */}
-                  <div className="bg-stone-50 border border-stone-200 p-4 rounded-xl flex items-center justify-between gap-4 mt-2">
-                    <label className="text-sm text-stone-600 font-medium">
-                      Проверка от спама: <strong className="text-lg text-stone-800 ml-1">{captcha.num1} + {captcha.num2} = ?</strong>
-                    </label>
-                    <input 
-                      required 
-                      type="number" 
-                      className="w-20 border border-stone-300 p-2 rounded-lg text-center focus:ring-2 focus:ring-sky-500 outline-none" 
-                      value={captcha.answer} 
-                      onChange={e => setCaptcha({...captcha, answer: e.target.value})} 
-                    />
-                  </div>
-
-                  <button type="submit" disabled={isSubmitting} className="w-full bg-sky-500 hover:bg-sky-600 text-white font-medium py-4 rounded-xl mt-6 flex justify-center items-center shadow-lg hover:shadow-xl transition-all">
-                    {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : "Отправить заявку"}
-                  </button>
-                </form>
-              </>
-            )}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
