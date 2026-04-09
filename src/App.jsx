@@ -685,8 +685,7 @@ const handleBookingSubmit = async (e) => {
                           </div>
                           <div><label className="block text-sm font-medium mb-1">Title (Главный заголовок сайта)</label><input type="text" className="w-full border p-3 rounded-xl text-sm font-medium" value={editingItem.title} onChange={e => setEditingItem({...editingItem, title: e.target.value})} /></div>
                           {/* НОВОЕ ПОЛЕ: РАСПИСАНИЕ */}
-                           {['massage', 'body'].includes(contentTab) && (
-                             <div>
+                              <div>
                                <label className="block text-sm font-medium mb-1 text-sky-700">Доступное время (через запятую)</label>
                                <input 
                                  type="text" 
@@ -697,7 +696,7 @@ const handleBookingSubmit = async (e) => {
                                />
                                <p className="text-xs text-stone-400 mt-1">Оставьте пустым для расписания по умолчанию (с 10:00 до 20:00)</p>
                              </div>
-                           )}
+                           )
                           <div><label className="block text-sm font-medium mb-1">Description (Описание для сниппета в поиске)</label><textarea className="w-full border p-3 rounded-xl text-sm min-h-[100px]" value={editingItem.description} onChange={e => setEditingItem({...editingItem, description: e.target.value})} /></div>
                           <div><label className="block text-sm font-medium mb-1">Keywords (Ключевые слова через запятую)</label><textarea className="w-full border p-3 rounded-xl text-sm" value={editingItem.keywords} onChange={e => setEditingItem({...editingItem, keywords: e.target.value})} /></div>
                         </div>
@@ -719,23 +718,7 @@ const handleBookingSubmit = async (e) => {
                    {['massage', 'body', 'equipment', 'team', 'faq'].includes(contentTab) && (
                          <>
                            {['massage', 'body', 'equipment'].includes(contentTab) && <div><label className="block text-sm font-medium mb-1">Заголовок</label><input type="text" className="w-full border p-3 rounded-xl text-sm" value={editingItem.title || editingItem.category || ''} onChange={e => setEditingItem(prev => prev.title !== undefined ? {...prev, title: e.target.value} : {...prev, category: e.target.value})} /></div>}
-                           
-                           {/* --- НОВОЕ ПОЛЕ: РАСПИСАНИЕ --- */}
-                           {['massage', 'body'].includes(contentTab) && (
-                             <div className="bg-sky-50 border border-sky-100 p-4 rounded-xl">
-                               <label className="block text-sm font-medium mb-1 text-sky-800">Доступное время (через запятую)</label>
-                               <input 
-                                 type="text" 
-                                 className="w-full border border-sky-200 p-3 rounded-xl text-sm" 
-                                 placeholder="Например: 08:00, 09:30, 11:00, 12:30" 
-                                 value={editingItem.availableTimes || ''} 
-                                 onChange={e => setEditingItem({...editingItem, availableTimes: e.target.value})} 
-                               />
-                               <p className="text-xs text-sky-600 mt-2">Оставьте пустым для классического расписания (с 10:00 до 20:00)</p>
-                             </div>
-                           )}
-                           {/* ------------------------------ */}
-
+                                                      
                            {contentTab === 'team' && (
                              <>
                                <div><label className="block text-sm font-medium mb-1">Имя</label><input type="text" className="w-full border p-3 rounded-xl text-sm" value={editingItem.name} onChange={e => setEditingItem({...editingItem, name: e.target.value})} /></div>
@@ -1170,10 +1153,7 @@ const handleBookingSubmit = async (e) => {
                         return <p className="text-sm text-stone-500 py-2 bg-stone-100 px-4 rounded-xl">Сначала выберите услугу в списке выше 👆</p>;
                       }
                       
-                      const massageMatch = massageServices.find(s => s.items?.some(i => `${s.title} (${i.name})` === selectedService));
-                      const bodyMatch = bodyShapingServices.find(c => c.items?.some(i => `${c.category} - ${i.name}` === selectedService));
-                      
-                      const timesString = (massageMatch?.availableTimes) || (bodyMatch?.availableTimes) || "10:00, 11:00, 12:00, 13:00, 14:00, 15:00, 16:00, 17:00, 18:00, 19:00, 20:00";
+                      const timesString = seoData?.availableTimes || defaultSeo.availableTimes || "10:00, 11:00, 12:00, 13:00, 14:00, 15:00, 16:00, 17:00, 18:00, 19:00, 20:00";
                       const activeSlots = timesString.split(',').map(t => t.trim()).filter(Boolean);
 
                       return (
