@@ -703,9 +703,26 @@ const handleBookingSubmit = async (e) => {
                         </>
                       )}
 
-                      {['massage', 'body', 'equipment', 'team', 'faq'].includes(contentTab) && (
+                   {['massage', 'body', 'equipment', 'team', 'faq'].includes(contentTab) && (
                          <>
                            {['massage', 'body', 'equipment'].includes(contentTab) && <div><label className="block text-sm font-medium mb-1">Заголовок</label><input type="text" className="w-full border p-3 rounded-xl text-sm" value={editingItem.title || editingItem.category || ''} onChange={e => setEditingItem(prev => prev.title !== undefined ? {...prev, title: e.target.value} : {...prev, category: e.target.value})} /></div>}
+                           
+                           {/* --- НОВОЕ ПОЛЕ: РАСПИСАНИЕ --- */}
+                           {['massage', 'body'].includes(contentTab) && (
+                             <div className="bg-sky-50 border border-sky-100 p-4 rounded-xl">
+                               <label className="block text-sm font-medium mb-1 text-sky-800">Доступное время (через запятую)</label>
+                               <input 
+                                 type="text" 
+                                 className="w-full border border-sky-200 p-3 rounded-xl text-sm" 
+                                 placeholder="Например: 08:00, 09:30, 11:00, 12:30" 
+                                 value={editingItem.availableTimes || ''} 
+                                 onChange={e => setEditingItem({...editingItem, availableTimes: e.target.value})} 
+                               />
+                               <p className="text-xs text-sky-600 mt-2">Оставьте пустым для классического расписания (с 10:00 до 20:00)</p>
+                             </div>
+                           )}
+                           {/* ------------------------------ */}
+
                            {contentTab === 'team' && (
                              <>
                                <div><label className="block text-sm font-medium mb-1">Имя</label><input type="text" className="w-full border p-3 rounded-xl text-sm" value={editingItem.name} onChange={e => setEditingItem({...editingItem, name: e.target.value})} /></div>
