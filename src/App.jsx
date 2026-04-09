@@ -292,11 +292,24 @@ const handleBookingSubmit = async (e) => {
 
     setIsSubmitting(true);
     
-    // ... здесь остается ваш старый код отправки в Firebase и Albato
+    // Формируем время окончания (для календаря)
     const [h, m] = bookingData.time.split(':');
-    // ... и так далее
+    const endH = String((Number(h) + 1) % 24).padStart(2, '0');
+    const endTime = `${endH}:${m}`;
 
-    const WEBHOOK_URL = 'ВАШ_WEBHOOK_URL_ЗДЕСЬ'; // Не забудьте вернуть вашу ссылку от Albato!
+    // Создаем саму заявку
+    const newBooking = {
+      name: bookingData.name,
+      phone: bookingData.phone,
+      service: selectedService || 'Не указана',
+      date: bookingData.date,
+      time: bookingData.time,
+      endTime: endTime,
+      status: 'new',
+      createdAt: new Date().toISOString()
+    };
+
+    const WEBHOOK_URL = 'ВАШ_WEBHOOK_URL_ЗДЕСЬ'; // <-- ВАЖНО: Вставьте сюда вашу ссылку от Albato!
 
     try {
       const docRef = await addDoc(collection(db, "bookings"), newBooking);
@@ -1149,21 +1162,17 @@ const handleBookingSubmit = async (e) => {
                     <input required type="date" min={todayDate} className="w-full border border-stone-200 p-3 rounded-xl text-sm focus:ring-2 focus:ring-sky-500 outline-none bg-stone-50" value={bookingData.date} onChange={e => setBookingData({...bookingData, date: e.target.value})} />
                   </div>
 
+                  {/* ИСПРАВЛЕННЫЙ БЛОК: Свободное время */}
                   <div>
-                   <div>
                     <label className="block text-sm font-medium mb-2 text-stone-700">Свободное время</label>
-                    
-                    {/* ЛОГИКА ВЫЧИСЛЕНИЯ ВРЕМЕНИ */}
                     {(() => {
                       if (!selectedService) {
                         return <p className="text-sm text-stone-500 py-2 bg-stone-100 px-4 rounded-xl">Сначала выберите услугу в списке выше 👆</p>;
                       }
                       
-                      // Ищем, к какой категории относится выбранная услуга
                       const massageMatch = massageServices.find(s => s.items?.some(i => `${s.title} (${i.name})` === selectedService));
                       const bodyMatch = bodyShapingServices.find(c => c.items?.some(i => `${c.category} - ${i.name}` === selectedService));
                       
-                      // Берем время из базы или ставим стандартное
                       const timesString = (massageMatch?.availableTimes) || (bodyMatch?.availableTimes) || "10:00, 11:00, 12:00, 13:00, 14:00, 15:00, 16:00, 17:00, 18:00, 19:00, 20:00";
                       const activeSlots = timesString.split(',').map(t => t.trim()).filter(Boolean);
 
