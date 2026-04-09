@@ -43,10 +43,10 @@ export default function App() {
   
   const [isLoadingData, setIsLoadingData] = useState(true);
 
-  // --- МАГИЯ SEO: ДИНАМИЧЕСКАЯ ПОДМЕНА ТЕГОВ ---
+ // --- МАГИЯ SEO: ДИНАМИЧЕСКАЯ ПОДМЕНА ТЕГОВ (С ЗАЩИТОЙ) ---
   useEffect(() => {
-    if (seoData) {
-      document.title = seoData.title || "SOVA";
+    if (seoData) { // <-- Проверяем, что данные вообще есть
+      document.title = seoData.title || "Студия массажа SOVA";
       
       const metaDesc = document.querySelector('meta[name="description"]');
       if (metaDesc) metaDesc.setAttribute('content', seoData.description || "");
@@ -56,7 +56,7 @@ export default function App() {
     }
   }, [seoData]);
 
-  // --- ЧТЕНИЕ ИЗ FIREBASE ПРИ ЗАГРУЗКЕ САЙТА ---
+  // --- ЧТЕНИЕ ИЗ FIREBASE ПРИ ЗАГРУЗКЕ САЙТА (С ЗАЩИТОЙ) ---
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -67,13 +67,14 @@ export default function App() {
 
         const contentSnap = await getDocs(collection(db, "site_content"));
         contentSnap.docs.forEach(doc => {
-          if (doc.id === 'hero') setHeroData(doc.data());
-          if (doc.id === 'seo') setSeoData(doc.data()); // <-- ЗАГРУЗКА SEO ИЗ БАЗЫ
-          if (doc.id === 'massage') setMassageServices(doc.data().items);
-          if (doc.id === 'body') setBodyShapingServices(doc.data().items);
-          if (doc.id === 'team') setTeamMembers(doc.data().items);
-          if (doc.id === 'equipment') setEquipmentData(doc.data().items);
-          if (doc.id === 'faq') setFaqData(doc.data().items);
+          // Если база вернула пустоту, мы берем стандартные данные (... || defaultData)
+          if (doc.id === 'hero') setHeroData(doc.data() || defaultHero);
+          if (doc.id === 'seo') setSeoData(doc.data() || defaultSeo);
+          if (doc.id === 'massage') setMassageServices(doc.data().items || massageServicesData);
+          if (doc.id === 'body') setBodyShapingServices(doc.data().items || bodyShapingServicesData);
+          if (doc.id === 'team') setTeamMembers(doc.data().items || teamMembersData);
+          if (doc.id === 'equipment') setEquipmentData(doc.data().items || equipmentDefaultData);
+          if (doc.id === 'faq') setFaqData(doc.data().items || faqDefaultData);
         });
       } catch (error) {
         console.error("Ошибка при загрузке данных:", error);
