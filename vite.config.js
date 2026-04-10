@@ -7,5 +7,5 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
-  base: './', // <-- Обязательно добавляем эту строку для Timeweb
+  base: '/', // <-- УБРАЛИ ТОЧКУ! Теперь пути считаются от корня домена
 })
