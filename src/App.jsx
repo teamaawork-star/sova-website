@@ -684,17 +684,15 @@ if (contentTab === 'seo') {
 
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     
-                    {/* ЛЕВАЯ КОЛОНКА (Основные поля) */}
+                    {/* ЛЕВАЯ КОЛОНКА */}
                     <div className="space-y-4 lg:col-span-1">
                       
-                      {/* ФОРМА ДЛЯ SEO */}
                       {contentTab === 'seo' && (
                         <div className="space-y-5 lg:col-span-2 w-full max-w-2xl">
                           <div className="bg-sky-50 border border-sky-100 p-4 rounded-xl mb-4">
                             <p className="text-xs text-sky-800 leading-relaxed">Здесь вы можете изменить общие настройки сайта: расписание для записи, а также теги для Яндекса и Google.</p>
                           </div>
                           
-                          {/* ПОЛЕ ВРЕМЕНИ */}
                           <div className="bg-stone-50 border border-stone-200 p-5 rounded-xl">
                             <label className="block text-sm font-medium mb-1 text-stone-800">Доступное время (через запятую)</label>
                             <input 
@@ -713,7 +711,6 @@ if (contentTab === 'seo') {
                         </div>
                       )}
 
-                      {/* СТАРЫЕ ФОРМЫ */}
                       {contentTab === 'hero' && (
                         <>
                           <div><label className="block text-sm font-medium mb-1">Бейдж</label><input type="text" className="w-full border p-3 rounded-xl text-sm" value={editingItem.badge} onChange={e => setEditingItem({...editingItem, badge: e.target.value})} /></div>
@@ -726,24 +723,24 @@ if (contentTab === 'seo') {
                         </>
                       )}
 
-                   {['massage', 'body', 'equipment', 'team', 'faq'].includes(contentTab) && (
-                         <>
-                           {['massage', 'body', 'equipment'].includes(contentTab) && <div><label className="block text-sm font-medium mb-1">Заголовок</label><input type="text" className="w-full border p-3 rounded-xl text-sm" value={editingItem.title || editingItem.category || ''} onChange={e => setEditingItem(prev => prev.title !== undefined ? {...prev, title: e.target.value} : {...prev, category: e.target.value})} /></div>}
-                                                      
-                           {contentTab === 'team' && (
-                             <>
-                               <div><label className="block text-sm font-medium mb-1">Имя</label><input type="text" className="w-full border p-3 rounded-xl text-sm" value={editingItem.name} onChange={e => setEditingItem({...editingItem, name: e.target.value})} /></div>
-                               <div><label className="block text-sm font-medium mb-1">Должность</label><input type="text" className="w-full border p-3 rounded-xl text-sm" value={editingItem.role} onChange={e => setEditingItem({...editingItem, role: e.target.value})} /></div>
-                             </>
-                           )}
-                           {contentTab === 'faq' && <div><label className="block text-sm font-medium mb-1">Вопрос</label><input type="text" className="w-full border p-3 rounded-xl text-sm" value={editingItem.question} onChange={e => setEditingItem({...editingItem, question: e.target.value})} /></div>}
-                           <div><label className="block text-sm font-medium mb-1">{contentTab === 'faq' ? 'Ответ' : 'Описание'}</label><textarea className="w-full border p-3 rounded-xl text-sm min-h-[100px]" value={editingItem.description || editingItem.answer || ''} onChange={e => contentTab === 'faq' ? setEditingItem({...editingItem, answer: e.target.value}) : setEditingItem({...editingItem, description: e.target.value})} /></div>
-                           {contentTab === 'equipment' && <div><label className="block text-sm font-medium mb-1">Особенности (через запятую)</label><textarea className="w-full border p-3 rounded-xl text-sm" value={editingItem.features} onChange={e => setEditingItem({...editingItem, features: e.target.value})} /></div>}
-                         </>
+                      {['massage', 'body', 'equipment', 'team', 'faq'].includes(contentTab) && (
+                        <>
+                          {['massage', 'body', 'equipment'].includes(contentTab) && <div><label className="block text-sm font-medium mb-1">Заголовок</label><input type="text" className="w-full border p-3 rounded-xl text-sm" value={editingItem.title || editingItem.category || ''} onChange={e => setEditingItem(prev => prev.title !== undefined ? {...prev, title: e.target.value} : {...prev, category: e.target.value})} /></div>}
+                          
+                          {contentTab === 'team' && (
+                            <>
+                              <div><label className="block text-sm font-medium mb-1">Имя</label><input type="text" className="w-full border p-3 rounded-xl text-sm" value={editingItem.name} onChange={e => setEditingItem({...editingItem, name: e.target.value})} /></div>
+                              <div><label className="block text-sm font-medium mb-1">Должность</label><input type="text" className="w-full border p-3 rounded-xl text-sm" value={editingItem.role} onChange={e => setEditingItem({...editingItem, role: e.target.value})} /></div>
+                            </>
+                          )}
+                          {contentTab === 'faq' && <div><label className="block text-sm font-medium mb-1">Вопрос</label><input type="text" className="w-full border p-3 rounded-xl text-sm" value={editingItem.question} onChange={e => setEditingItem({...editingItem, question: e.target.value})} /></div>}
+                          <div><label className="block text-sm font-medium mb-1">{contentTab === 'faq' ? 'Ответ' : 'Описание'}</label><textarea className="w-full border p-3 rounded-xl text-sm min-h-[100px]" value={editingItem.description || editingItem.answer || ''} onChange={e => contentTab === 'faq' ? setEditingItem({...editingItem, answer: e.target.value}) : setEditingItem({...editingItem, description: e.target.value})} /></div>
+                          {contentTab === 'equipment' && <div><label className="block text-sm font-medium mb-1">Особенности (через запятую)</label><textarea className="w-full border p-3 rounded-xl text-sm" value={editingItem.features} onChange={e => setEditingItem({...editingItem, features: e.target.value})} /></div>}
+                        </>
                       )}
+                    </div>
                     
-
-                    {/* ПРАВАЯ КОЛОНКА (Фото или список подуслуг) */}
+                    {/* ПРАВАЯ КОЛОНКА */}
                     {contentTab !== 'seo' && (
                       <div>
                         {contentTab !== 'faq' && (
