@@ -1,10 +1,11 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite' // <-- Добавьте этот импорт
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   plugins: [
     react(),
-    tailwindcss(), // <-- Добавьте этот плагин
+    tailwindcss(),
   ],
+  base: './', // <-- Обязательно добавляем эту строку для Timeweb
 })
