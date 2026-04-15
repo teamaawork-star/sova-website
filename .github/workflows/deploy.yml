@@ -1,0 +1,34 @@
+name: Deploy React App to Timeweb
+
+on:
+  push:
+    branches:
+      - main # Замените на master, если ваша главная ветка называется так
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 🚚 Получение кода
+      uses: actions/checkout@v3
+
+    - name: ⚙️ Установка Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+
+    - name: 📦 Установка зависимостей
+      run: npm install
+
+    - name: 🏗️ Сборка проекта
+      run: npm run build
+
+    - name: 🚀 Отправка на Timeweb
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: ./dist/ 
+        server-dir: /public_html/ # Убедитесь, что папка называется именно так
