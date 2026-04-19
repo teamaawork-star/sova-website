@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Phone, MapPin, Clock, Sparkles, Wind, Droplets, X, CheckCircle, Lock, Trash2, LogOut, Edit, Plus, Save, ArrowLeft, ArrowRight, Loader2, ChevronDown, ChevronUp, ShieldCheck, Upload, Search } from 'lucide-react';
+import { Phone, MapPin, Clock, Sparkles, Wind, Droplets, X, CheckCircle, Lock, Trash2, LogOut, Edit, Plus, Save, ArrowLeft, ArrowRight, Loader2, ChevronDown, ChevronUp, ShieldCheck, Upload, Search, Play, RotateCcw, Check } from 'lucide-react';
 import { collection, getDocs, addDoc, doc, setDoc, deleteDoc } from 'firebase/firestore';
 import { db } from './firebase';
 
@@ -151,6 +151,65 @@ export default function App() {
   const [bookingsList, setBookingsList] = useState([]);
   
   const [isLoadingData, setIsLoadingData] = useState(true);
+
+  // --- ДАННЫЕ ДЛЯ КВИЗА ---
+  const [quizStep, setQuizStep] = useState(0); // 0: intro, 1-3: вопросы, 4: результат
+  const [quizAnswers, setQuizAnswers] = useState([]);
+
+  const quizQuestions = [
+    {
+      question: "Какая ваша главная цель визита?",
+      options: [
+        { label: "Снять стресс и расслабиться", value: "relax", icon: <Wind className="w-8 h-8 mb-3" /> },
+        { label: "Скорректировать фигуру", value: "shape", icon: <Sparkles className="w-8 h-8 mb-3" /> },
+        { label: "Избавиться от боли в мышцах", value: "pain", icon: <ShieldCheck className="w-8 h-8 mb-3" /> },
+      ]
+    },
+    {
+      question: "Какая зона требует особого внимания?",
+      options: [
+        { label: "Спина и шея", value: "back" },
+        { label: "Живот и бока", value: "belly" },
+        { label: "Бедра и ягодицы", value: "legs" },
+        { label: "Все тело", value: "full" },
+      ]
+    },
+    {
+      question: "Какой метод воздействия вам ближе?",
+      options: [
+        { label: "Классический ручной массаж", value: "manual" },
+        { label: "Современные аппаратные методики", value: "machine" },
+        { label: "SPA-процедуры и обертывания", value: "spa" },
+      ]
+    }
+  ];
+
+  const handleQuizAnswer = (value) => {
+    setQuizAnswers([...quizAnswers, value]);
+    setQuizStep(quizStep + 1);
+  };
+
+  const getQuizResult = () => {
+    const [goal, zone, method] = quizAnswers;
+    if (goal === 'shape') {
+      if (method === 'machine') {
+         if (zone === 'belly') return { title: 'УЗ кавитация (живот)', desc: 'Идеально для локального жиросжигания. Безболезненная альтернатива липосакции.' };
+         if (zone === 'legs') return { title: 'Вакуумный массаж или Криолиполиз', desc: 'Эффективная борьба с целлюлитом и подтяжка кожи.' };
+         return { title: 'LPG-массаж всего тела', desc: 'Комплексное моделирование контуров тела и лимфодренаж.' };
+      }
+      return { title: 'Антицеллюлитный / Вакуумный массаж', desc: 'Мощная ручная или вакуумная проработка проблемных зон для упругости кожи.' };
+    }
+    
+    if (goal === 'pain' || zone === 'back') {
+      return { title: 'Массаж спины и ШВЗ', desc: 'Глубокая проработка мышц, снятие зажимов, спазмов и тяжести.' };
+    }
+
+    if (method === 'spa' || goal === 'relax') {
+      return { title: 'SPA-уход релакс/антистресс', desc: 'Полное погружение в расслабление с массажем и обертыванием.' };
+    }
+
+    return { title: 'Общий массаж всего тела', desc: 'Классический сеанс для гармонии души и тела, снятия усталости.' };
+  };
 
  // --- МАГИЯ SEO: ДИНАМИЧЕСКАЯ ПОДМЕНА ТЕГОВ (С ЗАЩИТОЙ) ---
   useEffect(() => {
@@ -899,6 +958,74 @@ if (contentTab === 'seo') {
               <button onClick={() => openModal()} className="bg-white border border-stone-200 px-8 py-3.5 rounded-full font-medium">Записаться на сеанс</button>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* ИНТЕРАКТИВНЫЙ КВИЗ */}
+      <section className="py-16 md:py-24 bg-white border-t border-stone-200 relative">
+        <div className="max-w-3xl mx-auto px-4 text-center">
+          
+          {quizStep === 0 && (
+            <div className="animate-fade-in bg-stone-50 rounded-3xl p-8 md:p-12 border border-stone-100 shadow-sm">
+              <div className="w-16 h-16 bg-sky-100 text-sky-500 rounded-full flex items-center justify-center mx-auto mb-6"><Sparkles className="w-8 h-8" /></div>
+              <h2 className="text-3xl font-serif text-stone-800 mb-4">Не знаете, какую услугу выбрать?</h2>
+              <p className="text-stone-500 mb-8 max-w-lg mx-auto">Пройдите короткий тест из 3 вопросов, и мы подберем идеальную процедуру специально для вас.</p>
+              <button 
+                onClick={() => { setQuizStep(1); setQuizAnswers([]); }} 
+                className="bg-sky-500 hover:bg-sky-600 text-white px-8 py-3.5 rounded-full font-medium flex items-center justify-center mx-auto transition-all hover:scale-105"
+              >
+                <Play className="w-4 h-4 mr-2" /> Начать тест
+              </button>
+            </div>
+          )}
+
+          {quizStep > 0 && quizStep <= quizQuestions.length && (
+            <div className="animate-fade-in">
+              <div className="mb-8 flex flex-col items-center">
+                <span className="text-sm font-bold text-sky-500 mb-3 tracking-widest uppercase">Шаг {quizStep} из {quizQuestions.length}</span>
+                <div className="w-full max-w-xs h-1.5 bg-stone-100 rounded-full overflow-hidden">
+                  <div className="bg-sky-500 h-full transition-all duration-500" style={{ width: `${(quizStep / quizQuestions.length) * 100}%` }}></div>
+                </div>
+              </div>
+              <h3 className="text-2xl md:text-3xl font-serif text-stone-800 mb-8">{quizQuestions[quizStep - 1].question}</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {quizQuestions[quizStep - 1].options.map((opt, idx) => (
+                  <button 
+                    key={idx}
+                    onClick={() => handleQuizAnswer(opt.value)}
+                    className="bg-white border-2 border-stone-100 p-6 rounded-2xl hover:border-sky-400 hover:bg-sky-50 hover:shadow-md transition-all flex flex-col items-center justify-center text-center group"
+                  >
+                    {opt.icon && <div className="text-stone-400 group-hover:text-sky-500 transition-colors">{opt.icon}</div>}
+                    <span className="font-medium text-stone-700">{opt.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {quizStep > quizQuestions.length && (
+            <div className="animate-fade-in bg-gradient-to-br from-sky-50 to-white rounded-3xl p-8 md:p-12 border border-sky-100 shadow-lg">
+              <div className="w-16 h-16 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-6"><Check className="w-8 h-8" /></div>
+              <h3 className="text-xl text-stone-500 mb-2">Вам идеально подойдет:</h3>
+              <h2 className="text-3xl md:text-4xl font-serif text-sky-700 mb-4">{getQuizResult().title}</h2>
+              <p className="text-stone-600 mb-10 max-w-lg mx-auto text-lg">{getQuizResult().desc}</p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <button 
+                  onClick={() => openModal(getQuizResult().title)}
+                  className="bg-sky-500 hover:bg-sky-600 text-white px-8 py-3.5 rounded-full font-medium shadow-md transition-all"
+                >
+                  Записаться на процедуру
+                </button>
+                <button 
+                  onClick={() => { setQuizStep(0); setQuizAnswers([]); }}
+                  className="bg-white border border-stone-200 text-stone-500 hover:bg-stone-50 px-8 py-3.5 rounded-full font-medium flex items-center justify-center transition-all"
+                >
+                  <RotateCcw className="w-4 h-4 mr-2" /> Пройти заново
+                </button>
+              </div>
+            </div>
+          )}
+
         </div>
       </section>
 
