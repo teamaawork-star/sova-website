@@ -407,15 +407,31 @@ const handleBookingSubmit = async (e) => {
     window.scrollTo(0, 0);
   };
 
-  // --- ЛОГИКА АДМИНКИ ---
-  const handleLogin = (e) => {
+ const handleLogin = async (e) => {
     e.preventDefault();
-    if (loginPass === 'wVxVVS4k') {
-      setCurrentView('adminPanel');
-      setLoginError('');
-      setLoginPass('');
-    } else {
-      setLoginError('Неверный пароль');
+    setLoginError(''); // Очищаем старые ошибки перед новой попыткой
+    
+    try {
+      // Отправляем пароль на наш новый PHP-скрипт
+      const res = await fetch('/api/login.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: loginPass })
+      });
+      
+      const result = await res.json();
+
+      if (result.status === 'success') {
+        // Сервер дал добро! Пускаем в админку
+        setCurrentView('adminPanel');
+        setLoginPass('');
+      } else {
+        // Сервер сказал, что пароль неверный
+        setLoginError(result.message || 'Неверный пароль');
+      }
+    } catch (error) {
+      console.error("Ошибка при входе:", error);
+      setLoginError('Ошибка связи с сервером');
     }
   };
 
