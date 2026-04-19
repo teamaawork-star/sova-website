@@ -40,30 +40,16 @@ if (!empty($data['name']) && !empty($data['phone'])) {
         $tg_url = "https://api.telegram.org/bot" . $tg_bot_token . "/sendMessage?chat_id=" . $tg_chat_id . "&parse_mode=HTML&text=" . urlencode($message_text);
         @file_get_contents($tg_url);
 
-// 3. Отправка на Email
-// Формируем информативную тему письма
-$subject = "⚡️ Новая запись: " . $data['name'] . " (" . $data['date'] . " в " . $data['time'] . ")";
-
-// Заголовки (From должен быть на вашем домене sova-sarov.ru)
-$headers = "From: info@" . $site_domain . "\r\n" .
-           "Reply-To: info@" . $site_domain . "\r\n" .
-           "MIME-Version: 1.0\r\n" .
-           "Content-Type: text/plain; charset=utf-8\r\n" .
-           "X-Priority: 1 (Highest)\r\n"; // Помечает письмо как важное
-
-// Текст письма
-$email_text = "🦉 Студия SOVA\n\n" .
-              "Поступила новая заявка через сайт.\n" .
-              "----------------------------------\n" .
-              "Клиент: " . $data['name'] . "\n" .
-              "Телефон: " . $data['phone'] . "\n" .
-              "Услуга: " . $data['service'] . "\n" .
-              "Дата: " . $data['date'] . "\n" .
-              "Время: " . $data['time'] . "\n" .
-              "----------------------------------\n" .
-              "Заявка уже сохранена в базе данных и доступна в админ-панели.";
-
-@mail($admin_email, $subject, $email_text, $headers);
+        // 3. Отправка на Email
+        // Важно: на Timeweb почта отправителя (From) должна быть на вашем домене, иначе письмо улетит в спам
+        $subject = 'Новая запись - SOVA';
+        $headers = "From: info@" . $site_domain . "\r\n" .
+                   "Reply-To: info@" . $site_domain . "\r\n" .
+                   "Content-Type: text/plain; charset=utf-8\r\n";
+        
+        // Для почты убираем HTML-теги, оставляем чистый текст
+        $email_text = strip_tags($message_text);
+        @mail($admin_email, $subject, $email_text, $headers);
 
         // Отдаем ответ React-приложению
         echo json_encode(['status' => 'success', 'id' => $insertId]);
