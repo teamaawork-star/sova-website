@@ -1,4 +1,4 @@
-import { initializeApp } from "firebase/app";
+    import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
 // ВСТАВЬТЕ СЮДА ВАШИ КЛЮЧИ ИЗ FIREBASE:
