@@ -169,9 +169,8 @@ export default function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const bookingsSnap = await getDocs(collection(db, "bookings"));
-        const loadedBookings = bookingsSnap.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-        loadedBookings.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        const bookingsRes = await fetch('/api/get_bookings.php');
+        const loadedBookings = await bookingsRes.json();
         setBookingsList(loadedBookings);
 
         const contentSnap = await getDocs(collection(db, "site_content"));
@@ -312,8 +311,13 @@ const handleBookingSubmit = async (e) => {
     const WEBHOOK_URL = 'ВАШ_WEBHOOK_URL_ЗДЕСЬ'; // <-- ВАЖНО: Вставьте сюда вашу ссылку от Albato!
 
     try {
-      const docRef = await addDoc(collection(db, "bookings"), newBooking);
-      setBookingsList([{ ...newBooking, id: docRef.id }, ...bookingsList]);
+      const res = await fetch('/api/add_booking.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newBooking)
+      });
+      const result = await res.json();
+      setBookingsList([{ ...newBooking, id: result.id }, ...bookingsList]);
       setIsSubmitted(true);
 
       if (WEBHOOK_URL !== 'ВАШ_WEBHOOK_URL_ЗДЕСЬ') {
@@ -356,20 +360,28 @@ const handleBookingSubmit = async (e) => {
     }
   };
 
-  const toggleBookingStatus = async (id, currentStatus) => {
+const toggleBookingStatus = async (id, currentStatus) => {
     const newStatus = currentStatus === 'new' ? 'done' : 'new';
     try {
-      await setDoc(doc(db, "bookings", id), { status: newStatus }, { merge: true });
+      await fetch('/api/update_booking.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: id, status: newStatus })
+      });
       setBookingsList(bookingsList.map(b => b.id === id ? { ...b, status: newStatus } : b));
     } catch (error) {
       console.error("Ошибка при обновлении статуса:", error);
     }
   };
 
-  const deleteBooking = async (id) => {
+const deleteBooking = async (id) => {
     if(window.confirm('Точно удалить эту заявку?')) {
       try {
-        await deleteDoc(doc(db, "bookings", id));
+        await fetch('/api/delete_booking.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: id })
+        });
         setBookingsList(bookingsList.filter(b => b.id !== id));
       } catch (error) {
         console.error("Ошибка при удалении:", error);
