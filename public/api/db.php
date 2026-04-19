@@ -1,8 +1,8 @@
 <?php
 $host = 'localhost'; // На Timeweb обычно так
-$db   = 'cy22091_название_базы';
-$user = 'cy22091_пользователь';
-$pass = 'Ваш_пароль_от_БД';
+$db   = 'cy22091_sova';
+$user = 'cy22091_sova';
+$pass = '836zBdhY';
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
