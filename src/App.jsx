@@ -1207,6 +1207,19 @@ if (contentTab === 'seo') {
                     />
                   </div>
 
+                  {/* СОГЛАСИЕ НА ОБРАБОТКУ ДАННЫХ */}
+                  <div className="flex items-start gap-3 mt-4 bg-stone-50 p-4 rounded-xl border border-stone-200">
+                    <input 
+                      type="checkbox" 
+                      id="privacy" 
+                      required 
+                      className="mt-1 w-4 h-4 text-sky-500 border-stone-300 rounded focus:ring-sky-500 cursor-pointer" 
+                    />
+                    <label htmlFor="privacy" className="text-xs text-stone-600 leading-relaxed cursor-pointer">
+                      Я даю согласие на обработку моих персональных данных в соответствии с <a href="/policy.html" target="_blank" className="text-sky-600 hover:underline">Политикой конфиденциальности</a>.
+                    </label>
+                  </div>
+
                   <button type="submit" disabled={isSubmitting} className="w-full bg-sky-500 hover:bg-sky-600 text-white font-medium py-4 rounded-xl mt-6 flex justify-center items-center shadow-lg hover:shadow-xl transition-all">
                     {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : "Отправить заявку"}
                   </button>
