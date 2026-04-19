@@ -410,7 +410,7 @@ const handleBookingSubmit = async (e) => {
   // --- ЛОГИКА АДМИНКИ ---
   const handleLogin = (e) => {
     e.preventDefault();
-    if (loginPass === 'admin') {
+    if (loginPass === 'wVxVVS4k') {
       setCurrentView('adminPanel');
       setLoginError('');
       setLoginPass('');
