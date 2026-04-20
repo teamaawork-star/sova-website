@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Phone, MapPin, Clock, Sparkles, Wind, Droplets, X, CheckCircle, Lock, Trash2, LogOut, Edit, Plus, Save, ArrowLeft, ArrowRight, Loader2, ChevronDown, ChevronUp, ShieldCheck, Upload, Search, Play, RotateCcw, Check } from 'lucide-react';
+import { Phone, MapPin, Clock, Sparkles, Wind, Droplets, X, CheckCircle, Lock, Trash2, LogOut, Edit, Plus, Save, ArrowLeft, ArrowRight, Loader2, ChevronDown, ChevronUp, ShieldCheck, Upload, Search, Play, RotateCcw, Check, Download } from 'lucide-react';
 import { collection, getDocs, addDoc, doc, setDoc, deleteDoc } from 'firebase/firestore';
 import { db } from './firebase';
 
@@ -512,6 +512,47 @@ const deleteBooking = async (id) => {
     }
   };
 
+
+const exportToExcel = () => {
+    if (bookingsList.length === 0) {
+      alert('Нет заявок для выгрузки');
+      return;
+    }
+
+    // Заголовки столбцов
+    const headers = ['Имя', 'Телефон', 'Услуга', 'Дата', 'Время', 'Статус'];
+
+    // Формируем строки (оборачиваем в кавычки на случай запятых внутри текста)
+    const rows = bookingsList.map(b => [
+      `"${b.name}"`, 
+      `"${b.phone}"`, 
+      `"${b.service}"`, 
+      `"${b.date}"`, 
+      `"${b.time}"`, 
+      `"${b.status === 'done' ? 'Обработано' : 'Новая'}"`
+    ]);
+
+    // Добавляем спецсимвол BOM (\uFEFF), чтобы русский Excel не сломал кодировку
+    const csvContent = '\uFEFF' + [
+      headers.join(';'),
+      ...rows.map(row => row.join(';'))
+    ].join('\n');
+
+    // Создаем виртуальный файл и запускаем скачивание
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    
+    // Формируем красивое имя файла с текущей датой
+    const today = new Date().toLocaleDateString('ru-RU').replace(/\./g, '-');
+    link.setAttribute('download', `Заявки_SOVA_${today}.csv`);
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   // --- ЛОГИКА РЕДАКТОРА КОНТЕНТА ---
   const handleEditClick = (index) => {
     setEditingIndex(index);
@@ -766,6 +807,9 @@ if (contentTab === 'seo') {
               {/* Рендер заявок (Оставлен как был) */}
               <div className="flex justify-between items-end mb-8">
                 <div><h2 className="text-3xl font-serif mb-2">Заявки с сайта</h2></div>
+                <button onClick={exportToExcel} className="bg-green-50 hover:bg-green-100 text-green-700 px-4 py-2.5 rounded-xl text-sm font-medium border border-green-200 flex items-center transition-colors shadow-sm">
+                  <Download className="w-4 h-4 mr-2" /> В Excel
+                </button>
               </div>
               {bookingsList.length === 0 ? (
                 <div className="bg-white rounded-2xl border p-12 text-center text-stone-500">Пока нет заявок.</div>
