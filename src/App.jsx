@@ -1099,92 +1099,102 @@ if (contentTab === 'seo') {
         </div>
       </header>
 
-      {/* HERO SECTION */}
-      <section className="relative bg-stone-100 overflow-hidden">
+     {/* HERO SECTION С ВСТРОЕННЫМ КВИЗОМ */}
+      <section className="relative bg-stone-100 overflow-hidden min-h-[85vh] flex items-center">
+        {/* Обновленный фон, чтобы и текст, и карточка квиза читались отлично */}
         <div className="absolute inset-0 z-0">
-          <img src={heroData.bgImage} alt="Background" className="w-full h-full object-cover opacity-60" />
-          <div className="absolute inset-0 bg-gradient-to-r from-stone-50 via-stone-50/80 to-transparent"></div>
+          <img src={heroData.bgImage} alt="Background" className="w-full h-full object-cover opacity-50" />
+          <div className="absolute inset-0 bg-gradient-to-br from-stone-50/95 via-stone-50/80 to-stone-50/30"></div>
         </div>
-        <div className="max-w-6xl mx-auto px-4 py-20 md:py-32 relative z-10">
-          <div className="max-w-2xl">
-            <div className="inline-block px-4 py-1.5 rounded-full bg-sky-100 text-sky-700 text-sm font-semibold mb-6">{heroData.badge}</div>
-            <h2 className="text-4xl md:text-5xl font-serif text-stone-800 mb-6 leading-tight">
-              {heroData.title1} <br/> <span className="text-sky-600">{heroData.titleHighlight}</span> {heroData.title2}
-            </h2>
-            <p className="text-lg text-stone-600 mb-10 leading-relaxed">{heroData.description}</p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <button onClick={() => scrollToSection('services')} className="bg-sky-500 hover:bg-sky-600 text-white px-8 py-3.5 rounded-full font-medium">Смотреть услуги</button>
-              <button onClick={() => openModal()} className="bg-white border border-stone-200 px-8 py-3.5 rounded-full font-medium">Записаться на сеанс</button>
+        
+        <div className="max-w-6xl mx-auto px-4 py-16 md:py-24 relative z-10 w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            {/* ЛЕВАЯ ЧАСТЬ: Текст и основные кнопки (занимает 7 из 12 колонок) */}
+            <div className="lg:col-span-7 text-center lg:text-left">
+              <div className="inline-block px-4 py-1.5 rounded-full bg-sky-100/80 backdrop-blur-sm text-sky-700 text-sm font-semibold mb-6 shadow-sm border border-sky-200/50">{heroData.badge}</div>
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif text-stone-800 mb-6 leading-tight">
+                {heroData.title1} <br className="hidden lg:block"/> <span className="text-sky-600">{heroData.titleHighlight}</span> {heroData.title2}
+              </h2>
+              <p className="text-lg text-stone-600 mb-10 leading-relaxed max-w-lg mx-auto lg:mx-0">{heroData.description}</p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <button onClick={() => scrollToSection('services')} className="bg-sky-500 hover:bg-sky-600 text-white px-8 py-3.5 rounded-full font-medium shadow-lg hover:shadow-xl transition-all text-center">Смотреть услуги</button>
+                <button onClick={() => openModal()} className="bg-white/80 backdrop-blur-sm border border-stone-200 px-8 py-3.5 rounded-full font-medium hover:bg-white transition-colors text-center shadow-sm">Записаться на сеанс</button>
+              </div>
             </div>
+
+            {/* ПРАВАЯ ЧАСТЬ: Интерактивный квиз (занимает 5 из 12 колонок) */}
+            <div className="lg:col-span-5 w-full max-w-md mx-auto lg:mx-0 mt-8 lg:mt-0">
+              <div className="bg-white/70 backdrop-blur-xl border border-white/60 shadow-2xl rounded-3xl p-6 md:p-8 relative overflow-hidden">
+                
+                {/* Декоративный блик для красоты */}
+                <div className="absolute -top-20 -right-20 w-40 h-40 bg-sky-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30"></div>
+
+                {quizStep === 0 && (
+                  <div className="animate-fade-in relative z-10 text-center py-2">
+                    <div className="w-14 h-14 bg-gradient-to-br from-sky-50 to-white text-sky-500 rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-sm border border-sky-100"><Sparkles className="w-7 h-7" /></div>
+                    <h2 className="text-2xl font-serif text-stone-800 mb-3">Не знаете, какую услугу выбрать?</h2>
+                    <p className="text-stone-500 text-sm mb-8 leading-relaxed">Пройдите короткий тест, и мы подберем идеальную процедуру специально для вас.</p>
+                    <button 
+                      onClick={() => { setQuizStep(1); setQuizAnswers([]); }} 
+                      className="w-full bg-stone-800 hover:bg-stone-900 text-white py-3.5 rounded-2xl font-medium flex items-center justify-center transition-all shadow-md hover:shadow-lg"
+                    >
+                      <Play className="w-4 h-4 mr-2" /> Начать подбор
+                    </button>
+                  </div>
+                )}
+
+                {quizStep > 0 && quizStep <= quizQuestions.length && (
+                  <div className="animate-fade-in relative z-10">
+                    <div className="mb-6 flex items-center justify-between">
+                      <span className="text-xs font-bold text-sky-500 tracking-widest uppercase">Вопрос {quizStep} из {quizQuestions.length}</span>
+                      <div className="w-24 h-1.5 bg-stone-200/50 rounded-full overflow-hidden">
+                        <div className="bg-sky-500 h-full transition-all duration-500" style={{ width: `${(quizStep / quizQuestions.length) * 100}%` }}></div>
+                      </div>
+                    </div>
+                    <h3 className="text-xl font-serif text-stone-800 mb-6 leading-snug">{quizQuestions[quizStep - 1].question}</h3>
+                    <div className="flex flex-col gap-3">
+                      {quizQuestions[quizStep - 1].options.map((opt, idx) => (
+                        <button 
+                          key={idx}
+                          onClick={() => handleQuizAnswer(opt.value)}
+                          className="bg-white/80 border border-stone-100 p-4 rounded-2xl hover:border-sky-300 hover:bg-sky-50 hover:shadow-sm transition-all flex items-center text-left group"
+                        >
+                          {opt.icon ? <span className="text-stone-400 group-hover:text-sky-500 transition-colors mr-4 scale-75">{opt.icon}</span> : <div className="w-2 h-2 rounded-full bg-stone-300 group-hover:bg-sky-400 mr-4 transition-colors"></div>}
+                          <span className="font-medium text-stone-700 text-sm">{opt.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {quizStep > quizQuestions.length && (
+                  <div className="animate-fade-in relative z-10 text-center py-2">
+                    <div className="w-14 h-14 bg-green-100 text-green-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm"><Check className="w-7 h-7" /></div>
+                    <span className="text-xs font-bold text-stone-400 uppercase tracking-widest block mb-2">Вам подойдет:</span>
+                    <h2 className="text-2xl font-serif text-sky-600 mb-3 leading-tight">{getQuizResult().title}</h2>
+                    <p className="text-stone-600 text-sm mb-8 leading-relaxed">{getQuizResult().desc}</p>
+                    <div className="flex flex-col gap-3">
+                      <button 
+                        onClick={() => openModal(getQuizResult().title)}
+                        className="w-full bg-sky-500 hover:bg-sky-600 text-white py-3.5 rounded-2xl font-medium shadow-md transition-all"
+                      >
+                        Записаться на процедуру
+                      </button>
+                      <button 
+                        onClick={() => { setQuizStep(0); setQuizAnswers([]); }}
+                        className="w-full bg-white/50 border border-stone-200 text-stone-500 hover:bg-white py-3 rounded-2xl font-medium flex items-center justify-center transition-all text-sm"
+                      >
+                        <RotateCcw className="w-3.5 h-3.5 mr-2" /> Пройти заново
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+              </div>
+            </div>
+
           </div>
-        </div>
-      </section>
-
-      {/* ИНТЕРАКТИВНЫЙ КВИЗ */}
-      <section className="py-16 md:py-24 bg-white border-t border-stone-200 relative">
-        <div className="max-w-3xl mx-auto px-4 text-center">
-          
-          {quizStep === 0 && (
-            <div className="animate-fade-in bg-stone-50 rounded-3xl p-8 md:p-12 border border-stone-100 shadow-sm">
-              <div className="w-16 h-16 bg-sky-100 text-sky-500 rounded-full flex items-center justify-center mx-auto mb-6"><Sparkles className="w-8 h-8" /></div>
-              <h2 className="text-3xl font-serif text-stone-800 mb-4">Не знаете, какую услугу выбрать?</h2>
-              <p className="text-stone-500 mb-8 max-w-lg mx-auto">Пройдите короткий тест из 3 вопросов, и мы подберем идеальную процедуру специально для вас.</p>
-              <button 
-                onClick={() => { setQuizStep(1); setQuizAnswers([]); }} 
-                className="bg-sky-500 hover:bg-sky-600 text-white px-8 py-3.5 rounded-full font-medium flex items-center justify-center mx-auto transition-all hover:scale-105"
-              >
-                <Play className="w-4 h-4 mr-2" /> Начать тест
-              </button>
-            </div>
-          )}
-
-          {quizStep > 0 && quizStep <= quizQuestions.length && (
-            <div className="animate-fade-in">
-              <div className="mb-8 flex flex-col items-center">
-                <span className="text-sm font-bold text-sky-500 mb-3 tracking-widest uppercase">Шаг {quizStep} из {quizQuestions.length}</span>
-                <div className="w-full max-w-xs h-1.5 bg-stone-100 rounded-full overflow-hidden">
-                  <div className="bg-sky-500 h-full transition-all duration-500" style={{ width: `${(quizStep / quizQuestions.length) * 100}%` }}></div>
-                </div>
-              </div>
-              <h3 className="text-2xl md:text-3xl font-serif text-stone-800 mb-8">{quizQuestions[quizStep - 1].question}</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                {quizQuestions[quizStep - 1].options.map((opt, idx) => (
-                  <button 
-                    key={idx}
-                    onClick={() => handleQuizAnswer(opt.value)}
-                    className="bg-white border-2 border-stone-100 p-6 rounded-2xl hover:border-sky-400 hover:bg-sky-50 hover:shadow-md transition-all flex flex-col items-center justify-center text-center group"
-                  >
-                    {opt.icon && <div className="text-stone-400 group-hover:text-sky-500 transition-colors">{opt.icon}</div>}
-                    <span className="font-medium text-stone-700">{opt.label}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {quizStep > quizQuestions.length && (
-            <div className="animate-fade-in bg-gradient-to-br from-sky-50 to-white rounded-3xl p-8 md:p-12 border border-sky-100 shadow-lg">
-              <div className="w-16 h-16 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-6"><Check className="w-8 h-8" /></div>
-              <h3 className="text-xl text-stone-500 mb-2">Вам идеально подойдет:</h3>
-              <h2 className="text-3xl md:text-4xl font-serif text-sky-700 mb-4">{getQuizResult().title}</h2>
-              <p className="text-stone-600 mb-10 max-w-lg mx-auto text-lg">{getQuizResult().desc}</p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button 
-                  onClick={() => openModal(getQuizResult().title)}
-                  className="bg-sky-500 hover:bg-sky-600 text-white px-8 py-3.5 rounded-full font-medium shadow-md transition-all"
-                >
-                  Записаться на процедуру
-                </button>
-                <button 
-                  onClick={() => { setQuizStep(0); setQuizAnswers([]); }}
-                  className="bg-white border border-stone-200 text-stone-500 hover:bg-stone-50 px-8 py-3.5 rounded-full font-medium flex items-center justify-center transition-all"
-                >
-                  <RotateCcw className="w-4 h-4 mr-2" /> Пройти заново
-                </button>
-              </div>
-            </div>
-          )}
-
         </div>
       </section>
 
