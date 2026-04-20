@@ -1158,62 +1158,6 @@ if (contentTab === 'seo') {
         </div>
       </section>
 
-      {/* SERVICES SECTION */}
-      <section id="services" className="py-20 bg-white border-t border-stone-200">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-serif text-stone-800 mb-4">Наши Услуги и Цены</h2>
-            <p className="text-stone-500 max-w-2xl mx-auto">Выберите подходящую процедуру для расслабления или эффективной коррекции фигуры.</p>
-          </div>
-          <div className="flex justify-center mb-12">
-            <div className="bg-stone-100 p-1 rounded-full inline-flex flex-col sm:flex-row w-full sm:w-auto">
-              <button onClick={() => setActiveTab('massage')} className={`px-8 py-3 rounded-full text-sm font-medium w-full sm:w-auto ${activeTab === 'massage' ? 'bg-white text-sky-600 shadow-sm' : 'text-stone-500 hover:text-stone-800'}`}>Услуги массажа</button>
-              <button onClick={() => setActiveTab('body')} className={`px-8 py-3 rounded-full text-sm font-medium w-full sm:w-auto mt-2 sm:mt-0 ${activeTab === 'body' ? 'bg-white text-sky-600 shadow-sm' : 'text-stone-500 hover:text-stone-800'}`}>Коррекция фигуры</button>
-            </div>
-          </div>
-
-          <div className="animate-fade-in grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {(activeTab === 'massage' ? massageServices : bodyShapingServices).map((item, idx) => {
-               const IconComp = IconMap[item.iconName] || Sparkles;
-               return (
-                <div key={idx} className="bg-white rounded-3xl shadow-sm border border-stone-100 overflow-hidden hover:shadow-xl transition-all flex flex-col group">
-                  <div className="h-56 overflow-hidden relative">
-                    <img src={item.image} alt={item.title || item.category} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-stone-900/80 to-transparent"></div>
-                    {activeTab === 'massage' ? (
-                      <h3 className="absolute bottom-4 left-6 right-6 text-white text-xl md:text-2xl font-serif leading-tight">{item.title}</h3>
-                    ) : (
-                      <div className="absolute bottom-4 left-6 right-6 flex items-center gap-3">
-                        <div className="bg-white/20 backdrop-blur-md p-2.5 rounded-xl text-white"><IconComp className="w-6 h-6 text-white" /></div>
-                        <h3 className="text-white text-xl md:text-2xl font-serif">{item.category}</h3>
-                      </div>
-                    )}
-                  </div>
-                  <div className="p-6 flex-1 flex flex-col">
-                    <p className="text-sm text-stone-500 mb-6 flex-1">{item.description}</p>
-                    <ul className="space-y-4">
-                      {item.items?.map((subItem, sIdx) => (
-                        <li key={sIdx} className="flex flex-col border-t border-stone-100 pt-4 first:border-0 first:pt-0 gap-2">
-                          <div className="flex justify-between items-start gap-3">
-                            <div>
-                              <span className="text-sm font-medium text-stone-800 block">{subItem.name}</span>
-                              {subItem.duration && <span className="text-stone-400 text-xs block mt-1"><Clock className="w-3.5 h-3.5 inline mr-1" />{subItem.duration}</span>}
-                            </div>
-                            <span className="text-sky-600 font-semibold whitespace-nowrap text-sm">{subItem.price}</span>
-                          </div>
-                          <button onClick={() => openModal(`${item.title || item.category} - ${subItem.name}`)} className="text-xs font-medium text-sky-700 bg-sky-50 hover:bg-sky-100 py-2 px-4 rounded-xl w-fit">Записаться</button>
-                        </li>
-                      ))}
-                    </ul>
-                    <button onClick={() => openServiceDetails(item)} className="mt-6 w-full border border-sky-100 text-sky-600 py-2.5 rounded-xl text-sm font-medium flex items-center justify-center">Подробнее <ArrowRight className="w-4 h-4 ml-1.5" /></button>
-                  </div>
-                </div>
-               );
-            })}
-          </div>
-        </div>
-      </section>
-
      {/* SERVICES SECTION */}
       <section id="services" className="py-20 md:py-32 bg-stone-50 border-t border-stone-200">
         <div className="max-w-6xl mx-auto px-4">
@@ -1281,6 +1225,56 @@ if (contentTab === 'seo') {
                 </div>
                );
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* TEAM SECTION */}
+      <section id="team" className="py-20 bg-stone-50 border-t border-stone-200">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-serif text-stone-800 mb-4">Наша Команда</h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {teamMembers.map((member, idx) => (
+              <div key={idx} className="bg-white rounded-3xl shadow-sm border border-stone-100 overflow-hidden hover:shadow-xl transition-all p-6 md:p-8 flex flex-col items-center text-center">
+                <div className="w-32 h-32 rounded-full overflow-hidden mb-6 border-4 border-stone-50 shadow-md">
+                  <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
+                </div>
+                <h3 className="text-xl font-serif font-bold text-stone-800 mb-1">{member.name}</h3>
+                <span className="text-sky-600 text-sm font-medium mb-4">{member.role}</span>
+                <p className="text-stone-500 text-sm leading-relaxed flex-1">{member.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* EQUIPMENT SECTION */}
+      <section id="equipment" className="py-20 bg-white border-t border-stone-200">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-serif text-stone-800 mb-4">Наше Оборудование</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {equipmentData.map((item, idx) => (
+              <div key={idx} className="bg-stone-50 rounded-3xl p-6 md:p-8 shadow-sm border border-stone-100 flex flex-col sm:flex-row gap-6 hover:shadow-md">
+                <div className="w-full sm:w-1/3 h-48 sm:h-auto shrink-0">
+                  <img src={item.image} alt={item.title} className="w-full h-full object-cover rounded-2xl" />
+                </div>
+                <div className="flex flex-col justify-center">
+                  <h3 className="text-xl font-serif font-bold text-stone-800 mb-3">{item.title}</h3>
+                  <p className="text-sm text-stone-500 leading-relaxed mb-4">{item.description}</p>
+                  <ul className="space-y-2">
+                    {item.features?.split(',').map((feature, fIdx) => (
+                      <li key={fIdx} className="flex items-center text-xs font-medium text-stone-600">
+                        <ShieldCheck className="w-4 h-4 text-sky-500 mr-2" /> {feature.trim()}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
