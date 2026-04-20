@@ -580,21 +580,17 @@ const exportToExcel = () => {
   // --- ЛОГИКА РЕДАКТОРА КОНТЕНТА ---
   const handleEditClick = (index) => {
     setEditingIndex(index);
-    if (contentTab === 'hero') {
-      setEditingItem(JSON.parse(JSON.stringify(heroData)));
-    } else if (contentTab === 'seo') {
-      setEditingItem(JSON.parse(JSON.stringify(seoData)));
-    } else if (contentTab === 'massage') {
-      setEditingItem(JSON.parse(JSON.stringify(massageServices[index])));
-    } else if (contentTab === 'body') {
-      setEditingItem(JSON.parse(JSON.stringify(bodyShapingServices[index])));
-    } else if (contentTab === 'team') {
-      setEditingItem(JSON.parse(JSON.stringify(teamMembers[index])));
-    } else if (contentTab === 'equipment') {
-      setEditingItem(JSON.parse(JSON.stringify(equipmentData[index])));
-    } else if (contentTab === 'faq') {
-      setEditingItem(JSON.parse(JSON.stringify(faqData[index])));
-    }
+    if (contentTab === 'hero') setEditingItem(JSON.parse(JSON.stringify(heroData)));
+    else if (contentTab === 'seo') setEditingItem(JSON.parse(JSON.stringify(seoData)));
+    else if (contentTab === 'massage') setEditingItem(JSON.parse(JSON.stringify(massageServices[index])));
+    else if (contentTab === 'body') setEditingItem(JSON.parse(JSON.stringify(bodyShapingServices[index])));
+    else if (contentTab === 'team') setEditingItem(JSON.parse(JSON.stringify(teamMembers[index])));
+    else if (contentTab === 'equipment') setEditingItem(JSON.parse(JSON.stringify(equipmentData[index])));
+    else if (contentTab === 'faq') setEditingItem(JSON.parse(JSON.stringify(faqData[index])));
+    // --- НОВЫЕ РАЗДЕЛЫ ---
+    else if (contentTab === 'results') setEditingItem(JSON.parse(JSON.stringify(resultsData[index])));
+    else if (contentTab === 'reviews') setEditingItem(JSON.parse(JSON.stringify(reviewsData[index])));
+    else if (contentTab === 'quiz') setEditingItem(JSON.parse(JSON.stringify(quizQuestions[index])));
   };
 
   const handleSaveContent = async () => {
@@ -612,6 +608,10 @@ const exportToExcel = () => {
         if (contentTab === 'team') { newData = [...teamMembers]; newData[editingIndex] = editingItem; setTeamMembers(newData); }
         if (contentTab === 'equipment') { newData = [...equipmentData]; newData[editingIndex] = editingItem; setEquipmentData(newData); }
         if (contentTab === 'faq') { newData = [...faqData]; newData[editingIndex] = editingItem; setFaqData(newData); }
+        // --- НОВЫЕ РАЗДЕЛЫ ---
+        if (contentTab === 'results') { newData = [...resultsData]; newData[editingIndex] = editingItem; setResultsData(newData); }
+        if (contentTab === 'reviews') { newData = [...reviewsData]; newData[editingIndex] = editingItem; setReviewsData(newData); }
+        if (contentTab === 'quiz') { newData = [...quizQuestions]; newData[editingIndex] = editingItem; setQuizQuestions(newData); }
         
         await setDoc(doc(db, "site_content", contentTab), { items: newData });
       }
@@ -634,6 +634,15 @@ const exportToExcel = () => {
     setEditingItem(updated);
   };
 
+  // Функция для изменения вариантов ответов в квизе
+  const handleOptionChange = (idx, field, value) => {
+    const updated = { ...editingItem };
+    if(!updated.options) updated.options = [];
+    if(!updated.options[idx]) updated.options[idx] = {};
+    updated.options[idx][field] = value;
+    setEditingItem(updated);
+  };
+
   const handleDeleteItem = async (index) => {
     if(window.confirm('Вы уверены, что хотите удалить этот элемент?')) {
       try {
@@ -643,12 +652,58 @@ const exportToExcel = () => {
         if (contentTab === 'team') { newData = teamMembers.filter((_, i) => i !== index); setTeamMembers(newData); }
         if (contentTab === 'equipment') { newData = equipmentData.filter((_, i) => i !== index); setEquipmentData(newData); }
         if (contentTab === 'faq') { newData = faqData.filter((_, i) => i !== index); setFaqData(newData); }
+        // --- НОВЫЕ РАЗДЕЛЫ ---
+        if (contentTab === 'results') { newData = resultsData.filter((_, i) => i !== index); setResultsData(newData); }
+        if (contentTab === 'reviews') { newData = reviewsData.filter((_, i) => i !== index); setReviewsData(newData); }
+        if (contentTab === 'quiz') { newData = quizQuestions.filter((_, i) => i !== index); setQuizQuestions(newData); }
         
         await setDoc(doc(db, "site_content", contentTab), { items: newData });
       } catch (error) {
         console.error("Ошибка при удалении:", error);
       }
     }
+  };
+
+  const handleAddNewItem = () => {
+    let newBlock;
+    let newIndex = 0;
+
+    if (contentTab === 'massage') {
+      newBlock = { title: "Новая услуга", description: "...", image: "", items: [] };
+      setMassageServices([...massageServices, newBlock]);
+      newIndex = massageServices.length;
+    } else if (contentTab === 'body') {
+      newBlock = { category: "Новый аппарат", description: "...", image: "", iconName: "Sparkles", items: [] };
+      setBodyShapingServices([...bodyShapingServices, newBlock]);
+      newIndex = bodyShapingServices.length;
+    } else if (contentTab === 'team') {
+      newBlock = { name: "Имя сотрудника", role: "Должность", description: "О специалисте...", image: "" };
+      setTeamMembers([...teamMembers, newBlock]);
+      newIndex = teamMembers.length;
+    } else if (contentTab === 'equipment') {
+      newBlock = { title: "Название аппарата", description: "Описание...", image: "", features: "Плюс 1, Плюс 2" };
+      setEquipmentData([...equipmentData, newBlock]);
+      newIndex = equipmentData.length;
+    } else if (contentTab === 'faq') {
+      newBlock = { question: "Новый вопрос?", answer: "Ответ на вопрос..." };
+      setFaqData([...faqData, newBlock]);
+      newIndex = faqData.length;
+    // --- НОВЫЕ РАЗДЕЛЫ ---
+    } else if (contentTab === 'results') {
+      newBlock = { title: "Новый результат", description: "Описание...", before: "", after: "" };
+      setResultsData([...resultsData, newBlock]);
+      newIndex = resultsData.length;
+    } else if (contentTab === 'reviews') {
+      newBlock = { image: "" }; // Для отзывов нужна только картинка
+      setReviewsData([...reviewsData, newBlock]);
+      newIndex = reviewsData.length;
+    } else if (contentTab === 'quiz') {
+      newBlock = { question: "Новый вопрос", options: [{label: "Ответ 1", value: "opt1", iconName: ""}] };
+      setQuizQuestions([...quizQuestions, newBlock]);
+      newIndex = quizQuestions.length;
+    }
+    
+    handleEditClick(newIndex);
   };
 
   const handleAddNewItem = () => {
