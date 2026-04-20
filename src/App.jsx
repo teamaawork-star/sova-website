@@ -567,18 +567,34 @@ const deleteBooking = async (id) => {
     handleEditClick(newIndex);
   };
 
-  const handleImageUpload = (e) => {
+const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        if (contentTab === 'hero') {
-           setEditingItem({ ...editingItem, bgImage: reader.result });
+      const formData = new FormData();
+      formData.append('image', file); // Прикрепляем файл
+
+      try {
+        // Отправляем картинку на наш PHP-скрипт
+        const res = await fetch('/api/upload_image.php', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+
+        if (data.status === 'success') {
+          // Если сервер успешно сохранил, подставляем ссылку в контент
+          if (contentTab === 'hero') {
+             setEditingItem({ ...editingItem, bgImage: data.url });
+          } else {
+             setEditingItem({ ...editingItem, image: data.url });
+          }
         } else {
-           setEditingItem({ ...editingItem, image: reader.result });
+          alert('Ошибка сервера: ' + data.message);
         }
-      };
-      reader.readAsDataURL(file);
+      } catch (err) {
+        console.error("Сбой загрузки:", err);
+        alert("Не удалось загрузить картинку. Проверьте соединение.");
+      }
     }
   };
 
@@ -686,8 +702,8 @@ if (contentTab === 'seo') {
             <button onClick={() => setAdminPanelTab('content')} className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${adminPanelTab === 'content' ? 'bg-white text-sky-600 shadow-sm' : 'text-stone-500 hover:text-stone-700'}`}>Контент сайта</button>
           </div>
           <div className="flex items-center gap-4">
-            <a href="#" onClick={(e) => {e.preventDefault(); setCurrentView('main');}} className="text-sm text-stone-500 hover:text-sky-600">На сайт</a>
-            <button onClick={() => setCurrentView('main')} className="flex items-center gap-2 text-sm font-medium text-red-500 hover:text-red-700 bg-red-50 px-4 py-2 rounded-lg"><LogOut className="w-4 h-4" /> Выйти</button>
+            <a href="https://sova-sarov.ru" className="text-sm text-stone-500 hover:text-sky-600">На сайт</a>
+            <a href="https://sova-sarov.ru" className="flex items-center gap-2 text-sm font-medium text-red-500 hover:text-red-700 bg-red-50 px-4 py-2 rounded-lg"><LogOut className="w-4 h-4" /> Выйти</a>
           </div>
         </header>
 
@@ -714,7 +730,20 @@ if (contentTab === 'seo') {
                         </div>
                         <div className="md:col-span-2">
                           <span className="block text-xs text-stone-400 uppercase tracking-wider mb-1">Услуга</span>
-                          <span className="text-stone-800 font-medium">{booking.service}</span>
+                          <span className="text-stone-800 font-medium block mb-1">{booking.service}</span>
+                          <span className="text-sky-600 font-bold text-sm bg-sky-50 px-2 py-1 rounded">
+                            {(() => {
+                              for (const cat of massageServices) {
+                                const found = cat.items?.find(i => booking.service.includes(i.name));
+                                if (found) return found.price;
+                              }
+                              for (const cat of bodyShapingServices) {
+                                const found = cat.items?.find(i => booking.service.includes(i.name));
+                                if (found) return found.price;
+                              }
+                              return 'Цена не указана';
+                            })()}
+                          </span>
                         </div>
                         <div>
                           <span className="block text-xs text-stone-400 uppercase tracking-wider mb-1">Время</span>
