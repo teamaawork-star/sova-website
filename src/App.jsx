@@ -438,10 +438,9 @@ const handleBookingSubmit = async (e) => {
 
  const handleLogin = async (e) => {
     e.preventDefault();
-    setLoginError(''); // Очищаем старые ошибки перед новой попыткой
+    setLoginError(''); 
     
     try {
-      // Отправляем пароль на наш новый PHP-скрипт
       const res = await fetch('/api/login.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -450,22 +449,14 @@ const handleBookingSubmit = async (e) => {
       
       const result = await res.json();
 
-    if (result.status === 'success') {
-        // Сохраняем данные
+      if (result.status === 'success') {
+        // Сохраняем сессию и токен, затем перезагружаем страницу в админку
         localStorage.setItem('sova_admin_session', JSON.stringify({ 
           timestamp: Date.now(),
           token: result.token
         }));
-        
-        // Вместо setCurrentView('adminPanel') делаем переход:
-        // Это заставит браузер обновить страницу и корректно запустить админку
         window.location.href = '/admin'; 
-      }
-        
-        setCurrentView('adminPanel');
-        setLoginPass('');
       } else {
-        // Сервер сказал, что пароль неверный
         setLoginError(result.message || 'Неверный пароль');
       }
     } catch (error) {
