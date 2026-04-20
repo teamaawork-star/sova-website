@@ -3,7 +3,7 @@ import { Phone, MapPin, Clock, Sparkles, Wind, Droplets, X, CheckCircle, Lock, T
 import { collection, getDocs, doc, setDoc } from 'firebase/firestore';
 import { db } from './firebase';
 import Header from './components/Header'; // <-- Добавили эту строку
-
+import Footer from './components/Footer'; // <-- Добавили эту строку
 const IconMap = { Wind, Droplets, Sparkles };
 
 
@@ -1479,19 +1479,8 @@ const handleImageUpload = async (e) => {
         </div>
       </section>
 
-      <footer className="bg-stone-900 text-stone-400 py-10 border-t border-stone-800">
-        <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
-          <div className="flex flex-col items-center md:items-start mb-6 md:mb-0">
-            <h1 className="text-2xl font-light text-white tracking-[0.2em] mb-1">SOVA</h1>
-            <p className="text-xs uppercase tracking-wider mb-4">Студия массажа и коррекции фигуры</p>
-            
-          </div>
-          <div className="text-center md:text-right text-sm">
-            <p className="mb-2">проспект Музрукова д.37 к.3</p>
-            <p>© {new Date().getFullYear()} Студия «SOVA». Все права защищены.</p>
-          </div>
-        </div>
-      </footer>
+     {/* FOOTER */}
+      <Footer />
 
       {/* PROMO BANNER */}
       {showPromo && (
