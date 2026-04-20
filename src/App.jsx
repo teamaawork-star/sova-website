@@ -137,7 +137,23 @@ const faqDefaultData = [{ question: "Сколько нужно процедур?
 export default function App() {
   // Проверяем адрес в браузере: если там /admin, сразу включаем окно входа
   const [currentView, setCurrentView] = useState(() => {
-    return window.location.pathname === '/admin' ? 'adminLogin' : 'main';
+    if (window.location.pathname === '/admin') {
+      const sessionData = localStorage.getItem('sova_admin_session');
+      if (sessionData) {
+        const { timestamp } = JSON.parse(sessionData);
+        const oneDay = 24 * 60 * 60 * 1000; // 24 часа в миллисекундах
+        
+        // Если с момента входа прошло меньше 24 часов — пускаем сразу!
+        if (Date.now() - timestamp < oneDay) {
+          return 'adminPanel';
+        } else {
+          // Если прошло больше времени — удаляем старую запись
+          localStorage.removeItem('sova_admin_session');
+        }
+      }
+      return 'adminLogin'; // Если записи нет или она старая, показываем окно входа
+    }
+    return 'main';
   });
   
   // Состояния данных
@@ -422,7 +438,9 @@ const handleBookingSubmit = async (e) => {
       const result = await res.json();
 
       if (result.status === 'success') {
-        // Сервер дал добро! Пускаем в админку
+        // Сервер дал добро! Сохраняем текущее время в браузер
+        localStorage.setItem('sova_admin_session', JSON.stringify({ timestamp: Date.now() }));
+        
         setCurrentView('adminPanel');
         setLoginPass('');
       } else {
@@ -703,7 +721,10 @@ if (contentTab === 'seo') {
           </div>
           <div className="flex items-center gap-4">
             <a href="https://sova-sarov.ru" className="text-sm text-stone-500 hover:text-sky-600">На сайт</a>
-            <a href="https://sova-sarov.ru" className="flex items-center gap-2 text-sm font-medium text-red-500 hover:text-red-700 bg-red-50 px-4 py-2 rounded-lg"><LogOut className="w-4 h-4" /> Выйти</a>
+            <button onClick={() => {
+  localStorage.removeItem('sova_admin_session');
+  window.location.href = 'https://sova-sarov.ru';
+}} className="flex items-center gap-2 text-sm font-medium text-red-500 hover:text-red-700 bg-red-50 px-4 py-2 rounded-lg cursor-pointer"><LogOut className="w-4 h-4" /> Выйти</button>
           </div>
         </header>
 
