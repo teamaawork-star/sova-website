@@ -1087,14 +1087,23 @@ if (contentTab === 'seo') {
             <h1 className="text-4xl md:text-5xl font-light text-sky-500 tracking-[0.3em] ml-2">SOVA</h1>
             <p className="text-[0.55rem] md:text-xs text-stone-500 tracking-widest mt-1 uppercase text-center">Студия массажа<br className="md:hidden"/> и коррекции фигуры</p>
           </div>
+          {/* ОБНОВЛЕННОЕ МЕНЮ */}
           <div className="hidden lg:flex items-center space-x-6 text-sm font-medium text-stone-600">
-            <button onClick={() => scrollToSection('services')} className="hover:text-sky-500">Услуги и цены</button>
+            <button onClick={() => scrollToSection('services')} className="hover:text-sky-500">Услуги</button>
+            <button onClick={() => scrollToSection('results')} className="hover:text-sky-500">Результаты</button>
+            <button onClick={() => scrollToSection('reviews')} className="hover:text-sky-500">Отзывы</button>
             <button onClick={() => scrollToSection('team')} className="hover:text-sky-500">Команда</button>
-            <button onClick={() => scrollToSection('equipment')} className="hover:text-sky-500">Аппараты</button>
-            <button onClick={() => scrollToSection('faq')} className="hover:text-sky-500">Вопрос-ответ</button>
+            <button onClick={() => scrollToSection('contacts')} className="hover:text-sky-500">Контакты</button>
           </div>
           <div className="flex items-center gap-2 sm:gap-4">
-            <button onClick={() => openModal()} className="flex items-center bg-sky-500 hover:bg-sky-600 text-white px-4 py-2 rounded-full text-sm font-medium"><Phone className="w-4 h-4 sm:mr-2" /><span className="hidden sm:inline">Записаться</span></button>
+            {/* ТЕЛЕФОН */}
+            <a href="tel:+79101258250" className="hidden md:flex items-center text-stone-700 font-medium hover:text-sky-500 mr-2 text-sm sm:text-base">
+              <Phone className="w-4 h-4 mr-1.5" /> +7 910-125-82-50
+            </a>
+            <button onClick={() => openModal()} className="flex items-center bg-sky-500 hover:bg-sky-600 text-white px-4 py-2 sm:px-6 sm:py-2.5 rounded-full text-sm font-medium">
+              <span className="hidden sm:inline">Записаться</span>
+              <span className="sm:hidden"><Phone className="w-4 h-4" /></span>
+            </button>
           </div>
         </div>
       </header>
@@ -1401,7 +1410,7 @@ if (contentTab === 'seo') {
                   <MapPin className="w-5 h-5" />
                   <span className="uppercase tracking-wider text-sm font-medium">Наш адрес</span>
                 </div>
-                <span className="text-xl font-light text-white block leading-relaxed">г. Саров,<br/>проспект Музрукова, д.37 к.3</span>
+                <span className="text-xl font-light text-white block leading-relaxed">проспект Музрукова, д.37 к.3</span>
               </div>
               
               <a href="tel:+79101258250" className="group flex flex-col items-center lg:items-start mb-8 w-full">
