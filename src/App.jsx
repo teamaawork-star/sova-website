@@ -1214,52 +1214,73 @@ if (contentTab === 'seo') {
         </div>
       </section>
 
-      {/* TEAM SECTION */}
-      <section id="team" className="py-20 bg-stone-50 border-t border-stone-200">
+     {/* SERVICES SECTION */}
+      <section id="services" className="py-20 md:py-32 bg-stone-50 border-t border-stone-200">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-serif text-stone-800 mb-4">Наша Команда</h2>
+            <h2 className="text-3xl md:text-5xl font-serif text-stone-800 mb-6">Наши Услуги и Цены</h2>
+            <p className="text-stone-500 max-w-2xl mx-auto text-lg">Выберите подходящую процедуру для глубокого расслабления или эффективной коррекции фигуры.</p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {teamMembers.map((member, idx) => (
-              <div key={idx} className="bg-white rounded-3xl shadow-sm border border-stone-100 overflow-hidden hover:shadow-xl transition-all p-6 md:p-8 flex flex-col items-center text-center">
-                <div className="w-32 h-32 rounded-full overflow-hidden mb-6 border-4 border-stone-50 shadow-md">
-                  <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
-                </div>
-                <h3 className="text-xl font-serif font-bold text-stone-800 mb-1">{member.name}</h3>
-                <span className="text-sky-600 text-sm font-medium mb-4">{member.role}</span>
-                <p className="text-stone-500 text-sm leading-relaxed flex-1">{member.description}</p>
-              </div>
-            ))}
+          
+          {/* Переключатель вкладок */}
+          <div className="flex justify-center mb-16">
+            <div className="bg-stone-200/50 p-1.5 rounded-full inline-flex flex-col sm:flex-row w-full sm:w-auto border border-stone-200/50 shadow-sm">
+              <button onClick={() => setActiveTab('massage')} className={`px-8 py-3.5 rounded-full text-sm font-medium w-full sm:w-auto transition-all duration-300 ${activeTab === 'massage' ? 'bg-white text-sky-600 shadow-md scale-105' : 'text-stone-500 hover:text-stone-800 hover:bg-stone-100/50'}`}>Услуги массажа</button>
+              <button onClick={() => setActiveTab('body')} className={`px-8 py-3.5 rounded-full text-sm font-medium w-full sm:w-auto mt-2 sm:mt-0 transition-all duration-300 ${activeTab === 'body' ? 'bg-white text-sky-600 shadow-md scale-105' : 'text-stone-500 hover:text-stone-800 hover:bg-stone-100/50'}`}>Коррекция фигуры</button>
+            </div>
           </div>
-        </div>
-      </section>
 
-      {/* EQUIPMENT SECTION */}
-      <section id="equipment" className="py-20 bg-white border-t border-stone-200">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-serif text-stone-800 mb-4">Наше Оборудование</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {equipmentData.map((item, idx) => (
-              <div key={idx} className="bg-stone-50 rounded-3xl p-6 md:p-8 shadow-sm border border-stone-100 flex flex-col sm:flex-row gap-6 hover:shadow-md">
-                <div className="w-full sm:w-1/3 h-48 sm:h-auto shrink-0">
-                  <img src={item.image} alt={item.title} className="w-full h-full object-cover rounded-2xl" />
-                </div>
-                <div className="flex flex-col justify-center">
-                  <h3 className="text-xl font-serif font-bold text-stone-800 mb-3">{item.title}</h3>
-                  <p className="text-sm text-stone-500 leading-relaxed mb-4">{item.description}</p>
-                  <ul className="space-y-2">
-                    {item.features?.split(',').map((feature, fIdx) => (
-                      <li key={fIdx} className="flex items-center text-xs font-medium text-stone-600">
-                        <ShieldCheck className="w-4 h-4 text-sky-500 mr-2" /> {feature.trim()}
-                      </li>
+          {/* Новый макет: SPA-Меню */}
+          <div className="flex flex-col gap-20 md:gap-32 animate-fade-in">
+            {(activeTab === 'massage' ? massageServices : bodyShapingServices).map((item, idx) => {
+               const IconComp = IconMap[item.iconName] || Sparkles;
+               return (
+                <div key={idx} className="flex flex-col lg:flex-row gap-8 lg:gap-16 items-start">
+                  
+                  {/* Левая часть: Фото и описание (Закрепляется при скролле) */}
+                  <div className="w-full lg:w-5/12 lg:sticky lg:top-32 relative group">
+                    <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-md mb-6 relative">
+                      <img src={item.image} alt={item.title || item.category} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                      <div className="absolute inset-0 bg-stone-900/10 group-hover:bg-transparent transition-colors duration-500"></div>
+                      {/* Иконка для аппаратных услуг */}
+                      {activeTab === 'body' && (
+                        <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-sm">
+                          <IconComp className="w-6 h-6 text-sky-500" />
+                        </div>
+                      )}
+                    </div>
+                    <h3 className="text-3xl font-serif text-stone-800 mb-4">{item.title || item.category}</h3>
+                    <p className="text-stone-500 leading-relaxed text-lg">{item.description}</p>
+                  </div>
+
+                  {/* Правая часть: Список услуг и цен */}
+                  <div className="w-full lg:w-7/12 flex flex-col gap-3 md:gap-4 lg:pt-4">
+                    {item.items?.map((subItem, sIdx) => (
+                      <div key={sIdx} className="bg-white p-5 md:p-6 rounded-2xl border border-stone-100 shadow-sm hover:shadow-md hover:border-sky-100 transition-all flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 group">
+                        <div className="flex-1 pr-4">
+                          <h4 className="font-medium text-stone-800 text-lg group-hover:text-sky-700 transition-colors">{subItem.name}</h4>
+                          {subItem.duration && (
+                            <span className="text-stone-400 text-sm mt-2 flex items-center">
+                              <Clock className="w-4 h-4 mr-1.5 text-stone-300" />{subItem.duration}
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-4 md:gap-6 w-full sm:w-auto justify-between sm:justify-end border-t border-stone-50 sm:border-0 pt-4 sm:pt-0 mt-2 sm:mt-0">
+                          <span className="text-xl md:text-2xl font-semibold text-sky-600 whitespace-nowrap">{subItem.price}</span>
+                          <button 
+                            onClick={() => openModal(`${item.title || item.category} - ${subItem.name}`)} 
+                            className="bg-stone-50 text-stone-600 hover:bg-sky-500 hover:text-white px-6 py-3 rounded-xl text-sm font-medium transition-all duration-300 shadow-sm hover:shadow-md"
+                          >
+                            Записаться
+                          </button>
+                        </div>
+                      </div>
                     ))}
-                  </ul>
+                  </div>
+
                 </div>
-              </div>
-            ))}
+               );
+            })}
           </div>
         </div>
       </section>
