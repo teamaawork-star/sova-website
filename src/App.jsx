@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Phone, MapPin, Clock, Sparkles, Wind, Droplets, X, CheckCircle, Lock, Trash2, LogOut, Edit, Plus, Save, ArrowLeft, ArrowRight, Loader2, ChevronDown, ChevronUp, ShieldCheck, Upload, Search, Play, RotateCcw, Check, Download } from 'lucide-react';
-import { collection, getDocs, addDoc, doc, setDoc, deleteDoc } from 'firebase/firestore';
+import { collection, getDocs, doc, setDoc } from 'firebase/firestore';
 import { db } from './firebase';
+import Header from './components/Header'; // <-- Добавили эту строку
 
 const IconMap = { Wind, Droplets, Sparkles };
+
 
 // --- БАЗОВЫЕ ДАННЫЕ ---
 const defaultHero = {
@@ -1138,33 +1140,8 @@ const handleImageUpload = async (e) => {
   return (
     <div className="min-h-screen bg-stone-50 font-sans text-slate-800">
       
-      {/* HEADER */}
-      <header className="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-stone-200">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex flex-col items-center">
-            <h1 className="text-4xl md:text-5xl font-light text-sky-500 tracking-[0.3em] ml-2">SOVA</h1>
-            <p className="text-[0.55rem] md:text-xs text-stone-500 tracking-widest mt-1 uppercase text-center">Студия массажа<br className="md:hidden"/> и коррекции фигуры</p>
-          </div>
-          {/* ОБНОВЛЕННОЕ МЕНЮ */}
-          <div className="hidden lg:flex items-center space-x-6 text-sm font-medium text-stone-600">
-            <button onClick={() => scrollToSection('services')} className="hover:text-sky-500">Услуги</button>
-            <button onClick={() => scrollToSection('results')} className="hover:text-sky-500">Результаты</button>
-            <button onClick={() => scrollToSection('reviews')} className="hover:text-sky-500">Отзывы</button>
-            <button onClick={() => scrollToSection('team')} className="hover:text-sky-500">Команда</button>
-            <button onClick={() => scrollToSection('contacts')} className="hover:text-sky-500">Контакты</button>
-          </div>
-          <div className="flex items-center gap-2 sm:gap-4">
-            {/* ТЕЛЕФОН */}
-            <a href="tel:+79101258250" className="hidden md:flex items-center text-stone-700 font-medium hover:text-sky-500 mr-2 text-sm sm:text-base">
-              <Phone className="w-4 h-4 mr-1.5" /> +7 910-125-82-50
-            </a>
-            <button onClick={() => openModal()} className="flex items-center bg-sky-500 hover:bg-sky-600 text-white px-4 py-2 sm:px-6 sm:py-2.5 rounded-full text-sm font-medium">
-              <span className="hidden sm:inline">Записаться</span>
-              <span className="sm:hidden"><Phone className="w-4 h-4" /></span>
-            </button>
-          </div>
-        </div>
-      </header>
+     {/* HEADER */}
+      <Header openModal={openModal} />
 
      {/* HERO SECTION С ВСТРОЕННЫМ КВИЗОМ */}
       <section className="relative bg-stone-100 overflow-hidden min-h-[85vh] flex items-center">
