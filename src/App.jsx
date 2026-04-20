@@ -133,7 +133,7 @@ const teamMembersData = [{ name: "Екатерина Игнатова", role: "�
 const equipmentDefaultData = [{ title: "Оборудование для LPG-массажа", description: "Передовая технология...", image: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", features: "Безболезненно, Мощный лимфодренаж" }];
 const faqDefaultData = [{ question: "Сколько нужно процедур?", answer: "Обычно курс состоит из 8-12 сеансов." }];
 
-const resultsData = [
+const defaultResults = [
   { 
     title: "LPG-массаж: минус 4 см в талии", 
     description: "Результат после курса из 10 сеансов. Улучшился тургор кожи и ушли отеки.",
@@ -148,7 +148,7 @@ const resultsData = [
   }
 ];
 
-const reviewsData = [
+const defaultReviews = [
   "https://images.unsplash.com/photo-1512438248247-f0f2a5a8b7f0?q=80&w=400", // Скриншоты отзывов
   "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=400",
   "https://images.unsplash.com/photo-1552693673-1bf958298935?q=80&w=400"
@@ -192,6 +192,8 @@ export default function App() {
   const [teamMembers, setTeamMembers] = useState(teamMembersData);
   const [equipmentData, setEquipmentData] = useState(equipmentDefaultData);
   const [faqData, setFaqData] = useState(faqDefaultData);
+  const [resultsData, setResultsData] = useState(defaultResults);
+  const [reviewsData, setReviewsData] = useState(defaultReviews);
   const [bookingsList, setBookingsList] = useState([]);
   
   const [isLoadingData, setIsLoadingData] = useState(true);
@@ -200,7 +202,7 @@ export default function App() {
   const [quizStep, setQuizStep] = useState(0); // 0: intro, 1-3: вопросы, 4: результат
   const [quizAnswers, setQuizAnswers] = useState([]);
 
-  const quizQuestions = [
+  const [quizQuestions, setQuizQuestions] = useState([
     {
       question: "Какая ваша главная цель визита?",
       options: [
@@ -291,6 +293,9 @@ export default function App() {
           if (doc.id === 'team') setTeamMembers(doc.data().items || teamMembersData);
           if (doc.id === 'equipment') setEquipmentData(doc.data().items || equipmentDefaultData);
           if (doc.id === 'faq') setFaqData(doc.data().items || faqDefaultData);
+          if (doc.id === 'results') setResultsData(doc.data().items || defaultResults);
+          if (doc.id === 'reviews') setReviewsData(doc.data().items || defaultReviews);
+          if (doc.id === 'quiz') setQuizQuestions(doc.data().items || quizQuestions);
         });
       } catch (error) {
         console.error("Ошибка при загрузке данных:", error);
