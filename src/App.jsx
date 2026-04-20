@@ -578,7 +578,7 @@ const exportToExcel = () => {
   };
 
   // --- ЛОГИКА РЕДАКТОРА КОНТЕНТА ---
-  const handleEditClick = (index) => {
+ const handleEditClick = (index) => {
     setEditingIndex(index);
     if (contentTab === 'hero') setEditingItem(JSON.parse(JSON.stringify(heroData)));
     else if (contentTab === 'seo') setEditingItem(JSON.parse(JSON.stringify(seoData)));
@@ -634,7 +634,6 @@ const exportToExcel = () => {
     setEditingItem(updated);
   };
 
-  // Функция для изменения вариантов ответов в квизе
   const handleOptionChange = (idx, field, value) => {
     const updated = { ...editingItem };
     if(!updated.options) updated.options = [];
@@ -694,7 +693,7 @@ const exportToExcel = () => {
       setResultsData([...resultsData, newBlock]);
       newIndex = resultsData.length;
     } else if (contentTab === 'reviews') {
-      newBlock = { image: "" }; // Для отзывов нужна только картинка
+      newBlock = { image: "" }; 
       setReviewsData([...reviewsData, newBlock]);
       newIndex = reviewsData.length;
     } else if (contentTab === 'quiz') {
@@ -704,36 +703,7 @@ const exportToExcel = () => {
     }
     
     handleEditClick(newIndex);
-  };
-
-  const handleAddNewItem = () => {
-    let newBlock;
-    let newIndex = 0;
-
-    if (contentTab === 'massage') {
-      newBlock = { title: "Новая услуга", description: "...", image: "", items: [] };
-      setMassageServices([...massageServices, newBlock]);
-      newIndex = massageServices.length;
-    } else if (contentTab === 'body') {
-      newBlock = { category: "Новый аппарат", description: "...", image: "", iconName: "Sparkles", items: [] };
-      setBodyShapingServices([...bodyShapingServices, newBlock]);
-      newIndex = bodyShapingServices.length;
-    } else if (contentTab === 'team') {
-      newBlock = { name: "Имя сотрудника", role: "Должность", description: "О специалисте...", image: "" };
-      setTeamMembers([...teamMembers, newBlock]);
-      newIndex = teamMembers.length;
-    } else if (contentTab === 'equipment') {
-      newBlock = { title: "Название аппарата", description: "Описание...", image: "", features: "Плюс 1, Плюс 2" };
-      setEquipmentData([...equipmentData, newBlock]);
-      newIndex = equipmentData.length;
-    } else if (contentTab === 'faq') {
-      newBlock = { question: "Новый вопрос?", answer: "Ответ на вопрос..." };
-      setFaqData([...faqData, newBlock]);
-      newIndex = faqData.length;
-    }
-    
-    handleEditClick(newIndex);
-  };
+  };  
 
 const handleImageUpload = async (e) => {
     const file = e.target.files[0];
