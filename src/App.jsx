@@ -137,22 +137,30 @@ const faqDefaultData = [{ question: "Сколько нужно процедур?
 export default function App() {
   // Проверяем адрес в браузере: если там /admin, сразу включаем окно входа
   const [currentView, setCurrentView] = useState(() => {
-    if (window.location.pathname === '/admin') {
-      const sessionData = localStorage.getItem('sova_admin_session');
-      if (sessionData) {
+    // 1. Сначала проверяем, есть ли живая сессия в браузере
+    const sessionData = localStorage.getItem('sova_admin_session');
+    if (sessionData) {
+      try {
         const { timestamp } = JSON.parse(sessionData);
-        const oneDay = 24 * 60 * 60 * 1000; // 24 часа в миллисекундах
+        const oneDay = 24 * 60 * 60 * 1000;
         
-        // Если с момента входа прошло меньше 24 часов — пускаем сразу!
+        // Если сессия активна (меньше 24 часов), сразу открываем админку
         if (Date.now() - timestamp < oneDay) {
           return 'adminPanel';
         } else {
-          // Если прошло больше времени — удаляем старую запись
           localStorage.removeItem('sova_admin_session');
         }
+      } catch (e) {
+        localStorage.removeItem('sova_admin_session');
       }
-      return 'adminLogin'; // Если записи нет или она старая, показываем окно входа
     }
+
+    // 2. Если сессии нет, но мы на странице /admin — показываем вход
+    if (window.location.pathname === '/admin') {
+      return 'adminLogin';
+    }
+    
+    // 3. Во всех остальных случаях — главная страница
     return 'main';
   });
   
@@ -442,12 +450,17 @@ const handleBookingSubmit = async (e) => {
       
       const result = await res.json();
 
-     if (result.status === 'success') {
-        // Сервер дал добро! Сохраняем текущее время и ТОКЕН в браузер
+    if (result.status === 'success') {
+        // Сохраняем данные
         localStorage.setItem('sova_admin_session', JSON.stringify({ 
           timestamp: Date.now(),
-          token: result.token // <-- Добавили сохранение токена
+          token: result.token
         }));
+        
+        // Вместо setCurrentView('adminPanel') делаем переход:
+        // Это заставит браузер обновить страницу и корректно запустить админку
+        window.location.href = '/admin'; 
+      }
         
         setCurrentView('adminPanel');
         setLoginPass('');
@@ -772,11 +785,11 @@ if (contentTab === 'seo') {
                           <span className="text-sky-600 font-bold text-sm bg-sky-50 px-2 py-1 rounded">
                             {(() => {
                               for (const cat of massageServices) {
-                                const found = cat.items?.find(i => booking.service.includes(i.name));
+                                const found = cat.items?.find(i => booking.service?.includes(i.name));
                                 if (found) return found.price;
                               }
                               for (const cat of bodyShapingServices) {
-                                const found = cat.items?.find(i => booking.service.includes(i.name));
+                                const found = cat.items?.find(i => booking.service?.includes(i.name));
                                 if (found) return found.price;
                               }
                               return 'Цена не указана';
