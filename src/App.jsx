@@ -136,17 +136,21 @@ const faqDefaultData = [{ question: "Сколько нужно процедур?
 
 export default function App() {
   // Проверяем адрес в браузере: если там /admin, сразу включаем окно входа
-  const [currentView, setCurrentView] = useState(() => {
-    // 1. Сначала проверяем, есть ли живая сессия в браузере
+   const [currentView, setCurrentView] = useState(() => {
+    // 1. Если в адресной строке НЕТ слова /admin, то ВСЕГДА показываем обычный сайт
+    if (window.location.pathname !== '/admin') {
+      return 'main';
+    }
+
+    // 2. Если мы находимся именно на /admin, то проверяем пропуск
     const sessionData = localStorage.getItem('sova_admin_session');
     if (sessionData) {
       try {
         const { timestamp } = JSON.parse(sessionData);
         const oneDay = 24 * 60 * 60 * 1000;
         
-        // Если сессия активна (меньше 24 часов), сразу открываем админку
         if (Date.now() - timestamp < oneDay) {
-          return 'adminPanel';
+          return 'adminPanel'; // Пропуск действителен, пускаем
         } else {
           localStorage.removeItem('sova_admin_session');
         }
@@ -154,14 +158,9 @@ export default function App() {
         localStorage.removeItem('sova_admin_session');
       }
     }
-
-    // 2. Если сессии нет, но мы на странице /admin — показываем вход
-    if (window.location.pathname === '/admin') {
-      return 'adminLogin';
-    }
     
-    // 3. Во всех остальных случаях — главная страница
-    return 'main';
+    // 3. Если мы на /admin, но пропуска нет или он истек — просим пароль
+    return 'adminLogin';
   });
   
   // Состояния данных
