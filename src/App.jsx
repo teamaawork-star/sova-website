@@ -1422,7 +1422,7 @@ const handleImageUpload = async (e) => {
           </div>
           <div className="flex overflow-x-auto pb-8 gap-6 scrollbar-hide">
             {reviewsData.map((rev, idx) => (
-              <div key={idx} className="min-w-[280px] md:min-w-[320px] aspect-[9/16] bg-white rounded-3xl shadow-md overflow-hidden border border-stone-100 flex-shrink-0 transform hover:-translate-y-2 transition-transform duration-300">
+              <div key={idx} className="w-[280px] md:w-[320px] flex-none aspect-[9/16] bg-white rounded-3xl shadow-md overflow-hidden border border-stone-100 transform hover:-translate-y-2 transition-transform duration-300">
                 <img src={rev.image || rev} alt="Отзыв" className="w-full h-full object-cover" />
               </div>
             ))}
