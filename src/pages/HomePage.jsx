@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Phone, MapPin, Clock, Sparkles, Wind, Droplets, ShieldCheck, ChevronDown, ChevronUp, Play, RotateCcw, Check } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const IconMap = { Wind, Droplets, Sparkles, ShieldCheck };
 
@@ -125,8 +126,15 @@ export default function HomePage({
                     {item.items?.map((subItem, sIdx) => (
                       <div key={sIdx} className="bg-white p-5 md:p-6 rounded-2xl border border-stone-100 shadow-sm hover:border-sky-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 group">
                         <div className="flex-1 pr-4"><h4 className="font-medium text-lg group-hover:text-sky-700">{subItem.name}</h4>{subItem.duration && (<span className="text-stone-400 text-sm mt-2 flex items-center"><Clock className="w-4 h-4 mr-1.5 text-stone-300" />{subItem.duration}</span>)}</div>
-                        <div className="flex items-center gap-4 sm:gap-6 w-full sm:w-auto justify-between border-t border-stone-50 sm:border-0 pt-4 sm:pt-0"><span className="text-xl md:text-2xl font-semibold text-sky-600">{subItem.price}</span><button onClick={() => openModal(`${item.title || item.category} - ${subItem.name}`)} className="bg-stone-50 text-stone-600 hover:bg-sky-500 hover:text-white px-6 py-3 rounded-xl text-sm font-medium transition-all shadow-sm">Записаться</button></div>
-                      </div>
+                          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 w-full sm:w-auto justify-between border-t border-stone-50 sm:border-0 pt-4 sm:pt-0">
+                          <span className="text-xl md:text-2xl font-semibold text-sky-600">{subItem.price}</span>
+                          <div className="flex gap-2 w-full sm:w-auto">
+                            {/* Кнопка перехода на отдельную страницу */}
+                            <Link to={`/service/${encodeURIComponent(subItem.name)}`} className="flex-1 sm:flex-none text-center bg-white border border-stone-200 text-stone-600 hover:text-sky-600 hover:border-sky-300 px-4 py-3 rounded-xl text-sm font-medium transition-all">Подробнее</Link>
+                            {/* Старая кнопка записи */}
+                            <button onClick={() => openModal(`${item.title || item.category} - ${subItem.name}`)} className="flex-1 sm:flex-none text-center bg-stone-50 text-stone-600 hover:bg-sky-500 hover:text-white px-6 py-3 rounded-xl text-sm font-medium transition-all shadow-sm">Записаться</button>
+                          </div>
+                        </div>                      </div>
                     ))}
                   </div>
                 </div>
