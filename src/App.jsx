@@ -436,7 +436,7 @@ const handleBookingSubmit = async (e) => {
     window.scrollTo(0, 0);
   };
 
- const handleLogin = async (e) => {
+const handleLogin = async (e) => {
     e.preventDefault();
     setLoginError(''); 
     
@@ -450,7 +450,6 @@ const handleBookingSubmit = async (e) => {
       const result = await res.json();
 
       if (result.status === 'success') {
-        // Сохраняем сессию и токен, затем перезагружаем страницу в админку
         localStorage.setItem('sova_admin_session', JSON.stringify({ 
           timestamp: Date.now(),
           token: result.token
