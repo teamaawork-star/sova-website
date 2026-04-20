@@ -4,6 +4,7 @@ import { collection, getDocs, doc, setDoc } from 'firebase/firestore';
 import { db } from './firebase';
 import Header from './components/Header'; // <-- Добавили эту строку
 import Footer from './components/Footer'; // <-- Добавили эту строку
+import HomePage from './pages/HomePage';
 const IconMap = { Wind, Droplets, Sparkles };
 
 
@@ -201,8 +202,7 @@ export default function App() {
   const [isLoadingData, setIsLoadingData] = useState(true);
 
   // --- ДАННЫЕ ДЛЯ КВИЗА ---
-  const [quizStep, setQuizStep] = useState(0); // 0: intro, 1-3: вопросы, 4: результат
-  const [quizAnswers, setQuizAnswers] = useState([]);
+  
 
   const [quizQuestions, setQuizQuestions] = useState([
     {
@@ -232,32 +232,7 @@ export default function App() {
     }
   ]);
 
-  const handleQuizAnswer = (value) => {
-    setQuizAnswers([...quizAnswers, value]);
-    setQuizStep(quizStep + 1);
-  };
-
-  const getQuizResult = () => {
-    const [goal, zone, method] = quizAnswers;
-    if (goal === 'shape') {
-      if (method === 'machine') {
-         if (zone === 'belly') return { title: 'УЗ кавитация (живот)', desc: 'Идеально для локального жиросжигания. Безболезненная альтернатива липосакции.' };
-         if (zone === 'legs') return { title: 'Вакуумный массаж или Криолиполиз', desc: 'Эффективная борьба с целлюлитом и подтяжка кожи.' };
-         return { title: 'LPG-массаж всего тела', desc: 'Комплексное моделирование контуров тела и лимфодренаж.' };
-      }
-      return { title: 'Антицеллюлитный / Вакуумный массаж', desc: 'Мощная ручная или вакуумная проработка проблемных зон для упругости кожи.' };
-    }
-    
-    if (goal === 'pain' || zone === 'back') {
-      return { title: 'Массаж спины и ШВЗ', desc: 'Глубокая проработка мышц, снятие зажимов, спазмов и тяжести.' };
-    }
-
-    if (method === 'spa' || goal === 'relax') {
-      return { title: 'SPA-уход релакс/антистресс', desc: 'Полное погружение в расслабление с массажем и обертыванием.' };
-    }
-
-    return { title: 'Общий массаж всего тела', desc: 'Классический сеанс для гармонии души и тела, снятия усталости.' };
-  };
+ 
 
  // --- МАГИЯ SEO: ДИНАМИЧЕСКАЯ ПОДМЕНА ТЕГОВ (С ЗАЩИТОЙ) ---
   useEffect(() => {
@@ -308,7 +283,7 @@ export default function App() {
     fetchData();
   }, []);
 
-  const [activeTab, setActiveTab] = useState('massage');
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedService, setSelectedService] = useState('');
 const [isSubmitted, setIsSubmitted] = useState(false);
@@ -366,7 +341,7 @@ const [isSubmitted, setIsSubmitted] = useState(false);
   const [editingIndex, setEditingIndex] = useState(-1);
 
   const [selectedServiceData, setSelectedServiceData] = useState(null);
-  const [openFaqIndex, setOpenFaqIndex] = useState(null);
+  
 
   // --- ЛОГИКА САЙТА ---
 const openModal = (serviceName = '') => {
@@ -459,12 +434,7 @@ const handleBookingSubmit = async (e) => {
     }
   };
 
-  const scrollToSection = (id) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+
 
   const openServiceDetails = (service) => {
     setSelectedServiceData(service);
@@ -1143,341 +1113,22 @@ const handleImageUpload = async (e) => {
      {/* HEADER */}
       <Header openModal={openModal} />
 
-     {/* HERO SECTION С ВСТРОЕННЫМ КВИЗОМ */}
-      <section className="relative bg-stone-100 overflow-hidden min-h-[85vh] flex items-center">
-        {/* Обновленный фон, чтобы и текст, и карточка квиза читались отлично */}
-        <div className="absolute inset-0 z-0">
-          <img src={heroData.bgImage} alt="Background" className="w-full h-full object-cover opacity-50" />
-          <div className="absolute inset-0 bg-gradient-to-br from-stone-50/95 via-stone-50/80 to-stone-50/30"></div>
-        </div>
-        
-        <div className="max-w-6xl mx-auto px-4 py-16 md:py-24 relative z-10 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            
-            {/* ЛЕВАЯ ЧАСТЬ: Текст и основные кнопки (занимает 7 из 12 колонок) */}
-            <div className="lg:col-span-7 text-center lg:text-left">
-              <div className="inline-block px-4 py-1.5 rounded-full bg-sky-100/80 backdrop-blur-sm text-sky-700 text-sm font-semibold mb-6 shadow-sm border border-sky-200/50">{heroData.badge}</div>
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif text-stone-800 mb-6 leading-tight">
-                {heroData.title1} <br className="hidden lg:block"/> <span className="text-sky-600">{heroData.titleHighlight}</span> {heroData.title2}
-              </h2>
-              <p className="text-lg text-stone-600 mb-10 leading-relaxed max-w-lg mx-auto lg:mx-0">{heroData.description}</p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <button onClick={() => scrollToSection('services')} className="bg-sky-500 hover:bg-sky-600 text-white px-8 py-3.5 rounded-full font-medium shadow-lg hover:shadow-xl transition-all text-center">Смотреть услуги</button>
-                <button onClick={() => openModal()} className="bg-white/80 backdrop-blur-sm border border-stone-200 px-8 py-3.5 rounded-full font-medium hover:bg-white transition-colors text-center shadow-sm">Записаться на сеанс</button>
-              </div>
-            </div>
+      {/* ГЛАВНАЯ СТРАНИЦА */}
+      <HomePage 
+        heroData={heroData} 
+        massageServices={massageServices} 
+        bodyShapingServices={bodyShapingServices} 
+        resultsData={resultsData} 
+        reviewsData={reviewsData} 
+        teamMembers={teamMembers} 
+        equipmentData={equipmentData} 
+        faqData={faqData} 
+        quizQuestions={quizQuestions} 
+        openModal={openModal} 
+      />
 
-            {/* ПРАВАЯ ЧАСТЬ: Интерактивный квиз (занимает 5 из 12 колонок) */}
-            <div className="lg:col-span-5 w-full max-w-md mx-auto lg:mx-0 mt-8 lg:mt-0">
-              <div className="bg-white/70 backdrop-blur-xl border border-white/60 shadow-2xl rounded-3xl p-6 md:p-8 relative overflow-hidden">
-                
-                {/* Декоративный блик для красоты */}
-                <div className="absolute -top-20 -right-20 w-40 h-40 bg-sky-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30"></div>
-
-                {quizStep === 0 && (
-                  <div className="animate-fade-in relative z-10 text-center py-2">
-                    <div className="w-14 h-14 bg-gradient-to-br from-sky-50 to-white text-sky-500 rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-sm border border-sky-100"><Sparkles className="w-7 h-7" /></div>
-                    <h2 className="text-2xl font-serif text-stone-800 mb-3">Не знаете, какую услугу выбрать?</h2>
-                    <p className="text-stone-500 text-sm mb-8 leading-relaxed">Пройдите короткий тест, и мы подберем идеальную процедуру специально для вас.</p>
-                    <button 
-                      onClick={() => { setQuizStep(1); setQuizAnswers([]); }} 
-                      className="w-full bg-stone-800 hover:bg-stone-900 text-white py-3.5 rounded-2xl font-medium flex items-center justify-center transition-all shadow-md hover:shadow-lg"
-                    >
-                      <Play className="w-4 h-4 mr-2" /> Начать подбор
-                    </button>
-                  </div>
-                )}
-
-                {quizStep > 0 && quizStep <= quizQuestions.length && (
-                  <div className="animate-fade-in relative z-10">
-                    <div className="mb-6 flex items-center justify-between">
-                      <span className="text-xs font-bold text-sky-500 tracking-widest uppercase">Вопрос {quizStep} из {quizQuestions.length}</span>
-                      <div className="w-24 h-1.5 bg-stone-200/50 rounded-full overflow-hidden">
-                        <div className="bg-sky-500 h-full transition-all duration-500" style={{ width: `${(quizStep / quizQuestions.length) * 100}%` }}></div>
-                      </div>
-                    </div>
-                    <h3 className="text-xl font-serif text-stone-800 mb-6 leading-snug">{quizQuestions[quizStep - 1].question}</h3>
-                    <div className="flex flex-col gap-3">
-                      {quizQuestions[quizStep - 1].options.map((opt, idx) => (
-                        <button 
-                          key={idx}
-                          onClick={() => handleQuizAnswer(opt.value)}
-                          className="bg-white/80 border border-stone-100 p-4 rounded-2xl hover:border-sky-300 hover:bg-sky-50 hover:shadow-sm transition-all flex items-center text-left group"
-                        >
-                          {opt.icon ? <span className="text-stone-400 group-hover:text-sky-500 transition-colors mr-4 scale-75">{opt.icon}</span> : <div className="w-2 h-2 rounded-full bg-stone-300 group-hover:bg-sky-400 mr-4 transition-colors"></div>}
-                          <span className="font-medium text-stone-700 text-sm">{opt.label}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {quizStep > quizQuestions.length && (
-                  <div className="animate-fade-in relative z-10 text-center py-2">
-                    <div className="w-14 h-14 bg-green-100 text-green-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm"><Check className="w-7 h-7" /></div>
-                    <span className="text-xs font-bold text-stone-400 uppercase tracking-widest block mb-2">Вам подойдет:</span>
-                    <h2 className="text-2xl font-serif text-sky-600 mb-3 leading-tight">{getQuizResult().title}</h2>
-                    <p className="text-stone-600 text-sm mb-8 leading-relaxed">{getQuizResult().desc}</p>
-                    <div className="flex flex-col gap-3">
-                      <button 
-                        onClick={() => openModal(getQuizResult().title)}
-                        className="w-full bg-sky-500 hover:bg-sky-600 text-white py-3.5 rounded-2xl font-medium shadow-md transition-all"
-                      >
-                        Записаться на процедуру
-                      </button>
-                      <button 
-                        onClick={() => { setQuizStep(0); setQuizAnswers([]); }}
-                        className="w-full bg-white/50 border border-stone-200 text-stone-500 hover:bg-white py-3 rounded-2xl font-medium flex items-center justify-center transition-all text-sm"
-                      >
-                        <RotateCcw className="w-3.5 h-3.5 mr-2" /> Пройти заново
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-     {/* SERVICES SECTION */}
-      <section id="services" className="py-20 md:py-32 bg-stone-50 border-t border-stone-200">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-serif text-stone-800 mb-6">Наши Услуги и Цены</h2>
-            <p className="text-stone-500 max-w-2xl mx-auto text-lg">Выберите подходящую процедуру для глубокого расслабления или эффективной коррекции фигуры.</p>
-          </div>
-          
-          {/* Переключатель вкладок */}
-          <div className="flex justify-center mb-16">
-            <div className="bg-stone-200/50 p-1.5 rounded-full inline-flex flex-col sm:flex-row w-full sm:w-auto border border-stone-200/50 shadow-sm">
-              <button onClick={() => setActiveTab('massage')} className={`px-8 py-3.5 rounded-full text-sm font-medium w-full sm:w-auto transition-all duration-300 ${activeTab === 'massage' ? 'bg-white text-sky-600 shadow-md scale-105' : 'text-stone-500 hover:text-stone-800 hover:bg-stone-100/50'}`}>Услуги массажа</button>
-              <button onClick={() => setActiveTab('body')} className={`px-8 py-3.5 rounded-full text-sm font-medium w-full sm:w-auto mt-2 sm:mt-0 transition-all duration-300 ${activeTab === 'body' ? 'bg-white text-sky-600 shadow-md scale-105' : 'text-stone-500 hover:text-stone-800 hover:bg-stone-100/50'}`}>Коррекция фигуры</button>
-            </div>
-          </div>
-
-          {/* Новый макет: SPA-Меню */}
-          <div className="flex flex-col gap-20 md:gap-32 animate-fade-in">
-            {(activeTab === 'massage' ? massageServices : bodyShapingServices).map((item, idx) => {
-               const IconComp = IconMap[item.iconName] || Sparkles;
-               return (
-                <div key={idx} className="flex flex-col lg:flex-row gap-8 lg:gap-16 items-start">
-                  
-                  {/* Левая часть: Фото и описание (Закрепляется при скролле) */}
-                  <div className="w-full lg:w-5/12 lg:sticky lg:top-32 relative group">
-                    <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-md mb-6 relative">
-                      <img src={item.image} alt={item.title || item.category} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                      <div className="absolute inset-0 bg-stone-900/10 group-hover:bg-transparent transition-colors duration-500"></div>
-                      {/* Иконка для аппаратных услуг */}
-                      {activeTab === 'body' && (
-                        <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-sm">
-                          <IconComp className="w-6 h-6 text-sky-500" />
-                        </div>
-                      )}
-                    </div>
-                    <h3 className="text-3xl font-serif text-stone-800 mb-4">{item.title || item.category}</h3>
-                    <p className="text-stone-500 leading-relaxed text-lg">{item.description}</p>
-                  </div>
-
-                  {/* Правая часть: Список услуг и цен */}
-                  <div className="w-full lg:w-7/12 flex flex-col gap-3 md:gap-4 lg:pt-4">
-                    {item.items?.map((subItem, sIdx) => (
-                      <div key={sIdx} className="bg-white p-5 md:p-6 rounded-2xl border border-stone-100 shadow-sm hover:shadow-md hover:border-sky-100 transition-all flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 group">
-                        <div className="flex-1 pr-4">
-                          <h4 className="font-medium text-stone-800 text-lg group-hover:text-sky-700 transition-colors">{subItem.name}</h4>
-                          {subItem.duration && (
-                            <span className="text-stone-400 text-sm mt-2 flex items-center">
-                              <Clock className="w-4 h-4 mr-1.5 text-stone-300" />{subItem.duration}
-                            </span>
-                          )}
-                        </div>
-                        <div className="flex items-center gap-4 md:gap-6 w-full sm:w-auto justify-between sm:justify-end border-t border-stone-50 sm:border-0 pt-4 sm:pt-0 mt-2 sm:mt-0">
-                          <span className="text-xl md:text-2xl font-semibold text-sky-600 whitespace-nowrap">{subItem.price}</span>
-                          <button 
-                            onClick={() => openModal(`${item.title || item.category} - ${subItem.name}`)} 
-                            className="bg-stone-50 text-stone-600 hover:bg-sky-500 hover:text-white px-6 py-3 rounded-xl text-sm font-medium transition-all duration-300 shadow-sm hover:shadow-md"
-                          >
-                            Записаться
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                </div>
-               );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* TEAM SECTION */}
-      <section id="team" className="py-20 bg-stone-50 border-t border-stone-200">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-serif text-stone-800 mb-4">Наша Команда</h2>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {teamMembers.map((member, idx) => (
-              <div key={idx} className="bg-white rounded-3xl shadow-sm border border-stone-100 overflow-hidden hover:shadow-xl transition-all p-6 md:p-8 flex flex-col items-center text-center">
-                <div className="w-32 h-32 rounded-full overflow-hidden mb-6 border-4 border-stone-50 shadow-md">
-                  <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
-                </div>
-                <h3 className="text-xl font-serif font-bold text-stone-800 mb-1">{member.name}</h3>
-                <span className="text-sky-600 text-sm font-medium mb-4">{member.role}</span>
-                <p className="text-stone-500 text-sm leading-relaxed flex-1">{member.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* EQUIPMENT SECTION */}
-      <section id="equipment" className="py-20 bg-white border-t border-stone-200">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-serif text-stone-800 mb-4">Наше Оборудование</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {equipmentData.map((item, idx) => (
-              <div key={idx} className="bg-stone-50 rounded-3xl p-6 md:p-8 shadow-sm border border-stone-100 flex flex-col sm:flex-row gap-6 hover:shadow-md">
-                <div className="w-full sm:w-1/3 h-48 sm:h-auto shrink-0">
-                  <img src={item.image} alt={item.title} className="w-full h-full object-cover rounded-2xl" />
-                </div>
-                <div className="flex flex-col justify-center">
-                  <h3 className="text-xl font-serif font-bold text-stone-800 mb-3">{item.title}</h3>
-                  <p className="text-sm text-stone-500 leading-relaxed mb-4">{item.description}</p>
-                  <ul className="space-y-2">
-                    {item.features?.split(',').map((feature, fIdx) => (
-                      <li key={fIdx} className="flex items-center text-xs font-medium text-stone-600">
-                        <ShieldCheck className="w-4 h-4 text-sky-500 mr-2" /> {feature.trim()}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-{/* ГАЛЕРЕЯ ДО/ПОСЛЕ */}
-      <section id="results" className="py-20 bg-white border-t border-stone-200">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-serif text-stone-800 mb-4">Результаты наших клиентов</h2>
-            <p className="text-stone-500">Реальные изменения после курсов процедур в нашей студии</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            {resultsData.map((res, idx) => (
-              <div key={idx} className="group">
-                <div className="flex gap-4 mb-6">
-                  <div className="relative flex-1 aspect-[3/4] rounded-2xl overflow-hidden shadow-lg">
-                    <img src={res.before} alt="До" className="w-full h-full object-cover" />
-                    <div className="absolute top-4 left-4 bg-black/50 backdrop-blur-md text-white text-xs px-3 py-1 rounded-full">До</div>
-                  </div>
-                  <div className="relative flex-1 aspect-[3/4] rounded-2xl overflow-hidden shadow-lg border-2 border-sky-400">
-                    <img src={res.after} alt="После" className="w-full h-full object-cover" />
-                    <div className="absolute top-4 left-4 bg-sky-500 text-white text-xs px-3 py-1 rounded-full">После</div>
-                  </div>
-                </div>
-                <h3 className="text-xl font-serif text-stone-800 mb-2">{res.title}</h3>
-                <p className="text-stone-500 text-sm leading-relaxed">{res.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ОТЗЫВЫ */}
-      <section id="reviews" className="py-20 bg-stone-50 border-t border-stone-200">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-serif text-stone-800 mb-4">Отзывы и впечатления</h2>
-            <p className="text-stone-500">Что говорят о нас гости студии</p>
-          </div>
-          <div className="flex overflow-x-auto pb-8 gap-6 scrollbar-hide">
-            {reviewsData.map((rev, idx) => (
-              <div key={idx} className="w-[280px] md:w-[320px] flex-none aspect-[9/16] bg-white rounded-3xl shadow-md overflow-hidden border border-stone-100 transform hover:-translate-y-2 transition-transform duration-300">
-                <img src={rev.image || rev} alt="Отзыв" className="w-full h-full object-cover" />
-              </div>
-            ))}
-          </div>
-          <div className="text-center mt-10">
-            <p className="text-sm text-stone-400">Листайте вправо, чтобы увидеть больше →</p>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ SECTION */}
-      <section id="faq" className="py-20 bg-stone-50 border-t border-stone-200">
-        <div className="max-w-4xl mx-auto px-4">
-          <div className="text-center mb-16"><h2 className="text-3xl md:text-4xl font-serif text-stone-800 mb-4">Вопрос-ответ</h2></div>
-          <div className="space-y-4">
-            {faqData.map((faq, idx) => (
-              <div key={idx} className="border border-stone-200 rounded-2xl overflow-hidden transition-all duration-300">
-                <button onClick={() => setOpenFaqIndex(openFaqIndex === idx ? null : idx)} className="w-full px-6 py-5 flex justify-between items-center bg-white hover:bg-stone-100 text-left">
-                  <span className="font-medium text-stone-800 pr-4">{faq.question}</span>
-                  {openFaqIndex === idx ? <ChevronUp className="w-5 h-5 text-sky-500 shrink-0" /> : <ChevronDown className="w-5 h-5 text-stone-400 shrink-0" />}
-                </button>
-                {openFaqIndex === idx && <div className="px-6 py-5 bg-stone-50 text-stone-600 text-sm leading-relaxed border-t">{faq.answer}</div>}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-{/* CONTACTS / FOOTER */}
-      <section id="contacts" className="py-16 bg-sky-800 text-white relative overflow-hidden">
-        <div className="max-w-6xl mx-auto px-4 relative z-10">
-          
-          {/* Главный заголовок секции - теперь строго по центру */}
-          <h2 className="text-3xl md:text-4xl font-serif mb-10 text-center">Как нас найти</h2>
-          
-          <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-6 md:p-8 border border-white/20 shadow-2xl flex flex-col lg:flex-row gap-8 items-stretch">
-            
-            {/* ЛЕВАЯ КОЛОНКА (35%): Информация */}
-            <div className="w-full lg:w-[35%] flex flex-col justify-center items-center lg:items-start text-center lg:text-left">
-              
-              <div className="mb-8 w-full border-b border-white/10 pb-8">
-                <div className="flex items-center justify-center lg:justify-start space-x-2 text-sky-200 mb-2">
-                  <MapPin className="w-5 h-5" />
-                  <span className="uppercase tracking-wider text-sm font-medium">Наш адрес</span>
-                </div>
-                <span className="text-xl font-light text-white block leading-relaxed">проспект Музрукова, д.37 к.3</span>
-              </div>
-              
-              <a href="tel:+79101258250" className="group flex flex-col items-center lg:items-start mb-8 w-full">
-                <div className="flex items-center space-x-3 sm:space-x-4">
-                  <div className="w-12 h-12 sm:w-14 sm:h-14 bg-sky-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shrink-0">
-                    <Phone className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                  </div>
-                  <span className="text-2xl sm:text-3xl font-light text-white tracking-wide whitespace-nowrap">+7 910-125-82-50</span>
-                </div>
-              </a>
-              
-              <button onClick={() => openModal()} className="w-full px-8 bg-white text-sky-900 hover:bg-sky-50 font-medium py-4 rounded-full transition-colors text-lg shadow-md mt-auto">
-                Записаться онлайн
-              </button>
-            </div>
-
-            {/* ПРАВАЯ КОЛОНКА (65%): Карта Яндекса */}
-            <div className="w-full lg:w-[65%] h-80 lg:h-auto min-h-[350px] rounded-2xl overflow-hidden border border-white/10 shadow-inner relative bg-stone-100/10">
-              <iframe 
-                src="https://yandex.ru/map-widget/v1/?um=constructor%3A5bd4448c7935bb1d9d7b082ee77117acbad4684acf8b86717e288673a4a24dbc&amp;source=constructor" 
-                width="100%" 
-                height="100%" 
-                frameBorder="0" 
-                allowFullScreen={true} 
-                style={{ position: 'absolute', top: 0, left: 0 }}
-                title="Карта студии SOVA"
-              ></iframe>
-            </div>
-            
-          </div>
-        </div>
-      </section>
+      {/* FOOTER */}
+      <Footer />
 
      {/* FOOTER */}
       <Footer />
