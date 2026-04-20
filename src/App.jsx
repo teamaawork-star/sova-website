@@ -771,56 +771,44 @@ const handleImageUpload = async (e) => {
       if (contentTab === 'team') dataToRender = teamMembers;
       if (contentTab === 'equipment') dataToRender = equipmentData;
       if (contentTab === 'faq') dataToRender = faqData;
+      // --- Новые разделы ---
+      if (contentTab === 'results') dataToRender = resultsData;
+      if (contentTab === 'reviews') dataToRender = reviewsData;
+      if (contentTab === 'quiz') dataToRender = quizQuestions;
 
       if (contentTab === 'hero') {
         return (
-          <div className="bg-white rounded-2xl border border-stone-200 p-8 flex flex-col justify-between shadow-sm items-center text-center">
-            <div className="w-full h-48 rounded-xl overflow-hidden mb-6 relative">
-              <img src={heroData.bgImage} alt="hero" className="w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                 <h3 className="text-white text-3xl font-serif">{heroData.title1} <span className="text-sky-400">{heroData.titleHighlight}</span> {heroData.title2}</h3>
-              </div>
-            </div>
-            <p className="text-stone-500 mb-6 max-w-xl">{heroData.description}</p>
-            <button onClick={() => handleEditClick(0)} className="bg-sky-500 text-white px-8 hover:bg-sky-600 font-medium py-3 rounded-xl flex items-center justify-center"><Edit className="w-4 h-4 mr-2" /> Редактировать</button>
+          <div className="bg-white rounded-2xl border border-stone-200 p-8 text-center">
+            <img src={heroData.bgImage} alt="hero" className="w-full h-48 object-cover rounded-xl mb-6 opacity-80" />
+            <h3 className="text-xl font-serif mb-2">{heroData.title1} {heroData.titleHighlight} {heroData.title2}</h3>
+            <button onClick={() => handleEditClick(0)} className="bg-sky-500 text-white px-8 py-3 rounded-xl inline-flex items-center"><Edit className="w-4 h-4 mr-2" /> Редактировать</button>
           </div>
         )
       }
-
-if (contentTab === 'seo') {
+      if (contentTab === 'seo') {
         return (
-          <div className="bg-white rounded-2xl border border-stone-200 p-8 flex flex-col items-center text-center shadow-sm">
-            <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-6"><Search className="w-8 h-8" /></div>
-            <h3 className="text-2xl font-serif text-stone-800 mb-2">{seoData.title}</h3>
-            <p className="text-stone-500 mb-4 max-w-xl">{seoData.description}</p>
-            
-            <div className="w-full max-w-md space-y-3 mb-8 text-left">
-              <div className="bg-stone-50 px-4 py-3 rounded-lg border border-stone-200">
-                <span className="text-xs text-stone-400 font-mono uppercase tracking-wider block mb-1">Доступное время записи</span>
-                <span className="text-sm text-stone-800 font-medium">{seoData.availableTimes || defaultSeo.availableTimes}</span>
-              </div>
-              <div className="bg-stone-50 px-4 py-3 rounded-lg border border-stone-200">
-                <span className="text-xs text-stone-400 font-mono uppercase tracking-wider block mb-1">Ключевые слова</span>
-                <span className="text-sm text-stone-600 font-medium">{seoData.keywords}</span>
-              </div>
-            </div>
-            <button onClick={() => handleEditClick(0)} className="bg-sky-500 text-white px-8 hover:bg-sky-600 font-medium py-3 rounded-xl flex items-center justify-center"><Edit className="w-4 h-4 mr-2" /> Настроить SEO и время</button>
+          <div className="bg-white rounded-2xl border border-stone-200 p-8 text-center">
+            <Search className="w-8 h-8 mx-auto text-green-500 mb-4" />
+            <h3 className="text-xl font-serif mb-2">Настройки SEO и Расписание</h3>
+            <button onClick={() => handleEditClick(0)} className="bg-sky-500 text-white px-8 py-3 rounded-xl inline-flex items-center mt-4"><Edit className="w-4 h-4 mr-2" /> Настроить</button>
           </div>
         )
       }
-
       return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {dataToRender.map((item, idx) => (
-            <div key={idx} className="bg-white rounded-2xl border border-stone-200 p-5 flex flex-col justify-between hover:shadow-md transition-shadow">
+            <div key={idx} className="bg-white rounded-2xl border border-stone-200 p-5 flex flex-col justify-between">
               <div className="mb-4">
-                {item.image && (<div className="w-full h-32 rounded-xl overflow-hidden mb-4 relative"><img src={item.image} alt="" className="w-full h-full object-cover" /></div>)}
-                <h3 className="text-lg font-serif font-bold text-stone-800 mb-2">{item.title || item.category || item.name || item.question}</h3>
-                <p className="text-sm text-stone-500 line-clamp-2">{item.description || item.answer || item.role}</p>
+                {item.image && (<img src={item.image} alt="" className="w-full h-32 object-cover rounded-xl mb-4" />)}
+                {/* Вывод картинок ДО для результатов */}
+                {item.before && (<img src={item.after} alt="" className="w-full h-32 object-cover rounded-xl mb-4" />)}
+                <h3 className="text-lg font-serif font-bold mb-2">
+                  {item.title || item.category || item.name || item.question || (contentTab === 'reviews' ? 'Отзыв' : '')}
+                </h3>
               </div>
               <div className="flex gap-2">
-                <button onClick={() => handleEditClick(idx)} className="flex-1 bg-sky-50 text-sky-600 hover:bg-sky-100 font-medium py-2 rounded-xl flex items-center justify-center text-sm"><Edit className="w-4 h-4 mr-2" /> Изменить</button>
-                <button onClick={() => handleDeleteItem(idx)} className="flex-none bg-white border border-stone-200 text-red-400 hover:bg-red-50 hover:text-red-500 font-medium px-3 rounded-xl flex items-center justify-center"><Trash2 className="w-4 h-4" /></button>
+                <button onClick={() => handleEditClick(idx)} className="flex-1 bg-sky-50 text-sky-600 py-2 rounded-xl text-sm font-medium"><Edit className="w-4 h-4 inline mr-1" /> Изменить</button>
+                <button onClick={() => handleDeleteItem(idx)} className="bg-red-50 text-red-500 px-3 rounded-xl"><Trash2 className="w-4 h-4" /></button>
               </div>
             </div>
           ))}
@@ -916,15 +904,7 @@ if (contentTab === 'seo') {
 
               {/* НАВИГАЦИЯ ПО РАЗДЕЛАМ САЙТА (ДОБАВЛЕНО SEO) */}
               <div className="flex overflow-x-auto pb-2 border-b border-stone-200 mb-6 space-x-2 scrollbar-hide">
-                {[
-                  { id: 'hero', label: 'Главный экран' },
-                  { id: 'seo', label: 'SEO настройки' },
-                  { id: 'massage', label: 'Массаж' },
-                  { id: 'body', label: 'Коррекция' },
-                  { id: 'team', label: 'Команда' },
-                  { id: 'equipment', label: 'Оборудование' },
-                  { id: 'faq', label: 'Вопрос-ответ' },
-                ].map(tab => (
+                {[ { id: 'hero', label: 'Главный экран' }, { id: 'seo', label: 'SEO' }, { id: 'massage', label: 'Массаж' }, { id: 'body', label: 'Коррекция' }, { id: 'results', label: 'До/После' }, { id: 'reviews', label: 'Отзывы' }, { id: 'quiz', label: 'Квиз' }, { id: 'team', label: 'Команда' }, { id: 'equipment', label: 'Аппараты' }, { id: 'faq', label: 'Вопрос-ответ' }].map(tab => (
                   <button 
                     key={tab.id}
                     onClick={() => {setContentTab(tab.id); setEditingItem(null);}} 
@@ -935,7 +915,7 @@ if (contentTab === 'seo') {
                 ))}
               </div>
 
-              {!editingItem ? renderAdminContentList() : (
+             {!editingItem ? renderAdminContentList() : (
                 <div className="bg-white rounded-3xl border border-stone-200 p-6 md:p-8 animate-fade-in shadow-sm">
                   <div className="flex justify-between items-center mb-6 border-b border-stone-100 pb-4">
                     <h3 className="text-2xl font-serif text-stone-800">Редактирование</h3>
@@ -983,9 +963,10 @@ if (contentTab === 'seo') {
                         </>
                       )}
 
-                      {['massage', 'body', 'equipment', 'team', 'faq'].includes(contentTab) && (
+                      {/* ДОБАВИЛИ RESULTS И QUIZ В МАССИВ ТАБОВ */}
+                      {['massage', 'body', 'equipment', 'team', 'faq', 'results', 'quiz'].includes(contentTab) && (
                         <>
-                          {['massage', 'body', 'equipment'].includes(contentTab) && <div><label className="block text-sm font-medium mb-1">Заголовок</label><input type="text" className="w-full border p-3 rounded-xl text-sm" value={editingItem.title || editingItem.category || ''} onChange={e => setEditingItem(prev => prev.title !== undefined ? {...prev, title: e.target.value} : {...prev, category: e.target.value})} /></div>}
+                          {['massage', 'body', 'equipment', 'results'].includes(contentTab) && <div><label className="block text-sm font-medium mb-1">Заголовок</label><input type="text" className="w-full border p-3 rounded-xl text-sm" value={editingItem.title || editingItem.category || ''} onChange={e => setEditingItem(prev => prev.title !== undefined ? {...prev, title: e.target.value} : {...prev, category: e.target.value})} /></div>}
                           
                           {contentTab === 'team' && (
                             <>
@@ -993,50 +974,98 @@ if (contentTab === 'seo') {
                               <div><label className="block text-sm font-medium mb-1">Должность</label><input type="text" className="w-full border p-3 rounded-xl text-sm" value={editingItem.role} onChange={e => setEditingItem({...editingItem, role: e.target.value})} /></div>
                             </>
                           )}
+                          
                           {contentTab === 'faq' && <div><label className="block text-sm font-medium mb-1">Вопрос</label><input type="text" className="w-full border p-3 rounded-xl text-sm" value={editingItem.question} onChange={e => setEditingItem({...editingItem, question: e.target.value})} /></div>}
-                          <div><label className="block text-sm font-medium mb-1">{contentTab === 'faq' ? 'Ответ' : 'Описание'}</label><textarea className="w-full border p-3 rounded-xl text-sm min-h-[100px]" value={editingItem.description || editingItem.answer || ''} onChange={e => contentTab === 'faq' ? setEditingItem({...editingItem, answer: e.target.value}) : setEditingItem({...editingItem, description: e.target.value})} /></div>
+                          
+                          {/* ПОЛЕ ДЛЯ ВОПРОСА КВИЗА */}
+                          {contentTab === 'quiz' && <div><label className="block text-sm font-medium mb-1">Вопрос квиза</label><input type="text" className="w-full border p-3 rounded-xl text-sm" value={editingItem.question} onChange={e => setEditingItem({...editingItem, question: e.target.value})} /></div>}
+
+                          {['massage', 'body', 'equipment', 'team', 'faq', 'results'].includes(contentTab) && <div><label className="block text-sm font-medium mb-1">{contentTab === 'faq' ? 'Ответ' : 'Описание'}</label><textarea className="w-full border p-3 rounded-xl text-sm min-h-[100px]" value={editingItem.description || editingItem.answer || ''} onChange={e => contentTab === 'faq' ? setEditingItem({...editingItem, answer: e.target.value}) : setEditingItem({...editingItem, description: e.target.value})} /></div>}
+                          
                           {contentTab === 'equipment' && <div><label className="block text-sm font-medium mb-1">Особенности (через запятую)</label><textarea className="w-full border p-3 rounded-xl text-sm" value={editingItem.features} onChange={e => setEditingItem({...editingItem, features: e.target.value})} /></div>}
+
+                          {/* ВАРИАНТЫ ОТВЕТОВ ДЛЯ КВИЗА */}
+                          {contentTab === 'quiz' && (
+                            <div className="bg-stone-50 border border-stone-200 p-4 rounded-xl mt-4">
+                              <label className="block text-sm font-medium mb-3 text-stone-800">Варианты ответов</label>
+                              <div className="space-y-3">
+                                {editingItem.options?.map((opt, oIdx) => (
+                                  <div key={oIdx} className="bg-white p-3 border border-stone-200 rounded-lg relative">
+                                    <button onClick={() => setEditingItem({...editingItem, options: editingItem.options.filter((_, i) => i !== oIdx)})} className="absolute top-2 right-2 text-stone-400 hover:text-red-500"><X className="w-4 h-4" /></button>
+                                    <input className="w-full border border-stone-200 p-2 text-sm rounded mb-2" placeholder="Текст (например: Спина и шея)" value={opt.label} onChange={e => handleOptionChange(oIdx, 'label', e.target.value)} />
+                                    <div className="flex gap-2">
+                                      <input className="w-1/2 border border-stone-200 p-2 text-sm rounded" placeholder="Значение (например: back)" value={opt.value} onChange={e => handleOptionChange(oIdx, 'value', e.target.value)} />
+                                      <input className="w-1/2 border border-stone-200 p-2 text-sm rounded" placeholder="Иконка (Wind)" value={opt.iconName || ''} onChange={e => handleOptionChange(oIdx, 'iconName', e.target.value)} />
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                              <button onClick={() => setEditingItem({...editingItem, options: [...(editingItem.options || []), {label: "Новый ответ", value: "val", iconName: ""}]})} className="w-full mt-3 border-2 border-dashed py-2 rounded-lg text-sm font-medium text-stone-500 flex justify-center items-center hover:bg-stone-100 transition-colors"><Plus className="w-4 h-4 mr-1" /> Добавить вариант</button>
+                            </div>
+                          )}
                         </>
                       )}
                     </div>
                     
                     {/* ПРАВАЯ КОЛОНКА */}
-                    {contentTab !== 'seo' && (
-                      <div>
-                        {contentTab !== 'faq' && (
+                    {contentTab !== 'seo' && contentTab !== 'quiz' && (
+                      <div className="lg:col-span-1">
+                        
+                        {/* ЛОГИКА ФОТО ДО/ПОСЛЕ ИЛИ ОБЫЧНОГО ФОТО */}
+                        {contentTab === 'results' ? (
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div className="mb-6">
+                              <label className="block text-sm font-medium mb-2 text-stone-700">Фото ДО</label>
+                              <div className="relative mb-3">
+                                  <input type="file" accept="image/*" onChange={e => handleImageUpload(e, 'before')} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+                                  <button className="w-full bg-stone-50 hover:bg-stone-100 border border-stone-200 py-3 rounded-xl text-sm font-medium flex justify-center items-center transition-colors"><Upload className="w-4 h-4 mr-2 text-stone-500" /> Загрузить ДО</button>
+                              </div>
+                              {editingItem.before && <div className="w-full aspect-[3/4] rounded-xl overflow-hidden border shadow-sm"><img src={editingItem.before} alt="До" className="w-full h-full object-cover" /></div>}
+                            </div>
+                            <div className="mb-6">
+                              <label className="block text-sm font-medium mb-2 text-stone-700">Фото ПОСЛЕ</label>
+                              <div className="relative mb-3">
+                                  <input type="file" accept="image/*" onChange={e => handleImageUpload(e, 'after')} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+                                  <button className="w-full bg-stone-50 hover:bg-stone-100 border border-stone-200 py-3 rounded-xl text-sm font-medium flex justify-center items-center transition-colors"><Upload className="w-4 h-4 mr-2 text-stone-500" /> Загрузить ПОСЛЕ</button>
+                              </div>
+                              {editingItem.after && <div className="w-full aspect-[3/4] rounded-xl overflow-hidden border shadow-sm"><img src={editingItem.after} alt="После" className="w-full h-full object-cover" /></div>}
+                            </div>
+                          </div>
+                        ) : contentTab !== 'faq' ? (
                           <div className="mb-6">
-                            <label className="block text-sm font-medium mb-1">Фотография</label>
+                            <label className="block text-sm font-medium mb-2">{contentTab === 'reviews' ? 'Скриншот отзыва' : 'Фотография'}</label>
                             <div className="flex flex-col gap-3">
                               <input type="text" className="w-full border p-3 rounded-xl text-sm" placeholder="Вставьте ссылку на фото..." value={editingItem.image || editingItem.bgImage || ''} onChange={e => contentTab === 'hero' ? setEditingItem({...editingItem, bgImage: e.target.value}) : setEditingItem({...editingItem, image: e.target.value})} />
                               <div className="relative">
-                                  <input type="file" accept="image/*" onChange={handleImageUpload} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
-                                  <button className="w-full bg-stone-50 border py-2.5 rounded-xl text-sm flex justify-center items-center"><Upload className="w-4 h-4 mr-2" /> Загрузить фото</button>
+                                  <input type="file" accept="image/*" onChange={e => handleImageUpload(e, 'image')} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+                                  <button className="w-full bg-stone-50 hover:bg-stone-100 border py-3 rounded-xl text-sm font-medium flex justify-center items-center transition-colors"><Upload className="w-4 h-4 mr-2" /> Загрузить файл</button>
                               </div>
                             </div>
                             {(editingItem.image || editingItem.bgImage) && (
-                              <div className="mt-4 w-full h-32 rounded-xl overflow-hidden border"><img src={editingItem.image || editingItem.bgImage} alt="" className="w-full h-full object-cover" /></div>
+                              <div className="mt-4 w-full h-48 rounded-xl overflow-hidden border shadow-sm"><img src={editingItem.image || editingItem.bgImage} alt="" className="w-full h-full object-cover" /></div>
                             )}
                           </div>
-                        )}
+                        ) : null}
 
+                        {/* УСЛУГИ И ЦЕНЫ */}
                         {['massage', 'body'].includes(contentTab) && (
-                          <div>
+                          <div className="mt-6 border-t border-stone-100 pt-6">
                             <label className="block text-sm font-medium mb-3">Вложенные услуги и цены</label>
                             <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2">
                               {editingItem.items?.map((item, itemIdx) => (
-                                <div key={itemIdx} className="bg-stone-50 border p-4 rounded-xl relative">
-                                  <button onClick={() => setEditingItem({...editingItem, items: editingItem.items.filter((_, i) => i !== itemIdx)})} className="absolute top-3 right-3 text-stone-400 hover:text-red-500"><Trash2 className="w-4 h-4" /></button>
+                                <div key={itemIdx} className="bg-stone-50 border p-4 rounded-xl relative shadow-sm">
+                                  <button onClick={() => setEditingItem({...editingItem, items: editingItem.items.filter((_, i) => i !== itemIdx)})} className="absolute top-3 right-3 text-stone-400 hover:text-red-500 transition-colors"><Trash2 className="w-4 h-4" /></button>
                                   <div className="space-y-3 pt-2">
-                                    <div><label className="text-xs text-stone-500">Название</label><input type="text" className="w-full border p-2 rounded-lg text-sm" value={item.name} onChange={e => handleItemChange(itemIdx, 'name', e.target.value)} /></div>
+                                    <div><label className="text-xs text-stone-500 font-medium">Название</label><input type="text" className="w-full border border-stone-200 p-2.5 rounded-lg text-sm focus:ring-1 focus:ring-sky-500 outline-none" value={item.name} onChange={e => handleItemChange(itemIdx, 'name', e.target.value)} /></div>
                                     <div className="grid grid-cols-2 gap-3">
-                                      <div><label className="text-xs text-stone-500">Длительность</label><input type="text" className="w-full border p-2 rounded-lg text-sm" value={item.duration || ''} onChange={e => handleItemChange(itemIdx, 'duration', e.target.value)} /></div>
-                                      <div><label className="text-xs text-stone-500">Цена</label><input type="text" className="w-full border p-2 rounded-lg text-sm" value={item.price} onChange={e => handleItemChange(itemIdx, 'price', e.target.value)} /></div>
+                                      <div><label className="text-xs text-stone-500 font-medium">Длительность</label><input type="text" className="w-full border border-stone-200 p-2.5 rounded-lg text-sm focus:ring-1 focus:ring-sky-500 outline-none" value={item.duration || ''} onChange={e => handleItemChange(itemIdx, 'duration', e.target.value)} /></div>
+                                      <div><label className="text-xs text-stone-500 font-medium">Цена</label><input type="text" className="w-full border border-stone-200 p-2.5 rounded-lg text-sm focus:ring-1 focus:ring-sky-500 outline-none" value={item.price} onChange={e => handleItemChange(itemIdx, 'price', e.target.value)} /></div>
                                     </div>
                                   </div>
                                 </div>
                               ))}
                             </div>
-                            <button onClick={() => setEditingItem({...editingItem, items: [...(editingItem.items || []), { name: "Новая под-услуга", price: "0 руб." }]})} className="w-full border-2 border-dashed py-3 rounded-xl mt-4 text-sm font-medium text-stone-500 flex justify-center items-center"><Plus className="w-4 h-4 mr-1" /> Добавить вариант (цену)</button>
+                            <button onClick={() => setEditingItem({...editingItem, items: [...(editingItem.items || []), { name: "Новая под-услуга", price: "0 руб." }]})} className="w-full border-2 border-dashed border-stone-200 hover:border-sky-300 hover:bg-sky-50 py-3 rounded-xl mt-4 text-sm font-medium text-stone-500 hover:text-sky-600 flex justify-center items-center transition-all"><Plus className="w-4 h-4 mr-1" /> Добавить вариант (цену)</button>
                           </div>
                         )}
                       </div>
@@ -1044,12 +1073,11 @@ if (contentTab === 'seo') {
                   </div>
 
                   <div className="flex justify-end gap-3 mt-8 pt-6 border-t border-stone-100">
-                    <button onClick={handleCancelEdit} className="px-6 py-2.5 rounded-xl font-medium bg-stone-100 hover:bg-stone-200">Отмена</button>
-                    <button onClick={handleSaveContent} className="px-6 py-2.5 rounded-xl font-medium text-white bg-sky-500 hover:bg-sky-600 flex items-center"><Save className="w-4 h-4 mr-2" /> Сохранить</button>
+                    <button onClick={handleCancelEdit} className="px-6 py-2.5 rounded-xl font-medium bg-stone-100 hover:bg-stone-200 transition-colors">Отмена</button>
+                    <button onClick={handleSaveContent} className="px-6 py-2.5 rounded-xl font-medium text-white bg-sky-500 hover:bg-sky-600 flex items-center shadow-md transition-colors"><Save className="w-4 h-4 mr-2" /> Сохранить</button>
                   </div>
                 </div>
-              )}
-            </>
+              )}            </>
           )}
         </div>
       </div>
