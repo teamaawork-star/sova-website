@@ -5,6 +5,8 @@ import { db } from './firebase';
 import Header from './components/Header'; // <-- Добавили эту строку
 import Footer from './components/Footer'; // <-- Добавили эту строку
 import HomePage from './pages/HomePage';
+import { Routes, Route } from 'react-router-dom'; // <-- Инструменты маршрутизатора
+import ServicePage from './pages/ServicePage';    // <-- Наша новая страница
 const IconMap = { Wind, Droplets, Sparkles };
 
 
@@ -1113,19 +1115,35 @@ const handleImageUpload = async (e) => {
      {/* HEADER */}
       <Header openModal={openModal} />
 
-      {/* ГЛАВНАЯ СТРАНИЦА */}
-      <HomePage 
-        heroData={heroData} 
-        massageServices={massageServices} 
-        bodyShapingServices={bodyShapingServices} 
-        resultsData={resultsData} 
-        reviewsData={reviewsData} 
-        teamMembers={teamMembers} 
-        equipmentData={equipmentData} 
-        faqData={faqData} 
-        quizQuestions={quizQuestions} 
-        openModal={openModal} 
-      />
+      {/* МАРШРУТИЗАТОР (Переключатель страниц) */}
+      <Routes>
+        
+        {/* Главная страница (открывается по умолчанию на адресе "/") */}
+        <Route path="/" element={
+          <HomePage 
+            heroData={heroData} 
+            massageServices={massageServices} 
+            bodyShapingServices={bodyShapingServices} 
+            resultsData={resultsData} 
+            reviewsData={reviewsData} 
+            teamMembers={teamMembers} 
+            equipmentData={equipmentData} 
+            faqData={faqData} 
+            quizQuestions={quizQuestions} 
+            openModal={openModal} 
+          />
+        } />
+
+        {/* Страница конкретной услуги (открывается по адресу "/service/что-то") */}
+        <Route path="/service/:id" element={
+          <ServicePage 
+            openModal={openModal} 
+            massageServices={massageServices} 
+            bodyShapingServices={bodyShapingServices} 
+          />
+        } />
+
+      </Routes>
 
       {/* FOOTER */}
       <Footer />
