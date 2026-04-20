@@ -228,7 +228,7 @@ export default function App() {
         { label: "SPA-процедуры и обертывания", value: "spa" },
       ]
     }
-  ];
+  ]);
 
   const handleQuizAnswer = (value) => {
     setQuizAnswers([...quizAnswers, value]);
