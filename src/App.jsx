@@ -244,7 +244,12 @@ export default function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const bookingsRes = await fetch('/api/get_bookings.php');
+        const session = localStorage.getItem('sova_admin_session');
+        const token = session ? JSON.parse(session).token : '';
+
+        const bookingsRes = await fetch('/api/get_bookings.php', {
+          headers: { 'X-Auth-Token': token } // <-- Предъявляем пропуск
+        });
         const loadedBookings = await bookingsRes.json();
         setBookingsList(loadedBookings);
 
@@ -437,9 +442,12 @@ const handleBookingSubmit = async (e) => {
       
       const result = await res.json();
 
-      if (result.status === 'success') {
-        // Сервер дал добро! Сохраняем текущее время в браузер
-        localStorage.setItem('sova_admin_session', JSON.stringify({ timestamp: Date.now() }));
+     if (result.status === 'success') {
+        // Сервер дал добро! Сохраняем текущее время и ТОКЕН в браузер
+        localStorage.setItem('sova_admin_session', JSON.stringify({ 
+          timestamp: Date.now(),
+          token: result.token // <-- Добавили сохранение токена
+        }));
         
         setCurrentView('adminPanel');
         setLoginPass('');
@@ -455,10 +463,15 @@ const handleBookingSubmit = async (e) => {
 
 const toggleBookingStatus = async (id, currentStatus) => {
     const newStatus = currentStatus === 'new' ? 'done' : 'new';
+    const session = JSON.parse(localStorage.getItem('sova_admin_session'));
+    
     try {
       await fetch('/api/update_booking.php', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'X-Auth-Token': session ? session.token : '' // <-- Предъявляем пропуск
+        },
         body: JSON.stringify({ id: id, status: newStatus })
       });
       setBookingsList(bookingsList.map(b => b.id === id ? { ...b, status: newStatus } : b));
@@ -469,10 +482,14 @@ const toggleBookingStatus = async (id, currentStatus) => {
 
 const deleteBooking = async (id) => {
     if(window.confirm('Точно удалить эту заявку?')) {
+      const session = JSON.parse(localStorage.getItem('sova_admin_session'));
       try {
         await fetch('/api/delete_booking.php', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 
+            'Content-Type': 'application/json',
+            'X-Auth-Token': session ? session.token : '' // <-- Предъявляем пропуск
+          },
           body: JSON.stringify({ id: id })
         });
         setBookingsList(bookingsList.filter(b => b.id !== id));
