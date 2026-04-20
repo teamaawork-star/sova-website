@@ -95,6 +95,7 @@ export default function ServicePage({ openModal, massageServices, bodyShapingSer
             </div>
 
             {/* Противопоказания */}
+
             <div className="bg-white p-8 md:p-10 rounded-3xl shadow-sm border border-red-50 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-red-50 rounded-bl-full -z-0 opacity-50"></div>
               <h2 className="text-2xl font-serif text-stone-800 mb-6 flex items-center relative z-10">
@@ -102,14 +103,18 @@ export default function ServicePage({ openModal, massageServices, bodyShapingSer
                 Противопоказания
               </h2>
               <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 relative z-10">
-                {[
-                  'Острые воспалительные процессы', 
-                  'Повышенная температура тела', 
-                  'Онкологические заболевания', 
-                  'Выраженное варикозное расширение вен', 
-                  'Беременность (уточнять у мастера)', 
-                  'Заболевания кожи в стадии обострения'
-                ].map((item, i) => (
+                {/* Если в админке что-то написано — берем оттуда, если нет — стандартный список */}
+                {(parentCategory.contraindications 
+                  ? parentCategory.contraindications.split('\n').filter(t => t.trim() !== '')
+                  : [
+                      'Острые воспалительные процессы', 
+                      'Повышенная температура тела', 
+                      'Онкологические заболевания', 
+                      'Выраженное варикозное расширение вен', 
+                      'Беременность (уточнять у мастера)', 
+                      'Заболевания кожи в стадии обострения'
+                    ]
+                ).map((item, i) => (
                   <li key={i} className="flex items-start text-stone-600 text-sm">
                     <span className="text-red-400 mr-2.5 mt-0.5">•</span> 
                     <span className="leading-relaxed">{item}</span>
@@ -120,7 +125,6 @@ export default function ServicePage({ openModal, massageServices, bodyShapingSer
                 * Перед началом курса специалист студии обязательно проведет консультацию и убедится в отсутствии ограничений.
               </p>
             </div>
-
             {/* Почему выбирают нас */}
             <div className="bg-white p-8 md:p-10 rounded-3xl shadow-sm border border-stone-100">
               <h2 className="text-2xl font-serif text-stone-800 mb-6">Почему выбирают нас</h2>

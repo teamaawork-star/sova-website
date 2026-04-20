@@ -956,6 +956,19 @@ const handleImageUpload = async (e) => {
 
                           {['massage', 'body', 'equipment', 'team', 'faq', 'results'].includes(contentTab) && <div><label className="block text-sm font-medium mb-1">{contentTab === 'faq' ? 'Ответ' : 'Описание'}</label><textarea className="w-full border p-3 rounded-xl text-sm min-h-[100px]" value={editingItem.description || editingItem.answer || ''} onChange={e => contentTab === 'faq' ? setEditingItem({...editingItem, answer: e.target.value}) : setEditingItem({...editingItem, description: e.target.value})} /></div>}
                           
+                          {/* НОВОЕ ПОЛЕ: ПРОТИВОПОКАЗАНИЯ */}
+{['massage', 'body'].includes(contentTab) && (
+  <div className="mt-4">
+    <label className="block text-sm font-medium mb-1 text-red-600">Противопоказания (каждое с новой строки)</label>
+    <textarea 
+      className="w-full border border-red-100 bg-red-50/30 p-3 rounded-xl text-sm min-h-[100px] focus:ring-1 focus:ring-red-300 outline-none" 
+      placeholder="Например:&#10;Беременность&#10;Варикоз&#10;Острые боли"
+      value={editingItem.contraindications || ''} 
+      onChange={e => setEditingItem({...editingItem, contraindications: e.target.value})} 
+    />
+    <p className="text-[10px] text-stone-400 mt-1 italic">Эти данные будут отображаться в красном блоке на странице услуги.</p>
+  </div>
+)}
                           {contentTab === 'equipment' && <div><label className="block text-sm font-medium mb-1">Особенности (через запятую)</label><textarea className="w-full border p-3 rounded-xl text-sm" value={editingItem.features} onChange={e => setEditingItem({...editingItem, features: e.target.value})} /></div>}
 
                           {/* ВАРИАНТЫ ОТВЕТОВ ДЛЯ КВИЗА */}
@@ -1145,8 +1158,7 @@ const handleImageUpload = async (e) => {
 
       </Routes>
 
-      {/* FOOTER */}
-      <Footer />
+     
 
      {/* FOOTER */}
       <Footer />
